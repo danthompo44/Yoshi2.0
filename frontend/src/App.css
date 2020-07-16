@@ -51,7 +51,7 @@ label {
     padding-left: 3px;
 }
 
-input,
+/* input,
 [type='text'],
 [type='password'],
 [type='date'],
@@ -79,7 +79,7 @@ select {
     background-color: inherit;
     box-shadow: 1px 1px 1px #000000;
     font-size: 1.1em;
-}
+} */
 
 input.light {
     background-color: #444444;
@@ -147,13 +147,13 @@ select:disabled {
     border-radius: 5px;
 }
 
-.input-icon {
+/* .input-icon {
     position: absolute;
     margin: 10px;
     font-size: 1.1em;
     line-height: 1.4 !important;
     color: #92d36e;
-}
+} */
 
 .with-icon {
     padding-left: 40px;
