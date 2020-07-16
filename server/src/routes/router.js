@@ -5,5 +5,9 @@ router.get('/', (req, res) => {
 });
 
 router.use('/games', require('./gameRouter'));
+router.use('/consoles', require('./consoleRouter'));
+router.use('/blogs', require('./blogRouter'));
+router.use('/users', require('./userRouter'));
+router.use('/queries', require('./queryRouter'));
 
 module.exports = router;
