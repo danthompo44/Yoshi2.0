@@ -1,5 +1,5 @@
 import React from 'react';
-import '../public/stylesheets/inputField.css';
+import './inputField.css';
 
 function InputField() {
     return(

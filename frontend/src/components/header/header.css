@@ -3,7 +3,7 @@
     width: 100%;
     display: flex;
     align-items: center;
-    background-image: url('../images/retro-games.jpg');
+    background-image: url('./retro-games.jpg');
     background-position: left;
     background-repeat: no-repeat;
     background-size: cover;

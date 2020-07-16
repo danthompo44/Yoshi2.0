@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import "../public/stylesheets/header.css";
+import "./header.css";
 
 function Header() {
   return (
@@ -30,7 +30,7 @@ function Header() {
               <Link to="/contact-us">Contact Us</Link>
             </li>
             <li class="nav-link">
-              <Link to="/login">Login</Link>
+              <Link to="/auth/login">Login</Link>
             </li>
           </ul>
         </nav>

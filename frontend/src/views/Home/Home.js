@@ -1,9 +1,12 @@
 import React from "react";
 
+import Title from '../../components/title/title';
+
 function Home() {
+  const title ="Home Page";
   return (
     <div className="home-page">
-      <p>Home page</p>
+      <Title title={title}/>
     </div>
   );
 }

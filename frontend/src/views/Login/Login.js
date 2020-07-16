@@ -1,10 +1,11 @@
 import React from "react";
-import InputField from "../../components/inputField";
+import Title from '../../components/title/title';
+import InputField from "../../components/inputField/inputField";
 
 function Login() {
   return (
     <div className="login">
-      <p>Login page</p>
+      <Title title={"Login"}/>
       <InputField />
     </div>
   );
