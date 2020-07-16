@@ -1,0 +1,95 @@
+#main-nav-container {
+    min-height: 120px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background-image: url('../images/retro-games.jpg');
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#main-nav {
+    background-color: #444444;
+    width: 100%;
+    border-radius: 2px solid #333333;
+    padding: 5px 5%;
+}
+
+.nav-flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#nav-title {
+    margin: 5px 20px 0 0;
+    font-size: 20px;
+    display: inline-block;
+}
+
+#nav-title h1 {
+    color: #92d36e;
+    font-family: 'Press Start 2P', cursive;
+    text-shadow: 1px 1px 3px black;
+    font-size: 28px;
+}
+
+.nav-links {
+    display: none;
+    list-style: none;
+    text-align: center;
+}
+
+.navbar-toggle {
+    color: #92d36e;
+    padding-right: 20px;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.active {
+    display: block;
+}
+
+.nav-link {
+    list-style: none;
+    font-size: 14px;
+    color: #c0c0c0;
+    margin: 15px auto;
+}
+
+@media screen and (min-width: 768px) {
+    #main-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    #nav-links {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .nav-link {
+        margin: 0;
+    }
+
+    #nav-links a {
+        list-style: none;
+    }
+
+    .nav-link::after {
+        content: '|';
+        color: #92d36e;
+        padding: 0 20px;
+    }
+
+    .nav-link:last-child::after {
+        content: '';
+        padding: 0 8px 0 0;
+    }
+    .navbar-toggle {
+        display: none;
+    }
+}
