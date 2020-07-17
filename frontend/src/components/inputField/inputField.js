@@ -10,6 +10,7 @@ function InputField(props) {
                 type={props.type}
                 className="inputField"
                 placeholder={props.placeholder}
+                name= {props.name}
             />
         </div>
     );

@@ -51,7 +51,7 @@ label {
     padding-left: 3px;
 }
 
-/* input,
+input,
 [type='text'],
 [type='password'],
 [type='date'],
@@ -79,7 +79,7 @@ select {
     background-color: inherit;
     box-shadow: 1px 1px 1px #000000;
     font-size: 1.1em;
-} */
+}
 
 input.light {
     background-color: #444444;
