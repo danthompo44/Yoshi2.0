@@ -92,7 +92,7 @@ function OpeningHours(){
             {OpeningTimesRow("Thursday", "9am - 5pm")}
             {OpeningTimesRow("Friday", "9am - 5pm")}
             {OpeningTimesRow("Saturday", "9am - 5pm")}
-            {OpeningTimesRow("Sunday", "Gone gaming")}
+            {OpeningTimesRow("Sunday", "Gone Gaming")}
           </table>
         </div>
     </div>

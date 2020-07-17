@@ -152,13 +152,13 @@ select:disabled {
     border-radius: 5px;
 }
 
-/* .input-icon {
+.input-icon {
     position: absolute;
     margin: 10px;
     font-size: 1.1em;
     line-height: 1.4 !important;
     color: #92d36e;
-} */
+}
 
 .with-icon {
     padding-left: 40px;

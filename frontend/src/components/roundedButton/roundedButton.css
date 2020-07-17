@@ -1,0 +1,11 @@
+.btn-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.btn-wrapper button {
+    border-radius: 50px;
+    width: 100px;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 12px;
+}
