@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import Title from '../../components/title/title';
 import InputField from '../../components/inputField/inputField';
 import Button from '../../components/squareButton/squareButton';
