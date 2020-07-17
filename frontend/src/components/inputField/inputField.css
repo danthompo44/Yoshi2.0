@@ -1,4 +1,4 @@
-.inputField{
+.inputField {
     max-width: 250px;
     width: 100%;
     height: 40px;
@@ -15,7 +15,7 @@
     /* position: absolute; */
 }
 
-.input-container{
+.input-container {
     max-width: 300px;
     display: flex;
     justify-content: center;
@@ -23,7 +23,7 @@
     position: relative;
 }
 
-.input-icon{
+.input-icon {
     position: absolute;
     margin: 10px;
     left: 30px;
