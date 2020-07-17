@@ -1,0 +1,34 @@
+.inputField {
+    max-width: 250px;
+    width: 100%;
+    height: 40px;
+    margin: 0 0 20px;
+    padding: 10px 10px;
+    border: 1px solid #333333;
+    border-radius: 5px;
+    color: #c0c0c0;
+    transition: border-color 0.25s ease-in-out;
+    background-color: #444444;
+    box-shadow: 1px 1px 1px #000000;
+    font-size: 14px;
+    padding-left: 40px;
+    /* position: absolute; */
+}
+
+.input-container {
+    max-width: 300px;
+    display: flex;
+    justify-content: center;
+    margin: 10px auto;
+    position: relative;
+}
+
+.input-icon {
+    position: absolute;
+    margin: 10px;
+    left: 30px;
+    bottom: 17px;
+    font-size: 1.1em;
+    line-height: 1.4 !important;
+    color: #92d36e;
+}

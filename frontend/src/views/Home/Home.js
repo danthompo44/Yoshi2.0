@@ -1,11 +1,14 @@
-import React from "react";
+import React from 'react';
+
+import Title from '../../components/title/title';
 
 function Home() {
-  return (
-    <div className="home-page">
-      <p>Home page</p>
-    </div>
-  );
+    const title = 'Home Page';
+    return (
+        <div className="home-page">
+            <Title title={title} />
+        </div>
+    );
 }
 
 export default Home;
