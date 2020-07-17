@@ -3,8 +3,8 @@ import './squareButton.css';
 
 function SquareButton(props){
     return(
-        <div className="form-button-container">
-            <button class="form-button">{props.content}</button>
+        <div className="square-button-container">
+            <button class="square-button">{props.content}</button>
         </div>
     );
 }
