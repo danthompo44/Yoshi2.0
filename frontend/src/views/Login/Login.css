@@ -1,0 +1,11 @@
+#login-form{
+    padding-top: 30px;
+    margin-bottom: 30px;
+}
+
+#sign-up-button-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-left: 85%;
+}

@@ -1,7 +1,7 @@
 import React from "react";
-import './formButton.css';
+import './squareButton.css';
 
-function formButton(props){
+function SquareButton(props){
     return(
         <div className="form-button-container">
             <button class="form-button">{props.content}</button>
@@ -9,4 +9,4 @@ function formButton(props){
     )
 }
 
-export default formButton;
+export default SquareButton;
