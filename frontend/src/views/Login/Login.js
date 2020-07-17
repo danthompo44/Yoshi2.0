@@ -1,13 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+
 
 import Title from '../../components/title/title';
-import InputField from "../../components/inputField/inputField";
-import InputLabel from '../../components/inputField/inputLabel';
+import InputFieldWithLabel from '../../components/inputField/inputFieldWithLabel';
 import SquareButton from '../../components/squareButton/squareButton';
+import FormWrapper from '../../components/form-wrapper/form-wrapper';
 
 import './Login.css';
-import '../../App.css';
-import { Link } from 'react-router-dom';
 
 
 function Login() {
@@ -17,10 +17,8 @@ function Login() {
       <FormWrapper>
         <form class="form-inner-wrapper" method="GET">
           <>
-          <InputLabel for="email" content="Email Address:"/>
-          <InputField icon={"fas fa-envelope"} type="email" placeholder="Enter Your Email" name="email"/>
-          <InputLabel for="password" content="Password:"/>
-          <InputField icon={"fas fa-lock"} type="password" placeholder="Enter Your Password" name="password"/>
+          <InputFieldWithLabel name="email" labelContent="Email Address:" icon ={"fas fa-envelope"} inputType="email" placeholder="Enter Your Email"/>
+          <InputFieldWithLabel name="password" labelContent="Password:" icon ={"fas fa-lock"} inputType="password" placeholder="Enter Your Password"/>
           <SquareButton content="Login"/>
           <Link id="forgotten-password">Forgotten Password?</Link>
           </>
@@ -31,12 +29,6 @@ function Login() {
   );
 }
 
-function FormWrapper({children}) {
-  return (
-    <div className="form-wrapper">
-      {children}
-    </div>
-  )
-}
+
 
 export default Login;
