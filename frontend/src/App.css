@@ -125,7 +125,7 @@ select:disabled {
     font-weight: bold;
 }
 
-.btn-green.form-button,
+.btn-green,
 .form-input {
     border: 1px solid #333333;
     box-shadow: 0px 1px 1px 0px #222222;
