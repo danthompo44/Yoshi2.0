@@ -110,6 +110,11 @@ select:disabled {
     }
 }
 
+.page-title {
+    margin-bottom: 25px;
+    text-shadow: 1px 2px 2px #222222;
+}
+
 .page-subtitle {
     margin-bottom: 20px;
 }

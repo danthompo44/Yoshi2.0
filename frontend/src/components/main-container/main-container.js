@@ -15,7 +15,7 @@ function MainContainer() {
 
 function MarginContainer() {
     return (
-        <div id="margin-container">
+        <div className="page-wrapper">
             <Switch>
                 <Route path="/" exact component={Home} />
                 <Route path="/products" component={Products} />
