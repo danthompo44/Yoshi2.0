@@ -1,0 +1,24 @@
+{
+  "name": "2.0",
+  "version": "1.0.0",
+  "description": "TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project.",
+  "main": "index.js",
+  "scripts": {
+    "install-server": "cd server & npm install",
+    "install-frontend": "cd frontend & npm install",
+    "postinstall": "concurrently \"npm run install-server\" \"npm run install-frontend\"",
+    "start-server": "cd server & npm start",
+    "start-frontend": "cd frontend & npm start",
+    "start": "concurrently \"npm run start-server\" \"npm run start-frontend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://bt-uni@dev.azure.com/bt-uni/Yoshi/_git/Yoshi2.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^5.2.0"
+  }
+}

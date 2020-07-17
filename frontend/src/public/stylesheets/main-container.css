@@ -1,0 +1,8 @@
+#main-container {
+    /* does flex setting for IE */
+    -ms-flex: 1 1 auto;
+    flex: 1;
+    background-color: #333333;
+    color: #c0c0c0;
+    transition: all 0.3s;
+}

@@ -10,5 +10,7 @@
     "quoteProps": "as-needed",
     "semi": true,
     "singleQuote": true,
-    "useTabs": false
+    "useTabs": false,
+    "jsxSingleQuote": false,
+    "jsxBracketSameLine": false
 }
