@@ -4,7 +4,7 @@
  * @returns True if any key is null or undefined
  */
 function isAnyKeyInObjectNullOrUndefined(data) {
-    if (typeof data === null || typeof data === undefined) {
+    if (!data || typeof data === undefined) {
         return true;
     }
     if (typeof data !== 'object') {
@@ -22,10 +22,10 @@ function isAnyKeyInObjectNullOrUndefined(data) {
 /**
  * A function to determine if a value is null or undefined.
  * @param {any} data Any data
- * @returns True if is null or undefined
+ * @returns True if data is null or undefined
  */
 function isDataNullOrUndefined(data) {
-    if (typeof data === null || typeof data === undefined) {
+    if (!data || typeof data === undefined) {
         return true;
     }
 

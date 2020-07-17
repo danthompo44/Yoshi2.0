@@ -4,26 +4,29 @@ const { Sequelize, DataTypes } = require('sequelize');
  *
  * @param {Sequelize} sequelize The sequelize object
  */
-function ConsoleComment(sequelize) {
+function GamePost(sequelize) {
     return sequelize.define(
-        'consoleComment',
+        'gamePost',
         {
-            comment: {
+            title: {
                 type: DataTypes.STRING,
             },
-            likes: {
-                type: DataTypes.INTEGER,
+            subtitle: {
+                type: DataTypes.STRING,
             },
-            console_id: {
+            content: {
+                type: DataTypes.STRING,
+            },
+            game_id: {
                 type: DataTypes.INTEGER,
             },
         },
         {
             timestamps: false,
             freezeTableName: true,
-            tableName: 'console_comments',
+            tableName: 'game_posts',
         }
     );
 }
 
-module.exports = ConsoleComment;
+module.exports = GamePost;
