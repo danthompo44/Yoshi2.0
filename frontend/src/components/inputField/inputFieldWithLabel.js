@@ -7,7 +7,7 @@ function InputWithLabel(props){
     return (
         <>
         <InputLabel for={props.name} content={props.labelContent}/>
-        <InputField icon={props.icon} type={props.inputFieldType} placeholder={props.placeholder} name={props.name}/>
+        <InputField icon={props.icon} type={props.inputType} placeholder={props.placeholder} name={props.name}/>
         </>
     )
 }
