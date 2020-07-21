@@ -1,6 +1,7 @@
 const {
     createErrorData,
     isAnyKeyInObjectNullOrUndefined,
+    throwMissingDataError,
 } = require('../helpers');
 const db = require('../models');
 
@@ -14,11 +15,7 @@ async function login(req, res) {
         };
 
         if (isAnyKeyInObjectNullOrUndefined(data)) {
-            throw {
-                code: 400,
-                name: 'Missing data error',
-                message: 'Missing data',
-            };
+            throwMissingDataError();
         }
 
         return res.status(200).json(data);
