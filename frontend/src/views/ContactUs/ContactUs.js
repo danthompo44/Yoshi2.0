@@ -29,8 +29,8 @@ function PageInfo() {
 
 function ContactUsForm() {
     return (
-        <div id="contact-form" class="form-wrapper">
-            <form class="form-inner-wrapper">
+        <div id="contact-form" className="form-wrapper">
+            <form className="form-inner-wrapper">
                 {ContactUsMessage()}
                 {ContactUsDetailsAndButton()}
             </form>
@@ -43,7 +43,7 @@ function ContactUsMessage() {
         <div id="message-wrapper">
             <label for="message">Message:</label>
             <textarea
-                class="form-input"
+                className="form-input"
                 name="message"
                 placeholder="Enter Your Message"
                 required="true"
@@ -56,7 +56,7 @@ function ContactUsMessage() {
 function ContactUsDetailsAndButton() {
     return (
         <div id="details-wrapper">
-            <div class="inline-form-item">
+            <div className="inline-form-item">
                 <InputFieldWithLabel
                     name="email"
                     labelContent="Email Address:"
@@ -66,7 +66,7 @@ function ContactUsDetailsAndButton() {
                     required="true"
                 />
             </div>
-            <div class="inline-form-item">
+            <div className="inline-form-item">
                 <InputFieldWithLabel
                     name="name"
                     labelContent="Full Name:"
@@ -76,8 +76,8 @@ function ContactUsDetailsAndButton() {
                     required="true"
                 />
             </div>
-            <div class="inline-button-wrapper">
-                <button class="btn-green form-button">Send</button>
+            <div className="inline-button-wrapper">
+                <button className="btn-green form-button">Send</button>
             </div>
         </div>
     );
