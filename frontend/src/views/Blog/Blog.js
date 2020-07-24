@@ -3,46 +3,34 @@ import { Link } from 'react-router-dom';
 
 import SearchBar from '../../components/search-bar/search-bar';
 import RoundedButton from '../../components/roundedButton/roundedButton';
+import { BlogPageTitle } from '../../components/titles/titles';
+import { ps5Blog, skate4Blog } from '../../data/mockBlogs';
 
 import './Blog.css';
 
 function Blog() {
     return (
         <div id="blog-page-wrapper">
-            {BlogPageTitle()}
+            <BlogPageTitle />
             <SearchBar />
-            {BlogEntry('Pewdiepie, Narcassist', 'Some Text For the Blog')}
-            {BlogEntry(
-                'PS5 Set To Annoy Gamers Worldwide',
-                'Some Other Text For the Blog'
-            )}
+            {BlogEntry(ps5Blog)}
+            {BlogEntry(skate4Blog)}
             <RoundedButton content="SHOW MORE" />
         </div>
     );
 }
 
-function BlogPageTitle() {
+function BlogEntry(blog) {
+    let link = '/blog/' + blog.id;
     return (
-        <div class="blog-page-title">
-            <h1>Gamer's United</h1>
-            <h4>Supporting Introverts Worldwide</h4>
-        </div>
-    );
-}
-
-function BlogEntry(title, description) {
-    return (
-        <Link to="/blog/1" className="blog-entry">
+        <Link to={link} className="blog-entry">
             <div class="blog-entry-container">
                 <div class="blog-image">
-                    <img
-                        alt="Insert Alt"
-                        src="https://cdn.vox-cdn.com/thumbor/x8pw9O_UdeENcbV0kuZxfkKUgkE=/0x0:1920x1080/1200x800/filters:focal(807x387:1113x693)/cdn.vox-cdn.com/uploads/chorus_image/image/66927028/image.0.png"
-                    />
+                    <img alt={blog.blogImage.alt} src={blog.blogImage.src} />
                 </div>
                 <div class="blog-content">
-                    <h2 class="blog-title">{title}</h2>
-                    <p class="blog-text">{description}</p>
+                    <h2 class="blog-title">{blog.title}</h2>
+                    <p class="blog-text">{blog.blogText}</p>
                 </div>
             </div>
         </Link>

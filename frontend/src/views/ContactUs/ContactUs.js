@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Title from '../../components/title/title';
+import { Title } from '../../components/titles/titles';
 import InputFieldWithLabel from '../../components/inputField/inputFieldWithLabel';
 
 import './ContactUs.css';

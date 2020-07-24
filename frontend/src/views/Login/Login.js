@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import Title from '../../components/title/title';
+import { Title } from '../../components/titles/titles';
 import InputFieldWithLabel from '../../components/inputField/inputFieldWithLabel';
 import Button from '../../components/squareButton/squareButton';
 import FormWrapper from '../../components/form-wrapper/form-wrapper';
