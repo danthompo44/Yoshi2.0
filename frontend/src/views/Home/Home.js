@@ -5,9 +5,9 @@ import './Home.css';
 function Home() {
     return (
         <div className="home-page-wrapper">
-            {AboutUsSection()}
-            {LocationSection()}
-            {OpeningHours()}
+            <AboutUsSection />
+            <LocationSection />
+            <OpeningHours />
         </div>
     );
 }
@@ -15,8 +15,8 @@ function Home() {
 function AboutUsSection() {
     return (
         <div id="about-us-wrapper" className="section">
-            {TitleWithIcon('About-Us', 'fas fa-info-circle')}
-            <div class="section-content">
+            <TitleWithIcon title="About-Us" icon="fas fa-info-circle" />
+            <div className="section-content">
                 <div id="about-us-text">
                     <p>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -42,7 +42,7 @@ function AboutUsSection() {
                 </div>
                 <div id="about-us-image">
                     <img
-                        alt="Placeholder Image"
+                        alt="Placeholder"
                         src="https://via.placeholder.com/400"
                     />
                 </div>
@@ -53,9 +53,9 @@ function AboutUsSection() {
 
 function LocationSection() {
     return (
-        <div id="location-wrapper" class="section">
-            {TitleWithIcon('Location', 'fas fa-location-arrow')}
-            <div class="section-content">
+        <div id="location-wrapper" className="section">
+            <TitleWithIcon title="Location" icon="fas fa-location-arrow" />
+            <div className="section-content">
                 <div id="location-text">
                     <p>College Rd</p>
                     <p>Stoke-on-Trent</p>
@@ -65,9 +65,9 @@ function LocationSection() {
                     <iframe
                         title="Google Maps"
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2400.6283963280216!2d-2.178326984174215!3d53.00906577990976!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487a6834966faedd%3A0x34dc6fb570e7360d!2sStaffordshire%20University!5e0!3m2!1sen!2suk!4v1591694525028!5m2!1sen!2suk"
-                        allowfullscreen=""
+                        allowFullScreen=""
                         aria-hidden="false"
-                        tabindex="0"
+                        tabIndex="0"
                     ></iframe>
                 </div>
             </div>
@@ -77,38 +77,40 @@ function LocationSection() {
 
 function OpeningHours() {
     return (
-        <div id="opening-wrapper" class="section">
-            {TitleWithIcon('Opening Hours', 'far fa-clock')}
-            <div class="section-content">
+        <div id="opening-wrapper" className="section">
+            <TitleWithIcon title="Opening Hours" icon="far fa-clock" />
+            <div className="section-content">
                 <table id="opening-hours-table">
-                    {OpeningTimesRow('Monday', '9am - 5pm')}
-                    {OpeningTimesRow('Tuesday', '9am - 5pm')}
-                    {OpeningTimesRow('Wednesday', '9am - 5pm')}
-                    {OpeningTimesRow('Thursday', '9am - 5pm')}
-                    {OpeningTimesRow('Friday', '9am - 5pm')}
-                    {OpeningTimesRow('Saturday', '9am - 5pm')}
-                    {OpeningTimesRow('Sunday', 'Gone Gaming')}
+                    <tbody>
+                        <OpeningTimesRow day="Monday" times="9am - 5pm" />
+                        <OpeningTimesRow day="Tuesday" times="9am - 5pm" />
+                        <OpeningTimesRow day="Wednesday" times="9am - 5pm" />
+                        <OpeningTimesRow day="Thursday" times="9am - 5pm" />
+                        <OpeningTimesRow day="Friday" times="9am - 5pm" />
+                        <OpeningTimesRow day="Saturday" times="9am - 5pm" />
+                        <OpeningTimesRow day="Sunday" times="Gone Gaming" />
+                    </tbody>
                 </table>
             </div>
         </div>
     );
 }
 
-function OpeningTimesRow(day, times) {
+function OpeningTimesRow({ day, times }) {
     return (
         <tr>
-            <td class="opening-day">{day}</td>
-            <td class="opening-time">{times}</td>
+            <td className="opening-day">{day}</td>
+            <td className="opening-time">{times}</td>
         </tr>
     );
 }
 
-function TitleWithIcon(title, icon) {
+function TitleWithIcon({ title, icon }) {
     let iconHtml = icon + ' section-title-icon';
     return (
-        <div class="section-title">
+        <div className="section-title">
             <h1>
-                <i class={iconHtml}></i>
+                <i className={iconHtml}></i>
                 {title}
             </h1>
         </div>

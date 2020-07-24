@@ -23,7 +23,7 @@ function Blog() {
 
 function BlogPageTitle() {
     return (
-        <div class="blog-page-title">
+        <div className="blog-page-title">
             <h1>Gamer's United</h1>
             <h4>Supporting Introverts Worldwide</h4>
         </div>
@@ -33,16 +33,16 @@ function BlogPageTitle() {
 function BlogEntry(title, description) {
     return (
         <Link to="/blog/1" className="blog-entry">
-            <div class="blog-entry-container">
-                <div class="blog-image">
+            <div className="blog-entry-container">
+                <div className="blog-image">
                     <img
                         alt="Insert Alt"
                         src="https://cdn.vox-cdn.com/thumbor/x8pw9O_UdeENcbV0kuZxfkKUgkE=/0x0:1920x1080/1200x800/filters:focal(807x387:1113x693)/cdn.vox-cdn.com/uploads/chorus_image/image/66927028/image.0.png"
                     />
                 </div>
-                <div class="blog-content">
-                    <h2 class="blog-title">{title}</h2>
-                    <p class="blog-text">{description}</p>
+                <div className="blog-content">
+                    <h2 className="blog-title">{title}</h2>
+                    <p className="blog-text">{description}</p>
                 </div>
             </div>
         </Link>

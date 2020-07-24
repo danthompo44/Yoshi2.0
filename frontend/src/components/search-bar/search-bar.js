@@ -7,10 +7,10 @@ function SearchBar() {
         <div id="search-container">
             <div id="search-bar">
                 <label for="search">Search:</label>
-                <i class="fas fa-search input-icon"></i>
+                <i className="fas fa-search input-icon"></i>
                 <input
                     id="search"
-                    class="form-input with-icon"
+                    className="form-input with-icon"
                     placeholder="Search..."
                     type="text"
                     name="search"

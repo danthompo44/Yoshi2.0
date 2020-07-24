@@ -13,7 +13,7 @@ function Login() {
         <div id="login-container">
             <Title title={'Login'} />
             <FormWrapper>
-                <form class="form-inner-wrapper" method="GET">
+                <form className="form-inner-wrapper" method="GET">
                     <>
                         <InputFieldWithLabel
                             name="email"

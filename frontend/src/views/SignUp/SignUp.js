@@ -12,7 +12,7 @@ function SignUp() {
         <div className="sign-up-container">
             <Title title={'Sign Up'} />
             <FormWrapper>
-                <form class="form-inner-wrapper" method="POST">
+                <form className="form-inner-wrapper" method="POST">
                     <InputFieldWithLabel
                         name="email"
                         labelContent="Email Address:"
