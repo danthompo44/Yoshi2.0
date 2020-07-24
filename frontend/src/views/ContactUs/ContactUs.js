@@ -32,7 +32,7 @@ function ContactUsForm() {
         <div id="contact-form" class="form-wrapper">
             <form class="form-inner-wrapper">
                 {ContactUsMessage()}
-                {ContactUsDetails()}
+                {ContactUsDetailsAndButton()}
             </form>
         </div>
     );
@@ -45,7 +45,7 @@ function ContactUsMessage() {
             <textarea
                 class="form-input"
                 name="message"
-                placeholder="Enter your message"
+                placeholder="Enter Your Message"
                 required="true"
                 id="message"
             ></textarea>
@@ -53,7 +53,7 @@ function ContactUsMessage() {
     );
 }
 
-function ContactUsDetails() {
+function ContactUsDetailsAndButton() {
     return (
         <div id="details-wrapper">
             <div class="inline-form-item">
@@ -62,7 +62,7 @@ function ContactUsDetails() {
                     labelContent="Email Address:"
                     icon="fas fa-envelope"
                     inputType="email"
-                    placeholder="Enter your email"
+                    placeholder="Enter Your Email"
                     required="true"
                 />
             </div>
@@ -72,7 +72,7 @@ function ContactUsDetails() {
                     labelContent="Full Name:"
                     icon="fas fa-user-alt"
                     inputType="text"
-                    placeholder="Enter your full name"
+                    placeholder="Enter Your Full Name"
                     required="true"
                 />
             </div>
