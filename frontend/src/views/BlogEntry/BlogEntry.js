@@ -3,7 +3,7 @@ import Title from '../../components/title/title';
 
 function BlogEntry() {
     return (
-        <div className="blog-entry">
+        <div className="blog">
             <Title title={'Blog Entry'} />
         </div>
     );

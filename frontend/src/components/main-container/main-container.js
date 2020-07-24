@@ -20,8 +20,8 @@ function MarginContainer() {
             <Switch>
                 <Route path="/" exact component={Home} />
                 <Route path="/products" component={Products} />
-                <Route path="/blog" component={Blog} />
-                <Route path="/blog/1" exact component={BlogEntry}/>
+                <Route path="/blog" exact component={Blog} />
+                <Route path="/blog/1" component={BlogEntry} />
                 <Route path="/contact-us" component={ContactUs} />
                 <Route path="/auth/login" component={Login} />
                 <Route path="/auth/sign-up" component={SignUp} />
