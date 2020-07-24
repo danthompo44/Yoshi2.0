@@ -1,7 +1,11 @@
 const { request, response } = require('express');
 const jwt = require('jsonwebtoken');
 const jwtConfig = require('../../config/jwt');
-const { throwAPIError, createErrorData } = require('../helpers');
+const {
+    throwAPIError,
+    createErrorData,
+    isDataNullOrUndefined,
+} = require('../helpers');
 
 /**
  * A function to verify a users JWT token.
@@ -11,10 +15,15 @@ const { throwAPIError, createErrorData } = require('../helpers');
  */
 exports.verifyToken = (req, res, next) => {
     try {
+        if (isDataNullOrUndefined(req.headers.authorization)) {
+            throwAPIError(401, 'ERR_MISSING_TOKEN', 'Missing token');
+        }
+        // FORMATTED AS - "BEARER TOKEN.IS.HERE"
         const token = req.headers.authorization.split(' ')[1];
         const decodedToken = jwt.verify(token, jwtConfig.secret);
         const userId = decodedToken.userId;
-        if (req.body.userId && req.body.userId !== userId) {
+
+        if (!userId || (req.body.userId && req.body.userId !== userId)) {
             throwAPIError(403, 'ERR_INVALID_TOKEN', 'Invalid token');
         } else {
             next();

@@ -85,7 +85,7 @@ exports.login = async (req, res) => {
  * @returns {string} The JWT token
  */
 function generateToken(userId) {
-    const token = jwt.sign({ id: userId }, jwtConfig.secret, {
+    const token = jwt.sign({ userId }, jwtConfig.secret, {
         expiresIn: '24h',
     });
     return token;
