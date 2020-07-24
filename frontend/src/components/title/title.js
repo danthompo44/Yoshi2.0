@@ -1,7 +1,11 @@
 import React from 'react';
 
 function Title(props) {
-    return <h1 className="page-title center">{props.title}</h1>;
+    return (
+        <div className="page-title center">
+            <h1>{props.title}</h1>
+        </div>
+    );
 }
 
 export default Title;

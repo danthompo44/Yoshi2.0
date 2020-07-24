@@ -10,7 +10,8 @@ function InputField(props) {
                 type={props.type}
                 className="inputField"
                 placeholder={props.placeholder}
-                name= {props.name}
+                name={props.name}
+                required={props.required}
             />
         </div>
     );

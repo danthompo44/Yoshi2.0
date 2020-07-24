@@ -2,7 +2,7 @@ import React from 'react';
 
 import './search-bar.css';
 
-function SearchBar(){
+function SearchBar() {
     return (
         <div id="search-container">
             <div id="search-bar">
@@ -18,7 +18,7 @@ function SearchBar(){
                 />
             </div>
         </div>
-    )
+    );
 }
 
 export default SearchBar;
