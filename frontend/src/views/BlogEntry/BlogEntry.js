@@ -1,5 +1,6 @@
 import React from 'react';
 import { BlogEntryTitle } from '../../components/titles/titles';
+import { CommentInputWithLabel } from '../../components/inputField/inputFieldWithLabel';
 import './BlogEntry.css';
 import { skate4Blog } from '../../data/mockBlogs';
 
@@ -8,7 +9,8 @@ function BlogEntry() {
         <div className="page-wrapper">
             <BlogEntryTitle />
             <BlogEntryContent />
-            <BlogComments />
+            <Comments />
+            <AddComment />
         </div>
     );
 }
@@ -61,10 +63,43 @@ function VideoSection() {
     );
 }
 
-function BlogComments() {
+function Comments() {
+    return skate4Blog.comments.map((item, index) => {
+        return <BlogComment key={index} item={item} />;
+    });
+}
+
+function BlogComment({ item }) {
     return (
         <div class="blog-comment">
-            <p class="blog-comment-text"></p>
+            <p class="blog-comment-text">{item}</p>
+        </div>
+    );
+}
+
+function AddComment() {
+    return (
+        <div id="blog-add-comment">
+            <CommentInputWithLabel
+            // name="comment"
+            // labelContent="Add Comment:"
+            // icon="fas fa-comment"
+            // inputType="text"
+            // placeholder="Add a comment"
+            />
+            {/* <label for="comment">Add Comment:</label>
+                <i class="fas fa-comment input-icon"></i>
+                <input
+                    class="form-input light with-icon"
+                    type="text"
+                    name="comment"
+                    placeholder="Add a comment"
+                    required="true"
+                    id="comment"
+                /> */}
+            <div class="inline-button-wrapper blog-btn-wrapper">
+                <button class="btn-green">Add Comment</button>
+            </div>
         </div>
     );
 }

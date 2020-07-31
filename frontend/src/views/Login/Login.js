@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { Title } from '../../components/titles/titles';
-import InputFieldWithLabel from '../../components/inputField/inputFieldWithLabel';
+import { InputWithLabel } from '../../components/inputField/inputFieldWithLabel';
 import Button from '../../components/squareButton/squareButton';
 import FormWrapper from '../../components/form-wrapper/form-wrapper';
 
@@ -15,7 +15,7 @@ function Login() {
             <FormWrapper>
                 <form className="form-inner-wrapper" method="GET">
                     <>
-                        <InputFieldWithLabel
+                        <InputWithLabel
                             name="email"
                             labelContent="Email Address:"
                             icon={'fas fa-envelope'}
@@ -23,7 +23,7 @@ function Login() {
                             placeholder="Enter Your Email"
                             required="true"
                         />
-                        <InputFieldWithLabel
+                        <InputWithLabel
                             name="password"
                             labelContent="Password:"
                             icon={'fas fa-lock'}

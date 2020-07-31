@@ -2,9 +2,10 @@ import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import FlickitySlider from 'react-flickity-component';
 
-import Title from '../../components/title/title';
+import { Title } from '../../components/titles/titles';
 import FilledHeart from '../../components/heartIcon/filledHeart';
 import UnfilledHeart from '../../components/heartIcon/unfilledHeart';
+import consoles from '../../data/products/consoles';
 
 import './flickity.css';
 import './Products.css';

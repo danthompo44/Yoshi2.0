@@ -3,7 +3,7 @@ import React from 'react';
 import { Title } from '../../components/titles/titles';
 import Button from '../../components/squareButton/squareButton';
 import FormWrapper from '../../components/form-wrapper/form-wrapper';
-import InputFieldWithLabel from '../../components/inputField/inputFieldWithLabel';
+import { InputWithLabel } from '../../components/inputField/inputFieldWithLabel';
 
 import './SignUp.css';
 
@@ -13,7 +13,7 @@ function SignUp() {
             <Title title={'Sign Up'} />
             <FormWrapper>
                 <form className="form-inner-wrapper" method="POST">
-                    <InputFieldWithLabel
+                    <InputWithLabel
                         name="email"
                         labelContent="Email Address:"
                         icon={'fas fa-envelope'}
@@ -21,7 +21,7 @@ function SignUp() {
                         placeholder="Enter Your Email"
                         required="true"
                     />
-                    <InputFieldWithLabel
+                    <InputWithLabel
                         name="password"
                         labelContent="Password:"
                         icon={'fas fa-lock'}
@@ -29,7 +29,7 @@ function SignUp() {
                         placeholder="Enter Your Password"
                         required="true"
                     />
-                    <InputFieldWithLabel
+                    <InputWithLabel
                         name="confirm-password"
                         labelContent="Confirm Password:"
                         icon={'fas fa-lock'}

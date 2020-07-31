@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Title } from '../../components/titles/titles';
-import InputFieldWithLabel from '../../components/inputField/inputFieldWithLabel';
+import { InputWithLabel } from '../../components/inputField/inputFieldWithLabel';
 
 import './ContactUs.css';
 
@@ -57,7 +57,7 @@ function ContactUsDetailsAndButton() {
     return (
         <div id="details-wrapper">
             <div className="inline-form-item">
-                <InputFieldWithLabel
+                <InputWithLabel
                     name="email"
                     labelContent="Email Address:"
                     icon="fas fa-envelope"
@@ -67,7 +67,7 @@ function ContactUsDetailsAndButton() {
                 />
             </div>
             <div className="inline-form-item">
-                <InputFieldWithLabel
+                <InputWithLabel
                     name="name"
                     labelContent="Full Name:"
                     icon="fas fa-user-alt"

@@ -17,4 +17,19 @@ function InputField(props) {
     );
 }
 
-export default InputField;
+function CommentInput(props) {
+    return (
+        <>
+            <i className="fas fa-comment input-icon"></i>
+            <input
+                type="type"
+                className="form-input light with-icon"
+                placeholder="Add a comment"
+                name="comment"
+                required="true"
+            />
+        </>
+    );
+}
+
+export { InputField, CommentInput };

@@ -1,15 +1,29 @@
 import React from 'react';
 
-import InputField from './inputField';
+import { InputField, CommentInput } from './inputField';
 import InputLabel from './inputLabel';
 
-function InputWithLabel(props){
+function InputWithLabel(props) {
     return (
         <>
-        <InputLabel for={props.name} content={props.labelContent}/>
-        <InputField icon={props.icon} type={props.inputType} placeholder={props.placeholder} name={props.name}/>
+            <InputLabel for={props.name} content={props.labelContent} />
+            <InputField
+                icon={props.icon}
+                type={props.inputType}
+                placeholder={props.placeholder}
+                name={props.name}
+            />
         </>
-    )
+    );
 }
 
-export default InputWithLabel;
+function CommentInputWithLabel() {
+    return (
+        <>
+            <InputLabel for="comment" content="Add comment:" />
+            <CommentInput />
+        </>
+    );
+}
+
+export { InputWithLabel, CommentInputWithLabel };
