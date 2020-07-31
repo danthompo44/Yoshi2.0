@@ -41,7 +41,7 @@ function ContactUsForm() {
 function ContactUsMessage() {
     return (
         <div id="message-wrapper">
-            <label for="message">Message:</label>
+            <label htmlFor="message">Message:</label>
             <textarea
                 className="form-input"
                 name="message"

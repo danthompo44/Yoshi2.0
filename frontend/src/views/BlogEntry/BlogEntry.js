@@ -17,7 +17,7 @@ function BlogEntry() {
 
 function BlogEntryContent() {
     return (
-        <div class="blog-entry-content-container">
+        <div className="blog-entry-content-container">
             <TextSection />
             <Image />
             <TextSection />
@@ -28,7 +28,7 @@ function BlogEntryContent() {
 
 function TextSection() {
     return (
-        <div class="blog-entry-section">
+        <div className="blog-entry-section">
             <p>{skate4Blog.blogText}</p>
         </div>
     );
@@ -36,8 +36,8 @@ function TextSection() {
 
 function Image() {
     return (
-        <div class="blog-entry-section">
-            <div class="blog-entry-image">
+        <div className="blog-entry-section">
+            <div className="blog-entry-image">
                 <img
                     src={skate4Blog.blogImage.src}
                     alt={skate4Blog.blogImage.alt}
@@ -49,8 +49,8 @@ function Image() {
 
 function VideoSection() {
     return (
-        <div class="blog-entry-section">
-            <div class="blog-entry-video">
+        <div className="blog-entry-section">
+            <div className="blog-entry-video">
                 <iframe
                     title="Blog Entry YouTube Video"
                     src={skate4Blog.blogVideo}
@@ -71,8 +71,8 @@ function Comments() {
 
 function BlogComment({ item }) {
     return (
-        <div class="blog-comment">
-            <p class="blog-comment-text">{item}</p>
+        <div className="blog-comment">
+            <p className="blog-comment-text">{item}</p>
         </div>
     );
 }
@@ -87,18 +87,18 @@ function AddComment() {
             // inputType="text"
             // placeholder="Add a comment"
             />
-            {/* <label for="comment">Add Comment:</label>
-                <i class="fas fa-comment input-icon"></i>
+            {/* <label htmlFor="comment">Add Comment:</label>
+                <i className="fas fa-comment input-icon"></i>
                 <input
-                    class="form-input light with-icon"
+                    className="form-input light with-icon"
                     type="text"
                     name="comment"
                     placeholder="Add a comment"
                     required="true"
                     id="comment"
                 /> */}
-            <div class="inline-button-wrapper blog-btn-wrapper">
-                <button class="btn-green">Add Comment</button>
+            <div className="inline-button-wrapper blog-btn-wrapper">
+                <button className="btn-green">Add Comment</button>
             </div>
         </div>
     );

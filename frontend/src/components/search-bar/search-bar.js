@@ -6,7 +6,7 @@ function SearchBar() {
     return (
         <div id="search-container">
             <div id="search-bar">
-                <label for="search">Search:</label>
+                <label htmlFor="search">Search:</label>
                 <i className="fas fa-search input-icon"></i>
                 <input
                     id="search"
