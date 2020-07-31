@@ -35,7 +35,12 @@ function Header() {
                         </li>
                         <li className="nav-link">
                             {user.isLoggedIn ? (
-                                <p id="logout-text">Logout</p>
+                                <p
+                                    id="logout-text"
+                                    onClick={user.functions.logout}
+                                >
+                                    Logout
+                                </p>
                             ) : (
                                 <Link to="/auth/login">Login</Link>
                             )}

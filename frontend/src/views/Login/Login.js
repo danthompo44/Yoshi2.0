@@ -25,7 +25,6 @@ function Login() {
 
     async function login(event) {
         try {
-            console.log({ email, password });
             user.functions.login(email, password);
             event.preventDefault();
         } catch (err) {}
