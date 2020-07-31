@@ -5,7 +5,6 @@ const {
     throwNotFoundError,
     createErrorData,
     throwMissingDataError,
-    validateEmail
 } = require('../helpers');
 
 const Query = db.Query;

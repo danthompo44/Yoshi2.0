@@ -126,6 +126,7 @@ async function getCommentsForPost(req, res) {
  */
 async function addCommentToPost(req, res) {
     try {
+        console.log(req.params.id);
         // check if valid post
         const post = await GamePost.findByPk(req.params.id);
 
@@ -141,7 +142,7 @@ async function addCommentToPost(req, res) {
         if (isDataNullOrUndefined(req.body.comment)) {
             throwMissingDataError();
         }
-
+        
         const comment = await GamePostComment.create({
             comment: req.body.comment,
             likes: 0,
