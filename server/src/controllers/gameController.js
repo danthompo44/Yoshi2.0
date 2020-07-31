@@ -3,7 +3,7 @@ const {
     createErrorData,
     isDataNullOrUndefined,
     throwMissingDataError,
-    throwNotFoundError,
+    throwAPIError,
 } = require('../helpers');
 const db = require('../models');
 
@@ -36,11 +36,11 @@ async function getById(req, res) {
     try {
         const game = await Game.findByPk(req.params.id);
         if (isDataNullOrUndefined(game)) {
-            throw {
-                code: 404,
-                name: 'ERR_GAME_NOT_FOUND',
-                message: `Game with id ${req.params.id} not found`,
-            };
+            throwAPIError(
+                404,
+                'ERR_GAME_NOT_FOUND',
+                `Game with id ${req.params.id} not found`
+            );
         }
         return res.status(200).json(game);
     } catch (err) {}
@@ -57,8 +57,8 @@ async function getAllPosts(req, res) {
         const gamePosts = await GamePost.findAll();
 
         if (isDataNullOrUndefined(gamePosts)) {
-            throwNotFoundError(
-                null,
+            throwAPIError(
+                404,
                 'ERR_POSTS_FAILED_TO_LOAD',
                 'Posts failed to load'
             );
@@ -82,8 +82,8 @@ async function getPostById(req, res) {
         const post = await GamePost.findByPk(req.params.id);
 
         if (isDataNullOrUndefined(post)) {
-            throwNotFoundError(
-                null,
+            throwAPIError(
+                404,
                 'ERR_POST_FAILED_TO_LOAD',
                 `Post with id ${id} failed to load`
             );
@@ -130,8 +130,8 @@ async function addCommentToPost(req, res) {
         const post = await GamePost.findByPk(req.params.id);
 
         if (isDataNullOrUndefined(post)) {
-            throwNotFoundError(
-                null,
+            throwAPIError(
+                404,
                 'ERR_POST_NOT_FOUND',
                 'Post not found, so can not add a comment'
             );
@@ -166,8 +166,8 @@ async function likeComment(req, res) {
         // check if valid post
         const post = await GamePost.findByPk(req.params.postId);
         if (isDataNullOrUndefined(post)) {
-            throwNotFoundError(
-                null,
+            throwAPIError(
+                404,
                 'ERR_POST_NOT_FOUND',
                 'Post not found, so can not like a comment'
             );
@@ -176,8 +176,8 @@ async function likeComment(req, res) {
         // check if valid comment
         const comment = await GamePostComment.findByPk(req.params.commentId);
         if (isDataNullOrUndefined(comment)) {
-            throwNotFoundError(
-                null,
+            throwAPIError(
+                404,
                 'ERR_COMMENT_NOT_FOUND',
                 'Comment not found, so can not increment number of likes'
             );
