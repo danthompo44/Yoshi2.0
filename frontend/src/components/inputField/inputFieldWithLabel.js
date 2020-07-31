@@ -12,6 +12,8 @@ function InputWithLabel(props) {
                 type={props.inputType}
                 placeholder={props.placeholder}
                 name={props.name}
+                value={props.value}
+                setValue={props.setValue}
             />
         </>
     );

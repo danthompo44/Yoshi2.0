@@ -59,6 +59,12 @@
     margin: 15px auto;
 }
 
+#logout-text {
+    color: inherit;
+    display: inline-block;
+    cursor: pointer;
+}
+
 @media screen and (min-width: 768px) {
     #main-nav {
         display: flex;

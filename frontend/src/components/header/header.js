@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+
+import UserContext from '../../state/userContext';
 
 import './header.css';
 
 function Header() {
+    const user = useContext(UserContext);
+
     return (
         <header>
             <div id="main-nav-container">
@@ -30,7 +34,11 @@ function Header() {
                             <Link to="/contact-us">Contact Us</Link>
                         </li>
                         <li className="nav-link">
-                            <Link to="/auth/login">Login</Link>
+                            {user.isLoggedIn ? (
+                                <p id="logout-text">Logout</p>
+                            ) : (
+                                <Link to="/auth/login">Login</Link>
+                            )}
                         </li>
                     </ul>
                 </nav>
