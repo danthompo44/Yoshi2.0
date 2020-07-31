@@ -47,11 +47,11 @@ label {
     display: block;
     margin-bottom: 5px;
     color: inherit;
-    font-weight: bold;
+    font-weight: 700;
     padding-left: 3px;
 }
 
-/* input,
+input,
 [type='text'],
 [type='password'],
 [type='date'],
@@ -79,7 +79,7 @@ select {
     background-color: inherit;
     box-shadow: 1px 1px 1px #000000;
     font-size: 1.1em;
-} */
+}
 
 input.light {
     background-color: #444444;
@@ -110,6 +110,11 @@ select:disabled {
     }
 }
 
+.page-title {
+    margin-bottom: 25px;
+    text-shadow: 1px 2px 2px #222222;
+}
+
 .page-subtitle {
     margin-bottom: 20px;
 }
@@ -125,7 +130,7 @@ select:disabled {
     font-weight: bold;
 }
 
-.btn-green.form-button,
+.btn-green,
 .form-input {
     border: 1px solid #333333;
     box-shadow: 0px 1px 1px 0px #222222;
@@ -147,13 +152,13 @@ select:disabled {
     border-radius: 5px;
 }
 
-/* .input-icon {
+.input-icon {
     position: absolute;
     margin: 10px;
     font-size: 1.1em;
     line-height: 1.4 !important;
     color: #92d36e;
-} */
+}
 
 .with-icon {
     padding-left: 40px;

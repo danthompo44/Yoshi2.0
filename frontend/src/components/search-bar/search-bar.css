@@ -1,0 +1,16 @@
+#search-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+#search-bar {
+    width: 250px;
+    position: relative;
+}
+
+#search-bar input {
+    border-radius: 50px;
+    border-color: #444444;
+    color: #c0c0c0;
+}

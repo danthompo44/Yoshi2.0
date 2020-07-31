@@ -1,25 +1,44 @@
 import React from 'react';
-import Title from '../../components/title/title';
-import InputField from '../../components/inputField/inputField';
-import FormButton from '../../components/formButton/formButton';
+import { Link } from 'react-router-dom';
+
+import { Title } from '../../components/titles/titles';
+import { InputWithLabel } from '../../components/inputField/inputFieldWithLabel';
+import Button from '../../components/squareButton/squareButton';
+import FormWrapper from '../../components/form-wrapper/form-wrapper';
+
+import './Login.css';
 
 function Login() {
     return (
-        <div className="login">
+        <div id="login-container">
             <Title title={'Login'} />
-            <form>
-                <InputField
-                    icon={'fas fa-envelope'}
-                    type="email"
-                    placeholder="Enter Your Email"
-                />
-                <InputField
-                    icon={'fas fa-lock'}
-                    type="password"
-                    placeholder="Enter Your Password"
-                />
-                <FormButton content="Submit"></FormButton>
-            </form>
+            <FormWrapper>
+                <form className="form-inner-wrapper" method="GET">
+                    <>
+                        <InputWithLabel
+                            name="email"
+                            labelContent="Email Address:"
+                            icon={'fas fa-envelope'}
+                            inputType="email"
+                            placeholder="Enter Your Email"
+                            required="true"
+                        />
+                        <InputWithLabel
+                            name="password"
+                            labelContent="Password:"
+                            icon={'fas fa-lock'}
+                            inputType="password"
+                            placeholder="Enter Your Password"
+                            required="true"
+                        />
+                        <Button content="Login" />
+                        <Link id="forgotten-password">Forgotten Password?</Link>
+                    </>
+                </form>
+                <Link to="/auth/sign-up" id="sign-up-link">
+                    No account? Sign Up
+                </Link>
+            </FormWrapper>
         </div>
     );
 }
