@@ -11,6 +11,9 @@ function Game(sequelize) {
             title: {
                 type: DataTypes.STRING,
             },
+            image_url: {
+                type: DataTypes.STRING,
+            },
             rating: {
                 type: DataTypes.INTEGER,
             },
