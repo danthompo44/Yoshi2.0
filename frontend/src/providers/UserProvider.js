@@ -71,6 +71,14 @@ function userReducer(state, action) {
                 token: action.payload.token,
                 errors: [],
             };
+        case 'signup':
+            return {
+                ...state,
+                isLoggedIn: true,
+                id: action.payload.id,
+                token: action.payload.token,
+                errors: [],
+            };
         case 'token_reset':
             return {
                 ...state,
@@ -82,6 +90,12 @@ function userReducer(state, action) {
                 ...state,
                 errors: [...state.errors, action.payload],
             };
+        case 'error_reset': {
+            return {
+                ...state,
+                errors: [],
+            };
+        }
         default:
             return state;
     }
