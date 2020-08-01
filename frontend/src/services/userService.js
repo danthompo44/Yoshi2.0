@@ -1,6 +1,19 @@
 import axios from '../helpers/axios';
 
-export async function signup(email, password) {}
+export async function signup(email, password) {
+    try {
+        const data = await axios.post('/users/signup', {
+            email,
+            password,
+        });
+
+        persistUserId(data.data.id);
+
+        return data;
+    } catch (err) {
+        throw err;
+    }
+}
 
 export async function login(email, password) {
     try {

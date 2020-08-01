@@ -1,5 +1,8 @@
 import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+
+import UserContext from '../../state/userContext';
+import service from '../../services/userService';
 
 import { Title } from '../../components/titles/titles';
 import { InputWithLabel } from '../../components/inputField/inputFieldWithLabel';
@@ -7,10 +10,9 @@ import Button from '../../components/squareButton/squareButton';
 import FormWrapper from '../../components/form-wrapper/form-wrapper';
 
 import './Login.css';
-import UserContext from '../../state/userContext';
-import * as service from '../../services/userService';
 
 function Login() {
+    const history = useHistory();
     const { state, dispatch } = useContext(UserContext);
 
     const [email, setEmail] = useState('');
@@ -36,6 +38,9 @@ function Login() {
                     token: userData.data.token,
                 },
             });
+
+            // return user to home page
+            history.replace('/');
         } catch (err) {}
     }
 
