@@ -24,13 +24,13 @@ function BlogEntry(blog) {
     let link = '/blog/' + blog.id;
     return (
         <Link to={link} className="blog-entry">
-            <div class="blog-entry-container">
-                <div class="blog-image">
+            <div className="blog-entry-container">
+                <div className="blog-image">
                     <img alt={blog.blogImage.alt} src={blog.blogImage.src} />
                 </div>
-                <div class="blog-content">
-                    <h2 class="blog-title">{blog.title}</h2>
-                    <p class="blog-text">{blog.blogText}</p>
+                <div className="blog-content">
+                    <h2 className="blog-title">{blog.title}</h2>
+                    <p className="blog-text">{blog.blogText}</p>
                 </div>
             </div>
         </Link>

@@ -4,6 +4,7 @@ const router = require('./src/routes/router');
 const compression = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 // packages for logging
 const morgan = require('morgan');
@@ -14,6 +15,7 @@ const app = express();
 // parse incoming requests
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 // security with helmet
 app.use(helmet());

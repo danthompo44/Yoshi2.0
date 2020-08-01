@@ -11,7 +11,7 @@ function Title(props) {
 
 function BlogPageTitle() {
     return (
-        <div class="blog-page-title">
+        <div className="blog-page-title">
             <h1>Gamer's United</h1>
             <h4>Supporting Introverts Worldwide</h4>
         </div>
@@ -20,7 +20,7 @@ function BlogPageTitle() {
 
 function BlogEntryTitle() {
     return (
-        <div class="blog-page-title">
+        <div className="blog-page-title">
             <h1>PS5 Set To Annoys Gamers Worldwide</h1>
         </div>
     );

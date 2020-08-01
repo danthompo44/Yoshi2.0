@@ -12,6 +12,8 @@ function InputField(props) {
                 placeholder={props.placeholder}
                 name={props.name}
                 required={props.required}
+                value={props.value}
+                onChange={props.setValue}
             />
         </div>
     );
