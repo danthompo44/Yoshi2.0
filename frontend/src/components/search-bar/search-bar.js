@@ -14,7 +14,7 @@ function SearchBar() {
                     placeholder="Search..."
                     type="text"
                     name="search"
-                    required="true"
+                    required={true}
                 />
             </div>
         </div>

@@ -2,11 +2,19 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import UserContext from '../../state/userContext';
+import service from '../../services/userService';
 
 import './header.css';
 
 function Header() {
-    const user = useContext(UserContext);
+    const { state, dispatch } = useContext(UserContext);
+
+    async function logout() {
+        await service.logout(state.id);
+        dispatch({
+            type: 'logout',
+        });
+    }
 
     return (
         <header>
@@ -34,11 +42,8 @@ function Header() {
                             <Link to="/contact-us">Contact Us</Link>
                         </li>
                         <li className="nav-link">
-                            {user.isLoggedIn ? (
-                                <p
-                                    id="logout-text"
-                                    onClick={user.functions.logout}
-                                >
+                            {state.isLoggedIn ? (
+                                <p id="logout-text" onClick={logout}>
                                     Logout
                                 </p>
                             ) : (

@@ -152,6 +152,10 @@ select:disabled {
     border-radius: 5px;
 }
 
+.form-inner-wrapper.error {
+    border: 1px solid red;
+}
+
 .input-icon {
     position: absolute;
     margin: 10px;
@@ -162,4 +166,8 @@ select:disabled {
 
 .with-icon {
     padding-left: 40px;
+}
+
+.error-text {
+    color: red;
 }

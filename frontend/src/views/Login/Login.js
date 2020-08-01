@@ -8,9 +8,10 @@ import FormWrapper from '../../components/form-wrapper/form-wrapper';
 
 import './Login.css';
 import UserContext from '../../state/userContext';
+import * as service from '../../services/userService';
 
 function Login() {
-    const user = useContext(UserContext);
+    const { state, dispatch } = useContext(UserContext);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -25,8 +26,16 @@ function Login() {
 
     async function login(event) {
         try {
-            user.functions.login(email, password);
             event.preventDefault();
+
+            const userData = await service.login(email, password);
+            dispatch({
+                type: 'login',
+                payload: {
+                    id: userData.data.id,
+                    token: userData.data.token,
+                },
+            });
         } catch (err) {}
     }
 
@@ -34,7 +43,11 @@ function Login() {
         <div id="login-container">
             <Title title={'Login'} />
             <FormWrapper onSubmit={login}>
-                <div className="form-inner-wrapper">
+                <div
+                    className={`form-inner-wrapper ${
+                        state.errors.length > 0 && 'error'
+                    }`}
+                >
                     <InputWithLabel
                         name="email"
                         labelContent="Email Address:"
@@ -60,6 +73,9 @@ function Login() {
                         Forgotten Password?
                     </Link>
                 </div>
+                {state.errors.length > 0 && (
+                    <div className="error-text">Unable to login, try again</div>
+                )}
                 <Link to="/auth/sign-up" id="sign-up-link">
                     No account? Sign Up
                 </Link>

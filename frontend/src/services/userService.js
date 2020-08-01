@@ -1,14 +1,55 @@
-import Axios from 'axios';
+import axios from '../helpers/axios';
 
 export async function signup(email, password) {}
 
 export async function login(email, password) {
-    const data = await Axios.post('http://localhost:3000/api/users/login', {
-        email,
-        password,
-    });
+    try {
+        const data = await axios.post('/users/login', {
+            email,
+            password,
+        });
 
-    return data.data;
+        persistUserId(data.data.id);
+
+        return data;
+    } catch (err) {
+        throw err;
+    }
 }
 
-export async function refreshToken() {}
+export async function refreshToken(userId) {
+    try {
+        const newToken = await axios.post('/users/refresh-token', {
+            userId,
+        });
+        return newToken;
+    } catch (err) {
+        throw err;
+    }
+}
+
+export async function logout(userId) {
+    try {
+        await axios.post('/users/logout', {
+            userId,
+        });
+        clearUserId();
+    } catch (err) {
+        throw err;
+    }
+}
+
+function persistUserId(userId) {
+    localStorage.setItem('userId', userId);
+}
+
+function clearUserId() {
+    localStorage.removeItem('userId');
+}
+
+export default {
+    signup,
+    login,
+    logout,
+    refreshToken,
+};

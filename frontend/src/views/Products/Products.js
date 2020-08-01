@@ -1,32 +1,30 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import FlickitySlider from 'react-flickity-component';
+
+import axios from '../../helpers/axios';
 
 import { Title } from '../../components/titles/titles';
 import FilledHeart from '../../components/heartIcon/filledHeart';
 import UnfilledHeart from '../../components/heartIcon/unfilledHeart';
-import consoleData from '../../data/products/consoles';
+import consolesMemory from '../../data/products/consoles';
 
 import './flickity.css';
 import './Products.css';
-import Axios from 'axios';
 
 function Products() {
     const [gamesLoading, setGamesLoading] = useState(true);
     const [games, setGames] = useState([]);
 
     const [consolesLoading, setConsolesLoading] = useState(false);
-    const [consoles, setConsoles] = useState(consoleData);
+    const [consoles, setConsoles] = useState(consolesMemory);
 
     useEffect(() => {
         const fetchGames = async () => {
             try {
                 setGamesLoading(true);
-                const games = await Axios.get(
-                    'http://localhost:3000/api/games'
-                );
-                setGames(games.data);
-                console.log(games.data);
+                const gameData = await axios.get('/games');
+                setGames(gameData.data);
                 setGamesLoading(false);
             } catch (err) {
                 setGamesLoading(false);
@@ -40,6 +38,11 @@ function Products() {
     useEffect(() => {
         const fetchConsoles = async () => {
             try {
+                setConsolesLoading(true);
+                // const consoleData = await axios.get('/consoles');
+                // setConsoles(consoleData.data);
+                setConsoles(consolesMemory);
+                setConsolesLoading(false);
             } catch (err) {
                 console.log(err);
             }

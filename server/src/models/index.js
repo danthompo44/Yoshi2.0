@@ -7,6 +7,7 @@ const Game = require('./game');
 const Console = require('./console');
 const Blog = require('./blog');
 const User = require('./user');
+const UserToken = require('./user_token');
 const GamePostComment = require('./game_post_comment');
 const ConsolePost = require('./console_post');
 const GamePost = require('./game_post');
@@ -40,6 +41,7 @@ const db = {
     Blog: Blog(sequelize),
     BlogComment: BlogComment(sequelize),
     User: User(sequelize),
+    UserToken: UserToken(sequelize),
     Query: Query(sequelize),
 };
 

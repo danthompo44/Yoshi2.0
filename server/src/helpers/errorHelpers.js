@@ -52,9 +52,9 @@ function throwAPIError(code, name, message) {
 }
 
 /**
- * Function that throws an API error containing the relevant information for a request with missing data
+ * Function that throws an API error containing the relevant information for a request with missing data.
  * Default code is 400.
- * @param {number} [code=400] The code of the error - Default 404
+ * @param {number} [code=400] The code of the error - Default 400
  * @param {string} [name="ERR_MISSING_DATA"] The name of the error
  * @param {string} [message="Missing data to complete task"] The user friendly message of the error
  */

@@ -9,8 +9,8 @@ function ContactUs() {
     return (
         <div id="contact-us-wrapper" className="page-wrapper">
             <Title title={'Contact Us'} />
-            {PageInfo()}
-            {ContactUsForm()}
+            <PageInfo />
+            <ContactUsForm />
         </div>
     );
 }
@@ -31,8 +31,8 @@ function ContactUsForm() {
     return (
         <div id="contact-form" className="form-wrapper">
             <form className="form-inner-wrapper">
-                {ContactUsMessage()}
-                {ContactUsDetailsAndButton()}
+                <ContactUsMessage />
+                <ContactUsDetailsAndButton />
             </form>
         </div>
     );
@@ -46,7 +46,7 @@ function ContactUsMessage() {
                 className="form-input"
                 name="message"
                 placeholder="Enter Your Message"
-                required="true"
+                required={true}
                 id="message"
             ></textarea>
         </div>
@@ -63,7 +63,7 @@ function ContactUsDetailsAndButton() {
                     icon="fas fa-envelope"
                     inputType="email"
                     placeholder="Enter Your Email"
-                    required="true"
+                    required={true}
                 />
             </div>
             <div className="inline-form-item">
@@ -73,7 +73,7 @@ function ContactUsDetailsAndButton() {
                     icon="fas fa-user-alt"
                     inputType="text"
                     placeholder="Enter Your Full Name"
-                    required="true"
+                    required={true}
                 />
             </div>
             <div className="inline-button-wrapper">

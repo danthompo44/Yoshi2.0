@@ -1,76 +1,88 @@
-import React, { useState } from 'react';
+import React, { useReducer, useCallback, useEffect } from 'react';
 import UserContext from '../state/userContext';
-import * as service from '../services/userService';
+import service from '../services/userService';
+
+const initialUserData = {
+    isLoggedIn: false,
+    id: null,
+    token: null,
+    errors: [],
+};
 
 function UserProvider({ children }) {
-    const initialUserData = {
-        isLoggedIn: false,
-        id: null,
-        email: null,
-        error: {
-            clearError,
-            clearErrors,
-            errors: [],
-        },
-        functions: { login, logout, signup },
-    };
-    const [user, setUser] = useState(initialUserData);
+    const [state, dispatch] = useReducer(userReducer, initialUserData);
 
-    function clearError(err) {
-        setUser({
-            ...user,
-            errors: user.errors.filter((item) => item !== err),
-        });
-    }
-
-    function clearErrors() {
-        setUser({
-            ...user,
-            errors: [],
-        });
-    }
-
-    async function login(email, password) {
+    const refreshToken = useCallback(async () => {
         try {
-            const userData = await service.login(email, password);
-            setUser({
-                ...user,
-                id: userData.id,
-                email: email,
-                isLoggedIn: true,
+            const userId = getUserIdFromStorage();
+
+            if (!userId) {
+                throw Error('User must already be logged in');
+            }
+            const res = await service.refreshToken(userId);
+            const newToken = res.data.token;
+
+            dispatch({
+                type: 'login',
+                payload: {
+                    token: newToken,
+                    id: userId,
+                },
             });
         } catch (err) {
-            console.log(err);
-            setUser({
-                ...user,
-                error: { ...user.error, errors: [...user.error.errors, err] },
+            dispatch({
+                type: 'add_error',
+                payload: err,
             });
         }
+    }, []);
+
+    function getUserIdFromStorage() {
+        return localStorage.getItem('userId');
     }
 
-    function logout() {
-        setUser(initialUserData);
-    }
+    useEffect(() => {
+        const tryLogin = async () => {
+            await refreshToken();
+        };
 
-    async function signup(email, password) {
-        try {
-            const userData = await service.signup(email, password);
-            setUser({
-                ...user,
-                id: userData.id,
-                email: email,
-                isLoggedIn: true,
-            });
-        } catch (err) {
-            console.log(err);
-            setUser({
-                ...user,
-                error: { ...user.error, errors: [...user.error.errors, err] },
-            });
-        }
-    }
+        tryLogin();
+    }, [refreshToken]);
 
-    return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+    return (
+        <UserContext.Provider value={{ state, dispatch }}>
+            {children}
+        </UserContext.Provider>
+    );
 }
 
 export default UserProvider;
+
+function userReducer(state, action) {
+    console.log(state, action);
+    switch (action.type) {
+        case 'logout':
+            return initialUserData;
+        case 'login':
+            return {
+                ...state,
+                isLoggedIn: true,
+                id: action.payload.id,
+                token: action.payload.token,
+                errors: [],
+            };
+        case 'token_reset':
+            return {
+                ...state,
+                isLoggedIn: true,
+                token: action.payload.token,
+            };
+        case 'add_error':
+            return {
+                ...state,
+                errors: [...state.errors, action.payload],
+            };
+        default:
+            return state;
+    }
+}
