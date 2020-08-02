@@ -2,12 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import FlickitySlider from 'react-flickity-component';
 
-import axios from '../../helpers/axios';
+import { getAllGames } from '../../services/gameService';
+import { getAllConsoles } from '../../services/consoleService';
 
 import { Title } from '../../components/titles/titles';
 import FilledHeart from '../../components/heartIcon/filledHeart';
 import UnfilledHeart from '../../components/heartIcon/unfilledHeart';
-import consolesMemory from '../../data/products/consoles';
 
 import './flickity.css';
 import './Products.css';
@@ -17,13 +17,13 @@ function Products() {
     const [games, setGames] = useState([]);
 
     const [consolesLoading, setConsolesLoading] = useState(false);
-    const [consoles, setConsoles] = useState(consolesMemory);
+    const [consoles, setConsoles] = useState([]);
 
     useEffect(() => {
         const fetchGames = async () => {
             try {
                 setGamesLoading(true);
-                const gameData = await axios.get('/games');
+                const gameData = await getAllGames();
                 setGames(gameData.data);
                 setGamesLoading(false);
             } catch (err) {
@@ -39,9 +39,8 @@ function Products() {
         const fetchConsoles = async () => {
             try {
                 setConsolesLoading(true);
-                // const consoleData = await axios.get('/consoles');
-                // setConsoles(consoleData.data);
-                setConsoles(consolesMemory);
+                const consoleData = await getAllConsoles();
+                setConsoles(consoleData.data);
                 setConsolesLoading(false);
             } catch (err) {
                 console.log(err);
@@ -98,15 +97,25 @@ function Carousel({ items, route }) {
 
 function CarouselItem({ item, route }) {
     let link = '/products/' + route + item.id;
+
+    function displayRating() {
+        const hearts = [];
+        for (let index = 0; index < 5; index++) {
+            if (item.rating > index) {
+                hearts.push(<FilledHeart key={index} />);
+            } else {
+                hearts.push(<UnfilledHeart key={index} />);
+            }
+        }
+        return hearts;
+    }
+
     return (
         <Link to={link} className="carousel-cell">
-            <img src={item.image} alt={item.alt} />
+            <img src={item.image_url} alt={item.alt} />
             <div className="carousel-cell-bottom-bar">
-                <p>{item.title}</p>
-                <div className="bottom-bar-rating">
-                    <FilledHeart />
-                    <UnfilledHeart />
-                </div>
+                <p>{item.title || item.name}</p>
+                <div className="bottom-bar-rating">{displayRating()}</div>
             </div>
         </Link>
     );
