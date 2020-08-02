@@ -40,7 +40,10 @@ exports.signup = async (req, res) => {
         const token = generateToken(user.id);
         const refreshToken = await generateRefreshToken(user.id);
 
-        res.cookie('token', refreshToken, { httpOnly: true });
+        res.cookie('token', refreshToken.token, {
+            httpOnly: true,
+            expires: refreshToken.disabled_at,
+        });
         res.status(201).json({ id: user.id, token: token });
     } catch (err) {
         const error = createErrorData(err);
@@ -79,7 +82,10 @@ exports.login = async (req, res) => {
         const token = generateToken(user.id);
         const refreshToken = await generateRefreshToken(user.id);
 
-        res.cookie('token', refreshToken, { httpOnly: true });
+        res.cookie('token', refreshToken.token, {
+            httpOnly: true,
+            expires: refreshToken.disabled_at,
+        });
         return res.status(200).json({ id: user.id, token: token });
     } catch (err) {
         const error = createErrorData(err);
@@ -125,8 +131,6 @@ exports.refreshToken = async (req, res) => {
  */
 exports.logout = async (req, res) => {
     try {
-        console.log(req.cookies);
-        console.log(req.body.userId);
         const data = {
             userId: req.body.userId,
             token: req.cookies.token,
@@ -164,22 +168,25 @@ function generateToken(userId) {
  * Function to generate a random secure token.
  * Will save the token in the DB against the user.
  * @param {number} userId The users id.
- * @returns {Promise<string>} The random token 16 characters in length.
+ * @returns {Promise<{token: string, created_at: Date, disabled_at: Date}>} The refresh token and the date created / expiry.
  */
 async function generateRefreshToken(userId) {
     try {
         const token = randToken.generate(16);
         const currentDate = new Date();
-        const disabledDate = new Date(
-            currentDate.setMonth(currentDate.getMonth + 1)
-        ).toUTCString();
+        const disabledDate = new Date(currentDate);
+        disabledDate.setFullYear(currentDate.getFullYear() + 1);
         await UserToken.create({
             token: token,
-            created_at: Date.now(),
-            disabled_at: Date.now(),
+            created_at: currentDate,
+            disabled_at: disabledDate,
             user_id: userId,
         });
-        return token;
+        return {
+            token: token,
+            created_at: currentDate,
+            disabled_at: disabledDate,
+        };
     } catch (err) {
         console.log(err);
         throw err;
