@@ -96,7 +96,7 @@ function Carousel({ items, route }) {
 }
 
 function CarouselItem({ item, route }) {
-    let link = '/products/' + route + item.id;
+    const link = '/products' + route + item.id;
 
     function displayRating() {
         const hearts = [];

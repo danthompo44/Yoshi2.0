@@ -28,7 +28,7 @@ function CommentInput(props) {
                 className="form-input light with-icon"
                 placeholder="Add a comment"
                 name="comment"
-                required="true"
+                required={true}
             />
         </>
     );

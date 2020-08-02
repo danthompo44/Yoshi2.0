@@ -11,7 +11,11 @@ import SignUp from '../../views/SignUp/SignUp';
 import './main-container.css';
 
 function MainContainer() {
-    return <div id="main-container">{MarginContainer()}</div>;
+    return (
+        <div id="main-container">
+            <MarginContainer />
+        </div>
+    );
 }
 
 function MarginContainer() {

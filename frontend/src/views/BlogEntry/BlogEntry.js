@@ -54,9 +54,9 @@ function VideoSection() {
                 <iframe
                     title="Blog Entry YouTube Video"
                     src={skate4Blog.blogVideo}
-                    frameborder="0"
+                    frameBorder="0"
                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
+                    allowFullScreen={true}
                 ></iframe>
             </div>
         </div>
