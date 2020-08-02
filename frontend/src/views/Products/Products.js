@@ -112,7 +112,10 @@ function CarouselItem({ item, route }) {
 
     return (
         <Link to={link} className="carousel-cell">
-            <img src={item.image_url} alt={item.alt} />
+            <img
+                src={item.image_url}
+                alt={`${item.title || item.name} in action`}
+            />
             <div className="carousel-cell-bottom-bar">
                 <p>{item.title || item.name}</p>
                 <div className="bottom-bar-rating">{displayRating()}</div>
