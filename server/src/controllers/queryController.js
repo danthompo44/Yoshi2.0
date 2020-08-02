@@ -1,4 +1,4 @@
-const {request, response} = require('express');
+const { request, response } = require('express');
 const db = require('../models');
 const {
     isDataNullOrUndefined,
@@ -11,18 +11,17 @@ const Query = db.Query;
 
 /**
  * A function to retrieve all queries
- * @param {request} req Express request object 
+ * @param {request} req Express request object
  * @param {response} res Express response object
  */
-async function getAll(req, res){
-    try{
+async function getAll(req, res) {
+    try {
         const queries = await Query.findAll();
-        if(isDataNullOrUndefined(queries)){
+        if (isDataNullOrUndefined(queries)) {
             throwNotFoundError();
         }
         return res.status(200).json(queries);
-    }
-    catch(err){
+    } catch (err) {
         const error = createErrorData(err);
         return res.status(error.code).json(error.error);
     }
@@ -34,15 +33,14 @@ async function getAll(req, res){
  * @param {response} res Express response object
  * @param {number} req.params.id A query id
  */
-async function getById(req, res){
-    try{
+async function getById(req, res) {
+    try {
         const query = await Query.findByPk(req.params.id);
-        if(isDataNullOrUndefined(query)){
+        if (isDataNullOrUndefined(query)) {
             throwNotFoundError();
         }
         return res.status(200).json(query);
-    }
-    catch(err){
+    } catch (err) {
         const error = createErrorData(err);
         return res.status(error.code).json(error.error);
     }
@@ -53,25 +51,24 @@ async function getById(req, res){
  * @param {request} req Express request object
  * @param {response} res Express response object
  */
-async function createQuery(req, res){
-    var data = [req.body.email, req.body.name, req.body.message]
-    try{
-        for(let i = 0; i<data.length; i++){
-            if(isDataNullOrUndefined(data[i])){
+async function createQuery(req, res) {
+    var data = [req.body.email, req.body.name, req.body.message];
+    try {
+        for (let i = 0; i < data.length; i++) {
+            if (isDataNullOrUndefined(data[i])) {
                 throwMissingDataError();
             }
         }
         const query = await Query.create({
             message: req.body.message,
             email: req.body.email,
-            name: req.body.name,           
+            name: req.body.name,
         });
         return res.status(200).json(query);
-    }
-    catch(err){
+    } catch (err) {
         const error = createErrorData(err);
         return res.status(error.code).json(error.error);
     }
 }
 
-module.exports = {getAll, getById, createQuery};
+module.exports = { getAll, getById, createQuery };

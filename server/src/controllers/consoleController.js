@@ -1,6 +1,10 @@
 const { request, response } = require('express');
 
-const { createErrorData, isDataNullOrUndefined, throwNotFoundError } = require('../helpers');
+const {
+    createErrorData,
+    isDataNullOrUndefined,
+    throwNotFoundError,
+} = require('../helpers');
 const db = require('../models');
 
 const Console = db.Console;
@@ -28,15 +32,14 @@ async function getAll(req, res) {
  * @param {response} res Express Response Object
  * @param {number} req.params.id A console id
  */
-async function getById(req, res){
-    try{
+async function getById(req, res) {
+    try {
         const console = await Console.findByPk(req.params.id);
-        if(isDataNullOrUndefined(console)){
+        if (isDataNullOrUndefined(console)) {
             throwNotFoundError();
         }
         return res.status(200).json(console);
-    }
-    catch(err){
+    } catch (err) {
         const error = createErrorData(err);
         return res.status(error.code).json(error.error);
     }
@@ -48,7 +51,7 @@ async function getById(req, res){
  * @param {request} req Express request object
  * @param {response} res Express response object
  */
-async function getAllPosts(req, res){
+async function getAllPosts(req, res) {
     try {
         const consolePosts = await ConsolePost.findAll();
 
@@ -65,7 +68,6 @@ async function getAllPosts(req, res){
         return res.status(error.code).json(error.error);
     }
 }
-
 
 /**
  * Get a post about a console by it's id.
@@ -143,7 +145,7 @@ async function addCommentToPost(req, res) {
             likes: 0,
             console_post_id: req.params.id,
         });
-        
+
         return res.status(200).json(comment);
     } catch (err) {
         const error = createErrorData(err);
@@ -191,4 +193,13 @@ async function likeComment(req, res) {
         return res.status(error.code).json(error.error);
     }
 }
-module.exports = { getAll, getById, getAllPosts, getPostById, getCommentsForPost, addCommentToPost, likeComment };
+
+module.exports = {
+    getAll,
+    getById,
+    getAllPosts,
+    getPostById,
+    getCommentsForPost,
+    addCommentToPost,
+    likeComment,
+};
