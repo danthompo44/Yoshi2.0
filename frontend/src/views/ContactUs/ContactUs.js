@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Title } from '../../components/titles/titles';
 import { InputWithLabel } from '../../components/inputField/inputFieldWithLabel';
 
 import './ContactUs.css';
+import { createQuery } from '../../services/queryService';
 
 function ContactUs() {
     return (
@@ -28,17 +29,63 @@ function PageInfo() {
 }
 
 function ContactUsForm() {
+    const [message, setMessage] = useState('');
+    const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
+
+    const [success, setSuccess] = useState('');
+    const [error, setError] = useState('');
+
+    function resetState() {
+        setMessage('');
+        setEmail('');
+        setName('');
+    }
+
+    async function submit(event) {
+        try {
+            event.preventDefault();
+            setError('');
+
+            await createQuery(message, email, name);
+            setSuccess('Created query!');
+            resetState();
+            // reset success message after 5 seconds.
+            setTimeout(() => {
+                setSuccess('');
+            }, 5000);
+        } catch (err) {
+            setError('Failed to create query');
+        }
+    }
+
     return (
-        <div id="contact-form" className="form-wrapper">
-            <form className="form-inner-wrapper">
-                <ContactUsMessage />
-                <ContactUsDetailsAndButton />
-            </form>
-        </div>
+        <>
+            <div id="contact-form" className="form-wrapper">
+                <form className="form-inner-wrapper" onSubmit={submit}>
+                    <ContactUsMessage
+                        message={message}
+                        setMessage={setMessage}
+                    />
+                    <ContactUsDetailsAndButton
+                        email={email}
+                        setEmail={setEmail}
+                        name={name}
+                        setName={setName}
+                    />
+                </form>
+            </div>
+            {success && <p className="success-query-text">{success}</p>}
+            {error && <p className="error-query-text">{error}</p>}
+        </>
     );
 }
 
-function ContactUsMessage() {
+function ContactUsMessage({ message, setMessage }) {
+    function updateMessage(event) {
+        setMessage(event.target.value);
+    }
+
     return (
         <div id="message-wrapper">
             <label htmlFor="message">Message:</label>
@@ -48,12 +95,22 @@ function ContactUsMessage() {
                 placeholder="Enter Your Message"
                 required={true}
                 id="message"
+                value={message}
+                onChange={updateMessage}
             ></textarea>
         </div>
     );
 }
 
-function ContactUsDetailsAndButton() {
+function ContactUsDetailsAndButton({ email, setEmail, name, setName }) {
+    function updateEmail(event) {
+        setEmail(event.target.value);
+    }
+
+    function updateName(event) {
+        setName(event.target.value);
+    }
+
     return (
         <div id="details-wrapper">
             <div className="inline-form-item">
@@ -64,6 +121,8 @@ function ContactUsDetailsAndButton() {
                     inputType="email"
                     placeholder="Enter Your Email"
                     required={true}
+                    value={email}
+                    setValue={updateEmail}
                 />
             </div>
             <div className="inline-form-item">
@@ -74,6 +133,8 @@ function ContactUsDetailsAndButton() {
                     inputType="text"
                     placeholder="Enter Your Full Name"
                     required={true}
+                    value={name}
+                    setValue={updateName}
                 />
             </div>
             <div className="inline-button-wrapper">

@@ -27,6 +27,18 @@
     flex: 1;
 }
 
+.success-query-text {
+    color: #92d36e;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.error-query-text {
+    color: red;
+    text-align: center;
+    margin: 20px 0;
+}
+
 @media all and (max-width: 800px) {
     #details-wrapper {
         flex-wrap: wrap;
