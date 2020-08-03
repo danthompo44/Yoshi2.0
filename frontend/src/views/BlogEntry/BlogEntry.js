@@ -80,24 +80,10 @@ function BlogComment({ item }) {
 function AddComment() {
     return (
         <div id="blog-add-comment">
-            <CommentInputWithLabel
-            // name="comment"
-            // labelContent="Add Comment:"
-            // icon="fas fa-comment"
-            // inputType="text"
-            // placeholder="Add a comment"
-            />
-            {/* <label htmlFor="comment">Add Comment:</label>
-                <i className="fas fa-comment input-icon"></i>
-                <input
-                    className="form-input light with-icon"
-                    type="text"
-                    name="comment"
-                    placeholder="Add a comment"
-                    required="true"
-                    id="comment"
-                /> */}
-            <div className="inline-button-wrapper blog-btn-wrapper">
+            <div id="comment-input-container">
+                <CommentInputWithLabel />
+            </div>
+            <div id="add-comment-button" className="inline-button-wrapper">
                 <button className="btn-green">Add Comment</button>
             </div>
         </div>

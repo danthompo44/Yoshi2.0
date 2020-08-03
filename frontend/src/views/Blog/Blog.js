@@ -13,14 +13,14 @@ function Blog() {
         <div id="blog-page-wrapper">
             <BlogPageTitle />
             <SearchBar />
-            {BlogEntry(ps5Blog)}
-            {BlogEntry(skate4Blog)}
+            <BlogEntry blog={ps5Blog} />
+            <BlogEntry blog={skate4Blog} />
             <RoundedButton content="SHOW MORE" />
         </div>
     );
 }
 
-function BlogEntry(blog) {
+function BlogEntry({ blog }) {
     let link = '/blog/' + blog.id;
     return (
         <Link to={link} className="blog-entry">
