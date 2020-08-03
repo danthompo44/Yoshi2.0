@@ -19,7 +19,6 @@
 .blog-entry-image {
     display: flex;
     align-items: center;
-
     margin: auto;
 }
 
@@ -74,6 +73,11 @@
     margin-right: 20px;
 }
 
+#comment-input-container {
+    width: 100%;
+    padding-right: 5px;
+}
+
 @media all and (max-width: 1000px) {
     .blog-entry-content-container {
         width: 80%;
@@ -83,6 +87,19 @@
 @media all and (max-width: 800px) {
     .blog-entry-content-container {
         width: 90%;
+    }
+
+    #blog-add-comment {
+        flex-wrap: wrap;
+    }
+
+    #add-comment-button,
+    #add-comment-button button {
+        width: 100%;
+    }
+
+    .comment-input-box input {
+        margin-bottom: 0 !important;
     }
 }
 

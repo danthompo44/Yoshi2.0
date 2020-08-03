@@ -2,7 +2,7 @@ import React from 'react';
 import './inputField.css';
 
 function InputField(props) {
-    let iconClass = props.icon + ' input-icon';
+    let iconClass = props.icon + ' field-input-icon';
     return (
         <div className="input-container">
             <i className={iconClass}></i>
@@ -21,7 +21,7 @@ function InputField(props) {
 
 function CommentInput(props) {
     return (
-        <>
+        <div className="comment-input-box">
             <i className="fas fa-comment input-icon"></i>
             <input
                 type="type"
@@ -30,7 +30,7 @@ function CommentInput(props) {
                 name="comment"
                 required={true}
             />
-        </>
+        </div>
     );
 }
 
