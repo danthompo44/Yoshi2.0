@@ -3,6 +3,7 @@ const controller = require('../controllers/consoleController');
 
 router.get('/', controller.getAll);
 router.get('/console/:id', controller.getById);
+router.get('/console/:id/post', controller.getPostByConsoleId);
 
 router.get('/posts', controller.getAllPosts);
 router.get('/posts/:id', controller.getPostById);

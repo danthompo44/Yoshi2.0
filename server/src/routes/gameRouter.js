@@ -4,6 +4,7 @@ const { verifyToken } = require('../middleware/auth');
 
 router.get('/', controller.getAll);
 router.get('/game/:id', controller.getById);
+router.get('/game/:id/post', controller.getPostByGameId);
 
 router.get('/posts', controller.getAllPosts);
 router.get('/posts/:id', controller.getPostById);

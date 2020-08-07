@@ -97,6 +97,32 @@ async function getPostById(req, res) {
 }
 
 /**
+ * Get a post about a game by the games id.
+ * Does **not** include the comments associated with the post.
+ * @param {request} req Express request object
+ * @param req.params.id Game id
+ * @param {response} res Express response object
+ */
+async function getPostByGameId(req, res) {
+    try {
+        const post = await GamePost.findAll({where : {game_id : req.params.id}});
+
+        if (isDataNullOrUndefined(post)) {
+            throwAPIError(
+                404,
+                'ERR_POST_FAILED_TO_LOAD',
+                `Post with game id ${id} failed to load`
+            );
+        }
+
+        return res.status(200).json(post);
+    } catch (err) {
+        const error = createErrorData(err);
+        return res.status(error.code).json(error.error);
+    }
+}
+
+/**
  * Get the comments for a post with a particular id.
  * @param {request} req Express request object
  * @param req.params.id Post id
@@ -202,6 +228,7 @@ module.exports = {
     getById,
     getAllPosts,
     getPostById,
+    getPostByGameId,
     getCommentsForPost,
     addCommentToPost,
     likeComment,

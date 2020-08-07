@@ -55,6 +55,20 @@ export async function getGamePostById(postId) {
 }
 
 /**
+ * Function to get a specific post about a game from the server using the game id.
+ * @param {number} gameId The game id.
+ */
+export async function getGamePostByGameId(gameId) {
+    try {
+        const post = await axios.get(`/games/game/${gameId}/post`);
+        return post;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
+/**
  * Function to get all the comments for a post about a game from the server.
  * @param {number} postId The post id.
  */
@@ -125,6 +139,7 @@ export default {
     getGameById,
     getAllGamePosts,
     getGamePostById,
+    getGamePostByGameId,
     getGamePostComments,
     addCommentToGamePost,
     likeCommentOnGamePost,

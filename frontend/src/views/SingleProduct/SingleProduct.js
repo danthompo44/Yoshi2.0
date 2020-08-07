@@ -5,8 +5,8 @@ import {Title} from '../../components/titles/titles';
 import FilledHeart from '../../components/heartIcon/filledHeart';
 import UnfilledHeart from '../../components/heartIcon/unfilledHeart';
 
-import {getGameById} from '../../services/gameService';
-import {getConsoleById} from '../../services/consoleService';
+import {getGamePostByGameId} from '../../services/gameService';
+import {getConsolePostByConsoleId} from '../../services/consoleService';
 
 function SingleProduct(props){
     //retireve paramaters to be used to query the database
@@ -23,12 +23,10 @@ function SingleProduct(props){
                 var product = "";
                 switch(type){
                     case "consoles":
-                        product = await getConsoleById(id);
-                        console.log("console");
+                        product = await getConsolePostByConsoleId(id);
                         break;
                     case "games":
-                        product = await getGameById(id);
-                        console.log("game");
+                        product = await getGamePostByGameId(id);
                         break;
                 }
                 setProduct(product.data);
@@ -40,44 +38,34 @@ function SingleProduct(props){
         };
         fetchProduct();
     }, []);
-    console.log(product);
+    // console.log(product);
     return(
         <>
-        <TopContainer />
-        <BottomContainer />
+        {!loading && (<TopContainer product={product}/>)}
+        {!loading && (<BottomContainer product={product}/>)}
         </>
     )
 }
 
-function TopContainer(){
+function TopContainer({product}){
     return (
         <>
-        <Title title="Single Product" />
+        <Title title={product[0].title} />
         <div className="top-content-container">
             <div id="top-content-wrapper">
-            <Paragraph />
+            <Paragraph content={product[0].content}/>
             <Image />
-            <Paragraph />
+            <Paragraph content={product[0].content}/>
             <Video />
             </div>
         </div>
         </>
     )
 }
-function Paragraph(){
+function Paragraph({content}){
     return (
         <div className="text-content">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscingelit. Morbi vitae efficitur purus. 
-                Aliquam felisturpis, eleifend vel arcu quis, sodales lobortiseros. Aenean lacinia, 
-                est a posuere scelerisque,nisi augue condimentum sapien, id pretium lacussapien at tortor. 
-                Cras sed sapien nec nibhconsectetur placerat. Vivamus pretium accumsanipsum, in finibus nisi ornare efficitur. 
-                Nunc congueullamcorper arcu nec bibendum. Nulla at ultriciesurna. Pellentesque pulvinar eu metus ac malesuada.
-                Suspendisse fringilla ligula eu massa sagittismaximus. Fusce at eros nec diam efficitur viverra.Suspendisse 
-                porta dui nec venenatis sollicitudin.Mauris vel justo eros. Proin vitae eleifend ligula,eu fringilla eros. 
-                Maecenas nulla metus, rhoncus euelit a, ullamcorper eleifend lectus. Nulla idsollicitudin velit. In fringilla
-                elit a blanditinterdum. Cras fermentum nunc id ex pulvinarcondimentum. Ut quis accumsan enim. Donec risusnibh, 
-                rhoncus ac feugiat sit amet, tincidunt egetaugue.
-            </p>
+            <p>{content}</p>
         </div>
     )
 }
@@ -92,8 +80,8 @@ function Image(){
 function Video(){
     return (
         <iframe className="product-media"width="560" height="315" title="A Snes video" src="https://www.youtube.com/embed/f4Ge7iVyOyw" 
-            frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen>
+            frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen>
         </iframe>
     )
 }
@@ -197,7 +185,7 @@ function AddComment(){
     return (
         <div id="blog-add-comment">
             <div className="inline-form-item">
-                <label for="comment">Add Comment:</label>
+                <label htmlFor="comment">Add Comment:</label>
                 <i className="fas fa-comment input-icon"></i>
                 <input
                     className="form-input light with-icon"

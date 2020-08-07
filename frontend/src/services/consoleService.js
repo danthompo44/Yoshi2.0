@@ -55,6 +55,20 @@ export async function getConsolePostById(postId) {
 }
 
 /**
+ * Function to get a specific post about a console from the server.
+ * @param {number} consoleId The post id.
+ */
+export async function getConsolePostByConsoleId(consoleId) {
+    try {
+        const post = await axios.get(`/consoles/console/${consoleId}/post`);
+        return post;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
+/**
  * Function to get all the comments for a post about a console from the server.
  * @param {number} postId The post id.
  */
@@ -125,6 +139,7 @@ export default {
     getConsoleById,
     getAllConsolePosts,
     getConsolePostById,
+    getConsolePostByConsoleId,
     getConsolePostComments,
     addCommentToConsolePost,
     likeCommentOnConsolePost,
