@@ -1,0 +1,143 @@
+.single-products-content-container {
+    width: 60%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.top-content-container {
+    border-bottom: 1px solid grey;
+}
+
+#top-content-wrapper {
+    width: 60%;
+    margin: 0 auto 40px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* border-bottom: 1px solid grey; */
+}
+
+.text-content {
+    margin-top: 30px;
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.product-media {
+    width: 100%;
+    min-height: 400px;
+    height: auto;
+    max-width: 700px;
+}
+
+#bottom-content-wrapper {
+    margin: 60px 0 40px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-bottom-box {
+    padding: 60px;
+    width: 40%;
+}
+
+.right-bottom-box {
+    width: 60%;
+}
+
+.product-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.product-info-icon {
+    width: 20px;
+    color: #92d36e;
+    text-align: center;
+}
+
+.product-info-icon.empty {
+    color: #999999;
+}
+
+.product-info-text {
+    margin-left: 15px;
+}
+
+.product-rating {
+    align-items: center;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: row;
+}
+
+#product-comments {
+    margin-bottom: 20px;
+}
+
+.single-product-comment {
+    margin: 15px 0;
+}
+
+.single-product-comment-box {
+    background-color: #444;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px 0 #222;
+    min-height: 50px;
+    margin: 5px auto;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.single-product-comment-icons-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.like-comment-wrapper {
+    margin-left: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.thumbs-up-icon-wrapper {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.like-comment-text {
+    color: #92d36e;
+    margin-right: 20px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.like-icon {
+    margin-right: 10px;
+    color: #92d36e;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.like-icon-text {
+    margin-right: 10px;
+    color: #92d36e;
+    font-size: 14px;
+}
+
+@media all and (max-width: 880px) {
+    #bottom-content-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+    .left-bottom-box {
+        padding: 0;
+        margin-bottom: 40px;
+    }
+}
