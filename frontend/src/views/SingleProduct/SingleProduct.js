@@ -1,11 +1,46 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './SingleProduct.css';
 
 import {Title} from '../../components/titles/titles';
 import FilledHeart from '../../components/heartIcon/filledHeart';
 import UnfilledHeart from '../../components/heartIcon/unfilledHeart';
 
-function SingleProduct(){
+import {getGameById} from '../../services/gameService';
+import {getConsoleById} from '../../services/consoleService';
+
+function SingleProduct(props){
+    //retireve paramaters to be used to query the database
+    let id = props.match.params.id;
+    let type = props.match.params.type;
+
+    const [loading, setLoading] = useState(true);
+    const [product, setProduct] = useState([]);
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                setLoading(true);
+                var product = "";
+                switch(type){
+                    case "consoles":
+                        product = await getConsoleById(id);
+                        console.log("console");
+                        break;
+                    case "games":
+                        product = await getGameById(id);
+                        console.log("game");
+                        break;
+                }
+                setProduct(product.data);
+                setLoading(false);
+            } catch (err) {
+                setLoading(false);
+                console.log(err);
+            }
+        };
+        fetchProduct();
+    }, []);
+    console.log(product);
     return(
         <>
         <TopContainer />
@@ -99,7 +134,7 @@ function ProductRating(){
     return (
         <div class="product-rating">
             <DisplayRating filled={3} />                
-            <p class="product-info-text">10 reviews</p>
+            <p className="product-info-text">10 reviews</p>
         </div>
     )
 }

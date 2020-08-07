@@ -19,7 +19,7 @@ export async function getAllConsoles() {
  */
 export async function getConsoleById(consoleId) {
     try {
-        const console = await axios.get(`/consoles/${consoleId}`);
+        const console = await axios.get(`/consoles/console/${consoleId}`);
         return console;
     } catch (err) {
         console.log(err);

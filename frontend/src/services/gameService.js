@@ -19,7 +19,7 @@ export async function getAllGames() {
  */
 export async function getGameById(gameId) {
     try {
-        const game = await axios.get(`/games/${gameId}`);
+        const game = await axios.get(`/games/game/${gameId}`);
         return game;
     } catch (err) {
         console.log(err);
