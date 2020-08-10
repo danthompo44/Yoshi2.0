@@ -105,7 +105,7 @@ async function getPostById(req, res) {
  */
 async function getPostByGameId(req, res) {
     try {
-        const post = await GamePost.findAll({where : {game_id : req.params.id}});
+        const post = await GamePost.findOne({where : {game_id : req.params.id}});
 
         if (isDataNullOrUndefined(post)) {
             throwAPIError(

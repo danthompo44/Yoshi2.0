@@ -14,6 +14,12 @@ function Console(sequelize) {
             image_url: {
                 type: DataTypes.STRING,
             },
+            image_alt: {
+                type: DataTypes.STRING,
+            },
+            video_src: {
+                type: DataTypes.STRING,
+            },
             rating: {
                 type: DataTypes.INTEGER,
             },

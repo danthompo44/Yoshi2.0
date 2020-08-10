@@ -104,7 +104,7 @@ async function getPostById(req, res) {
  */
 async function getPostByConsoleId(req, res) {
     try {
-        const post = await ConsolePost.findAll({where : {console_id : req.params.id}});
+        const post = await ConsolePost.findOne(({where : {console_id : req.params.id}}));
 
         if (isDataNullOrUndefined(post)) {
             throwAPIError(

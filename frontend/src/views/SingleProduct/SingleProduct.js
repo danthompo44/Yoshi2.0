@@ -5,58 +5,107 @@ import {Title} from '../../components/titles/titles';
 import FilledHeart from '../../components/heartIcon/filledHeart';
 import UnfilledHeart from '../../components/heartIcon/unfilledHeart';
 
-import {getGamePostByGameId} from '../../services/gameService';
-import {getConsolePostByConsoleId} from '../../services/consoleService';
+import {getGamePostByGameId, getGameById, getGamePostComments} from '../../services/gameService';
+import {getConsolePostByConsoleId, getConsoleById, getConsolePostComments} from '../../services/consoleService';
 
 function SingleProduct(props){
     //retireve paramaters to be used to query the database
     let id = props.match.params.id;
     let type = props.match.params.type;
 
-    const [loading, setLoading] = useState(true);
+    const [loadingPost, setLoadingPost] = useState(true);
+    const [productPost, setProductPost] = useState([]);
+    const [loadingProduct, setLoadingProduct] = useState(true);
     const [product, setProduct] = useState([]);
+    const [loadingComments, setLoadingComments] = useState(true);
+    const [comments, setComments] = useState([]);
+
+    useEffect(() => {
+        const fetchProductPost = async () => {
+            try {
+                setLoadingPost(true);
+                var productPost = "";
+                switch(type){
+                    case "consoles":
+                        productPost = await getConsolePostByConsoleId(id);
+                        break;
+                    case "games":
+                        productPost = await getGamePostByGameId(id);
+                        break;
+                }
+                setProductPost(productPost.data);
+                setLoadingPost(false);
+            } catch (err) {
+                setLoadingPost(false);
+                console.log(err);
+            }
+        };
+        fetchProductPost();
+    }, [id, type]);
 
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                setLoading(true);
+                setLoadingProduct(true);
                 var product = "";
                 switch(type){
                     case "consoles":
-                        product = await getConsolePostByConsoleId(id);
+                        product = await getConsoleById(id);
                         break;
                     case "games":
-                        product = await getGamePostByGameId(id);
+                        product = await getGameById(id);
                         break;
                 }
                 setProduct(product.data);
-                setLoading(false);
+                setLoadingProduct(false);
             } catch (err) {
-                setLoading(false);
+                setLoadingProduct(false);
                 console.log(err);
             }
         };
         fetchProduct();
-    }, []);
-    // console.log(product);
+    }, [id, type]);
+
+    useEffect(() => {
+        const fetchComments = async () => {
+            try {
+                setLoadingComments(true);
+                var comments = "";
+                switch(type){
+                    case "consoles":
+                        comments = await getConsolePostComments(id);
+                        break;
+                    case "games":
+                        comments = await getGamePostComments(id);
+                        break;
+                }
+                setComments(comments.data);
+                setLoadingComments(false);
+            } catch (err) {
+                setLoadingComments(false);
+                console.log(err);
+            }
+        };
+        fetchComments();
+    }, [id, type]);
     return(
         <>
-        {!loading && (<TopContainer product={product}/>)}
-        {!loading && (<BottomContainer product={product}/>)}
+        {!loadingPost && !loadingProduct && (<TopContainer productPost={productPost} product ={product}/>)}
+        {!loadingPost && !loadingProduct && !loadingComments && (<BottomContainer productPost={productPost} product ={product} comments={comments}/>)}
         </>
     )
 }
 
-function TopContainer({product}){
+function TopContainer({productPost, product}){
     return (
         <>
-        <Title title={product[0].title} />
+        <Title title={productPost.title} />
         <div className="top-content-container">
             <div id="top-content-wrapper">
-            <Paragraph content={product[0].content}/>
-            <Image />
-            <Paragraph content={product[0].content}/>
-            <Video />
+            <Paragraph content={productPost.content}/>
+            <Image url={product.image_url} alt ={product.image_alt}/>
+            <Paragraph content={productPost.content}/>
+            <Video src={product.video_src}/>
             </div>
         </div>
         </>
@@ -70,40 +119,43 @@ function Paragraph({content}){
     )
 }
 
-function Image(){
+function Image({url, alt}){
     return (
-        <img className="product-media" src="https://th.bing.com/th/id/OIP.zM3QRIjlPHyTbwWPA3TQUwHaEK?pid=Api&rs=1" 
-        alt="SNES"/>
+        <img className="product-media" src={url} 
+        alt={alt}/>
     )
 }
 
-function Video(){
+function Video({src}){
+    // console.log(src);
+    // let attributes = ' className="product-media"' + src.src;
+    // console.log(attributes);
+    // let iframe = <iframe attributes></iframe>;
+    // console.log(iframe);
     return (
-        <iframe className="product-media"width="560" height="315" title="A Snes video" src="https://www.youtube.com/embed/f4Ge7iVyOyw" 
-            frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen>
-        </iframe>
+        <iframe title="Video" src={src} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
     )
 }
 
-function BottomContainer(){
+function BottomContainer({productPost, product, comments}){
     return (
         <div id="bottom-content-wrapper">
-            <LeftBottomBox />
+            <LeftBottomBox product={product}/>
             <RightBottomBox />
         </div>
     )
 }
 
-function LeftBottomBox(){
+function LeftBottomBox({product}){
+    console.log(product);
     return(
-        <div class="left-bottom-box">
-            <ProductInfo icon="fas fa-user-friends" text="Multiplayer"/>
-            <ProductInfo icon="fas fa-wifi" text="Offline"/>
-            <ProductInfo icon="fas fa-gamepad" text="Console"/>
-            <ProductInfo icon="fas fa-chart-line" text="Trending"/>
-            <ProductInfo icon="fas fa-pound-sign" text="£40"/>
-            <ProductRating/>         
+        <div className="left-bottom-box">
+            <ProductInfo icon="fas fa-user-friends" text={product.multiplayer ? 'Multiplayer' : 'Singleplayer'}/>
+            <ProductInfo icon="fas fa-wifi" text={product.online ? 'Online' : 'Offline'}/>
+            {product.form_factor ? <ProductInfo icon="fas fa-gamepad" text={product.form_factor}/> : null}
+            {product.trending ? <ProductInfo icon="fas fa-chart-line" text="Trending"/> : null}
+            <ProductInfo icon="fas fa-pound-sign" text={'£' + product.cost}/>
+            <ProductRating rating={product.rating}/>         
         </div>
     )
 }
@@ -118,10 +170,10 @@ function ProductInfo({icon, text}){
     )
 }
 
-function ProductRating(){
+function ProductRating({rating}){
     return (
-        <div class="product-rating">
-            <DisplayRating filled={3} />                
+        <div className="product-rating">
+            <DisplayRating filled={rating} />                
             <p className="product-info-text">10 reviews</p>
         </div>
     )
@@ -168,7 +220,7 @@ function Comment({comment, likes}){
             </div>
             <div className="single-product-comment-icons-wrapper">
                 <div className="like-comment-wrapper">
-                    <p class="like-comment-text">
+                    <p className="like-comment-text">
                     Like
                     </p>
                 </div>
@@ -192,7 +244,7 @@ function AddComment(){
                     type="text"
                     name="comment"
                     placeholder="Add a comment"
-                    required="true"
+                    required={true}
                     id="comment"
                 />
             </div>
