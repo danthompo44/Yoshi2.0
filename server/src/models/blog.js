@@ -14,6 +14,12 @@ function Blog(sequelize) {
             subtitle: {
                 type: DataTypes.STRING,
             },
+            img_src: {
+                type: DataTypes.STRING,
+            },
+            img_alt: {
+                type: DataTypes.STRING,
+            },
             content: {
                 type: DataTypes.STRING,
             },
