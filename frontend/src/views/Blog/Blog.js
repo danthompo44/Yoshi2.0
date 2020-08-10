@@ -1,10 +1,9 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 
 import SearchBar from '../../components/search-bar/search-bar';
 import RoundedButton from '../../components/roundedButton/roundedButton';
 import { BlogPageTitle } from '../../components/titles/titles';
-import { ps5Blog, skate4Blog } from '../../data/mockBlogs';
 
 import './Blog.css';
 
@@ -31,7 +30,7 @@ function Blog() {
 
     var blogEntrys = [];
     for(let i = 0; i <blogs.length; i++){
-        blogEntrys.push(<BlogEntry blog={blogs[i]} />)
+        blogEntrys.push(!loadingBlogs && <BlogEntry blog={blogs[i]} key={i} />)
     }
 
     return (
@@ -39,8 +38,6 @@ function Blog() {
             <BlogPageTitle blogs = {blogs}/>
             <SearchBar />
             {blogEntrys}
-            {/* <BlogEntry blog={ps5Blog} />
-            <BlogEntry blog={skate4Blog} /> */}
             <RoundedButton content="SHOW MORE" />
         </div>
     );

@@ -20,7 +20,13 @@ function Blog(sequelize) {
             img_alt: {
                 type: DataTypes.STRING,
             },
-            content: {
+            paragraph_one: {
+                type: DataTypes.STRING,
+            },
+            paragraph_two: {
+                type: DataTypes.STRING,
+            },
+            vid_src: {
                 type: DataTypes.STRING,
             },
         },

@@ -43,21 +43,40 @@
 
 #blog-comments {
     width: 100%;
-    margin: 50px 0;
+    margin: 30px 0;
 }
 
-.blog-comment {
+
+.blog-comment-text {
     background-color: #444444;
     border-radius: 5px;
     box-shadow: 0px 1px 2px 0 #222222;
     min-height: 50px;
     margin: 10px auto;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    padding-left: 15px;
+    justify-content: center;
 }
 
-.blog-comment-text {
-    padding: 15px;
+.blog-comment-box {
+    align-items: center;
+    justify-content: center;
+}
+
+.blog-comment-icons-wrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#blog-comment-form{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+#add-comment-button{
+    margin-top: 29px;
 }
 
 #blog-add-comment {

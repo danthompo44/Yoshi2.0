@@ -27,7 +27,7 @@ function MarginContainer() {
                 <Route path="/products" exact component={Products} />
                 <Route path="/products/:type/:id" component={SingleProduct} />
                 <Route path="/blog" exact component={Blog} />
-                <Route path="/blog/1" component={BlogEntry} />
+                <Route path="/blog/:id" component={BlogEntry} />
                 <Route path="/contact-us" component={ContactUs} />
                 <Route path="/auth/login" component={Login} />
                 <Route path="/auth/sign-up" component={SignUp} />
