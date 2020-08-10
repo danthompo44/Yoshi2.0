@@ -104,9 +104,9 @@ function TopContainer({ productPost, product }) {
             <Title title={productPost.title} />
             <div className="top-content-container">
                 <div id="top-content-wrapper">
-                    <Paragraph content={productPost.content} />
+                    <Paragraph content={productPost.paragraph_one} />
                     <Image url={product.image_url} alt={product.image_alt} />
-                    <Paragraph content={productPost.content} />
+                    <Paragraph content={productPost.paragraph_two} />
                     <Video src={product.video_src} />
                 </div>
             </div>
@@ -263,14 +263,12 @@ function Comments({ comments, post, type }) {
 }
 
 function Comment({ comment, comments, type, post }) {
-    console.log(comment);
     const user = useContext(UserContext);
     const handleLike = () => {
         if (type === 'consoles') {
             likeCommentOnConsolePost(post.id, comment.id, user.token);
         } else {
             likeCommentOnGamePost(post.id, comment.id, user.token);
-            console.log("game")
         }
 
         const newComments = [...comments.comments];
@@ -316,14 +314,12 @@ function AddComment({ comments, post, type }) {
                 user.state.token
             );
         } else {
-            console.log("Game Add comment")
             comment = await addCommentToGamePost(
                 post.id,
                 commentText,
                 user.state.token
             );
         }
-        console.log(comment);
         comments.setComments([...comments.comments, comment.data]);
     }
 

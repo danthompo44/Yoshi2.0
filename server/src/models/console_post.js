@@ -14,7 +14,10 @@ function ConsolePost(sequelize) {
             subtitle: {
                 type: DataTypes.STRING,
             },
-            content: {
+            paragraph_one: {
+                type: DataTypes.STRING,
+            },
+            paragraph_two: {
                 type: DataTypes.STRING,
             },
             console_id: {
