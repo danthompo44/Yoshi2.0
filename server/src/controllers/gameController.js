@@ -152,6 +152,7 @@ async function getCommentsForPost(req, res) {
  */
 async function addCommentToPost(req, res) {
     try {
+        console.log('Add Comment to Game');
         console.log(req.params.id);
         // check if valid post
         const post = await GamePost.findByPk(req.params.id);
