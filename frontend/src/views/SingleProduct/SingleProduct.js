@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './SingleProduct.css';
 
 import {Title} from '../../components/titles/titles';
 import FilledHeart from '../../components/heartIcon/filledHeart';
 import UnfilledHeart from '../../components/heartIcon/unfilledHeart';
 
-import {getGamePostByGameId, getGameById, getGamePostComments} from '../../services/gameService';
-import {getConsolePostByConsoleId, getConsoleById, getConsolePostComments} from '../../services/consoleService';
+import {getGamePostByGameId, getGameById, getGamePostComments, addCommentToGamePost} from '../../services/gameService';
+import {getConsolePostByConsoleId, getConsoleById, getConsolePostComments, addCommentToConsolePost} from '../../services/consoleService';
+import UserContext from '../../state/userContext';
 
 function SingleProduct(props){
     //retireve paramaters to be used to query the database
@@ -32,6 +33,8 @@ function SingleProduct(props){
                     case "games":
                         productPost = await getGamePostByGameId(id);
                         break;
+                    default :
+                        productPost = null;
                 }
                 setProductPost(productPost.data);
                 setLoadingPost(false);
@@ -55,6 +58,8 @@ function SingleProduct(props){
                     case "games":
                         product = await getGameById(id);
                         break;
+                    default :
+                        product = null;
                 }
                 setProduct(product.data);
                 setLoadingProduct(false);
@@ -78,6 +83,8 @@ function SingleProduct(props){
                     case "games":
                         comments = await getGamePostComments(id);
                         break;
+                    default :
+                        comments = null;
                 }
                 setComments(comments.data);
                 setLoadingComments(false);
@@ -91,7 +98,7 @@ function SingleProduct(props){
     return(
         <>
         {!loadingPost && !loadingProduct && (<TopContainer productPost={productPost} product ={product}/>)}
-        {!loadingPost && !loadingProduct && !loadingComments && (<BottomContainer productPost={productPost} product ={product} comments={comments}/>)}
+        {!loadingPost && !loadingProduct && !loadingComments && (<BottomContainer productPost={productPost} product ={product} comments={{comments, setComments}} type={type}/>)}
         </>
     )
 }
@@ -127,27 +134,21 @@ function Image({url, alt}){
 }
 
 function Video({src}){
-    // console.log(src);
-    // let attributes = ' className="product-media"' + src.src;
-    // console.log(attributes);
-    // let iframe = <iframe attributes></iframe>;
-    // console.log(iframe);
     return (
         <iframe title="Video" src={src} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
     )
 }
 
-function BottomContainer({productPost, product, comments}){
+function BottomContainer({productPost, product, comments, type}){
     return (
         <div id="bottom-content-wrapper">
             <LeftBottomBox product={product}/>
-            <RightBottomBox />
+            <RightBottomBox comments = {comments} post={productPost} type={type}/>
         </div>
     )
 }
 
 function LeftBottomBox({product}){
-    console.log(product);
     return(
         <div className="left-bottom-box">
             <ProductInfo icon="fas fa-user-friends" text={product.multiplayer ? 'Multiplayer' : 'Singleplayer'}/>
@@ -191,21 +192,25 @@ function DisplayRating({filled}) {
     return hearts;
 }
 
-function RightBottomBox(){
+function RightBottomBox({comments, post, type}){
+    console.log(comments);
     return (
         <div className="right-bottom-box">
             <Title title="Comments"/>
-            <Comments />
+            <Comments comments={comments} post ={post} type={type}/>
         </div>        
     )
 }
 
-function Comments(){
+function Comments({comments, post, type}){
+    const items =[];
+    {for (let i = 0; i < comments.comments.length; i++) {
+        items.push(<Comment key = {i} comment={comments.comments[i].comment} likes={comments.comments[i].likes}/>)   
+    }}
     return(
         <div id="product-comments">
-            <Comment comment="Comment 1" likes="9"/>
-            <Comment comment="Comment 2" likes="11"/>
-            <AddComment/>
+            {items}
+            <AddComment comments={comments} post = {post} type={type}/>
         </div>
     )
 }
@@ -233,24 +238,52 @@ function Comment({comment, likes}){
     )
 }
 
-function AddComment(){
+function AddComment({comments, post, type}){
+    const user = useContext(UserContext);
+    const [commentText, setCommentText] = useState('');
+
+    async function handleAddComment(event){
+        let comment;
+        console.log("fuinction")
+        event.preventDefault();
+        if(type === "consoles"){
+            console.log("consoles")
+            comment = await addCommentToConsolePost(post.id, commentText, user.token);
+        }
+        else{
+            console.log("games")
+            comment = await addCommentToGamePost(post.id, commentText, user.token);
+        }
+        comments.setComments([...comments.comments,comment.data])
+    }
+
+    const updateCommentText = (event) => {
+        setCommentText(event.target.value);
+        console.log("Update text")
+    }
+
     return (
         <div id="blog-add-comment">
-            <div className="inline-form-item">
-                <label htmlFor="comment">Add Comment:</label>
-                <i className="fas fa-comment input-icon"></i>
-                <input
-                    className="form-input light with-icon"
-                    type="text"
-                    name="comment"
-                    placeholder="Add a comment"
-                    required={true}
-                    id="comment"
-                />
-            </div>
-            <div className="inline-button-wrapper blog-btn-wrapper">
-                <button className="btn-green">Add Comment</button>
-            </div>
+            <form onSubmit={handleAddComment}>
+                <div className="inline-form-item">
+                    <label htmlFor="comment">Add Comment:</label>
+                    <i className="fas fa-comment input-icon"></i>
+                    <input
+                        className="form-input light with-icon"
+                        type="text"
+                        name="comment"
+                        placeholder="Add a comment"
+                        required={true}
+                        id="comment"
+                        value={commentText}
+                        onChange={updateCommentText}
+                        // setValue={setCommentText}
+                    />
+                </div>
+                <div className="inline-button-wrapper blog-btn-wrapper">
+                    <button className="btn-green" type="submit">Add Comment</button>
+                </div>
+            </form>
         </div>
     )
 }
