@@ -55,12 +55,12 @@ function Products() {
             <div className="top-x-wrapper">
                 <Title title="Top 5 Consoles" />
                 {!consolesLoading && (
-                    <Carousel items={consoles} route="/consoles" />
+                    <Carousel items={consoles} route="/consoles/" />
                 )}
             </div>
             <div className="top-x-wrapper">
                 <Title title="Top 5 Games" />
-                {!gamesLoading && <Carousel items={games} route="/games" />}
+                {!gamesLoading && <Carousel items={games} route="/games/" />}
             </div>
         </>
     );

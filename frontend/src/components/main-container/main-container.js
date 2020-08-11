@@ -4,6 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 import Home from '../../views/Home/Home';
 import Login from '../../views/Login/Login';
 import Products from '../../views/Products/Products';
+import SingleProduct from '../../views/SingleProduct/SingleProduct';
 import Blog from '../../views/Blog/Blog';
 import BlogEntry from '../../views/BlogEntry/BlogEntry';
 import ContactUs from '../../views/ContactUs/ContactUs';
@@ -23,9 +24,10 @@ function MarginContainer() {
         <div className="page-wrapper">
             <Switch>
                 <Route path="/" exact component={Home} />
-                <Route path="/products" component={Products} />
+                <Route path="/products" exact component={Products} />
+                <Route path="/products/:type/:id" component={SingleProduct} />
                 <Route path="/blog" exact component={Blog} />
-                <Route path="/blog/1" component={BlogEntry} />
+                <Route path="/blog/:id" component={BlogEntry} />
                 <Route path="/contact-us" component={ContactUs} />
                 <Route path="/auth/login" component={Login} />
                 <Route path="/auth/sign-up" component={SignUp} />

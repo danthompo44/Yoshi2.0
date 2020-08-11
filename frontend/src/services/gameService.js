@@ -19,7 +19,7 @@ export async function getAllGames() {
  */
 export async function getGameById(gameId) {
     try {
-        const game = await axios.get(`/games/${gameId}`);
+        const game = await axios.get(`/games/game/${gameId}`);
         return game;
     } catch (err) {
         console.log(err);
@@ -47,6 +47,20 @@ export async function getAllGamePosts() {
 export async function getGamePostById(postId) {
     try {
         const post = await axios.get(`/games/posts/${postId}`);
+        return post;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
+/**
+ * Function to get a specific post about a game from the server using the game id.
+ * @param {number} gameId The game id.
+ */
+export async function getGamePostByGameId(gameId) {
+    try {
+        const post = await axios.get(`/games/game/${gameId}/post`);
         return post;
     } catch (err) {
         console.log(err);
@@ -125,6 +139,7 @@ export default {
     getGameById,
     getAllGamePosts,
     getGamePostById,
+    getGamePostByGameId,
     getGamePostComments,
     addCommentToGamePost,
     likeCommentOnGamePost,

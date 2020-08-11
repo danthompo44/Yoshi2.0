@@ -19,11 +19,11 @@ function InputWithLabel(props) {
     );
 }
 
-function CommentInputWithLabel() {
+function CommentInputWithLabel({onChange}) {
     return (
         <>
             <InputLabel htmlFor="comment" content="Add comment:" />
-            <CommentInput />
+            <CommentInput onChange={onChange}/>
         </>
     );
 }

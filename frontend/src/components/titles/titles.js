@@ -18,10 +18,11 @@ function BlogPageTitle() {
     );
 }
 
-function BlogEntryTitle() {
+function BlogEntryTitle({blog}) {
     return (
         <div className="blog-page-title">
-            <h1>PS5 Set To Annoys Gamers Worldwide</h1>
+            <h1>{blog.title}</h1>
+            <h4>{blog.subtitle}</h4>
         </div>
     );
 }

@@ -19,7 +19,7 @@ export async function getAllConsoles() {
  */
 export async function getConsoleById(consoleId) {
     try {
-        const console = await axios.get(`/consoles/${consoleId}`);
+        const console = await axios.get(`/consoles/console/${consoleId}`);
         return console;
     } catch (err) {
         console.log(err);
@@ -47,6 +47,20 @@ export async function getAllConsolePosts() {
 export async function getConsolePostById(postId) {
     try {
         const post = await axios.get(`/consoles/posts/${postId}`);
+        return post;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
+/**
+ * Function to get a specific post about a console from the server.
+ * @param {number} consoleId The post id.
+ */
+export async function getConsolePostByConsoleId(consoleId) {
+    try {
+        const post = await axios.get(`/consoles/console/${consoleId}/post`);
         return post;
     } catch (err) {
         console.log(err);
@@ -125,6 +139,7 @@ export default {
     getConsoleById,
     getAllConsolePosts,
     getConsolePostById,
+    getConsolePostByConsoleId,
     getConsolePostComments,
     addCommentToConsolePost,
     likeCommentOnConsolePost,
