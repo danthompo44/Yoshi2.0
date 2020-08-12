@@ -71,6 +71,7 @@
         justify-content: space-between;
         align-items: center;
     }
+
     #nav-links {
         display: flex;
         justify-content: flex-end;
@@ -95,6 +96,7 @@
         content: '';
         padding: 0 8px 0 0;
     }
+
     .navbar-toggle {
         display: none;
     }
