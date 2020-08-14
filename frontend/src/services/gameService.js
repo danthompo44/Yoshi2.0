@@ -14,6 +14,19 @@ export async function getAllGames() {
 }
 
 /**
+ * Function to get the top 5 rated games from the server.
+ */
+export async function getTop5Games() {
+    try {
+        const games = await axios.get('/games/top5');
+        return games;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
+/**
  * Function to get a specific game from the server.
  * @param {number} gameId The game id.
  */

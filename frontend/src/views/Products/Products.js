@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import FlickitySlider from 'react-flickity-component';
 
-import { getAllGames } from '../../services/gameService';
-import { getAllConsoles } from '../../services/consoleService';
+import { getTop5Games } from '../../services/gameService';
+import { getTop5Consoles } from '../../services/consoleService';
 
 import { Title } from '../../components/titles/titles';
 import FilledHeart from '../../components/heartIcon/filledHeart';
@@ -23,7 +23,7 @@ function Products() {
         const fetchGames = async () => {
             try {
                 setGamesLoading(true);
-                const gameData = await getAllGames();
+                const gameData = await getTop5Games();
                 setGames(gameData.data);
                 setGamesLoading(false);
             } catch (err) {
@@ -39,7 +39,7 @@ function Products() {
         const fetchConsoles = async () => {
             try {
                 setConsolesLoading(true);
-                const consoleData = await getAllConsoles();
+                const consoleData = await getTop5Consoles();
                 setConsoles(consoleData.data);
                 setConsolesLoading(false);
             } catch (err) {
@@ -85,6 +85,7 @@ function Carousel({ items, route }) {
     return (
         <FlickitySlider
             className={'main-carousel'}
+            reloadOnUpdate={true}
             options={flickityOptions}
             ref={flickityRef}
         >
