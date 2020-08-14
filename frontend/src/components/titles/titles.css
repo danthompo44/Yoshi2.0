@@ -9,6 +9,7 @@
     flex-direction: column;
     box-shadow: 1px 1px 5px black;
     border-radius: 5px;
+    text-align: center;
 }
 
 .blog-page-title h1 {
