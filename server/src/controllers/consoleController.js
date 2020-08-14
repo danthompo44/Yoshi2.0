@@ -6,6 +6,7 @@ const {
     throwNotFoundError,
 } = require('../helpers');
 const db = require('../models');
+const { sequelize } = require('../models');
 
 const Console = db.Console;
 const ConsolePost = db.ConsolePost;
@@ -19,6 +20,24 @@ const ConsolePostComment = db.ConsolePostComment;
 async function getAll(req, res) {
     try {
         const consoles = await Console.findAll();
+        return res.status(200).json(consoles);
+    } catch (err) {
+        const error = createErrorData(err);
+        return res.status(error.code).json(error.error);
+    }
+}
+
+/**
+ * A method to retrieve the top 5 rated consoles
+ * @param {request} req Express Request Object
+ * @param {response} res Express Response Object
+ */
+async function getTop5(req, res) {
+    try {
+        const consoles = await Console.findAll({
+            limit: 5,
+            order: [['rating', 'DESC']],
+        });
         return res.status(200).json(consoles);
     } catch (err) {
         const error = createErrorData(err);
@@ -104,7 +123,9 @@ async function getPostById(req, res) {
  */
 async function getPostByConsoleId(req, res) {
     try {
-        const post = await ConsolePost.findOne(({where : {console_id : req.params.id}}));
+        const post = await ConsolePost.findOne({
+            where: { console_id: req.params.id },
+        });
 
         if (isDataNullOrUndefined(post)) {
             throwAPIError(
@@ -222,6 +243,7 @@ async function likeComment(req, res) {
 
 module.exports = {
     getAll,
+    getTop5,
     getById,
     getAllPosts,
     getPostById,

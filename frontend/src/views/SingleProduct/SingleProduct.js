@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import './SingleProduct.css';
 
 import { Title } from '../../components/titles/titles';
@@ -20,74 +20,49 @@ import {
     likeCommentOnConsolePost,
 } from '../../services/consoleService';
 import UserContext from '../../state/userContext';
+import useFetchData from '../../hooks/useFetchData';
 
 function SingleProduct(props) {
     //retireve paramaters to be used to query the database
     let id = props.match.params.id;
     let type = props.match.params.type;
 
-    const [loadingPost, setLoadingPost] = useState(true);
-    const [productPost, setProductPost] = useState([]);
-    const [loadingProduct, setLoadingProduct] = useState(true);
-    const [product, setProduct] = useState([]);
-
-    useEffect(() => {
-        const fetchProductPost = async () => {
-            try {
-                setLoadingPost(true);
-                var productPost = '';
-                switch (type) {
-                    case 'consoles':
-                        productPost = await getConsolePostByConsoleId(id);
-                        break;
-                    case 'games':
-                        productPost = await getGamePostByGameId(id);
-                        break;
-                    default:
-                        productPost = null;
-                }
-                setProductPost(productPost.data);
-                setLoadingPost(false);
-            } catch (err) {
-                setLoadingPost(false);
-                console.log(err);
-            }
-        };
-        fetchProductPost();
+    const postMethod = useCallback(async () => {
+        switch (type) {
+            case 'consoles':
+                return await getConsolePostByConsoleId(id);
+            case 'games':
+                return await getGamePostByGameId(id);
+            default:
+                throw Error('Type is not valid');
+        }
     }, [id, type]);
 
-    useEffect(() => {
-        const fetchProduct = async () => {
-            try {
-                setLoadingProduct(true);
-                var product = '';
-                switch (type) {
-                    case 'consoles':
-                        product = await getConsoleById(id);
-                        break;
-                    case 'games':
-                        product = await getGameById(id);
-                        break;
-                    default:
-                        product = null;
-                }
-                setProduct(product.data);
-                setLoadingProduct(false);
-            } catch (err) {
-                setLoadingProduct(false);
-                console.log(err);
-            }
-        };
-        fetchProduct();
+    const productsMethod = useCallback(async () => {
+        switch (type) {
+            case 'consoles':
+                return await getConsoleById(id);
+            case 'games':
+                return await getGameById(id);
+            default:
+                throw Error('Type is not valid');
+        }
     }, [id, type]);
 
-    
+    const [{ value: loadingProduct }, { value: product }] = useFetchData(
+        productsMethod
+    );
+
+    const [{ value: loadingPost }, { value: productPost }] = useFetchData(
+        postMethod
+    );
+
     return (
         <>
             {!loadingPost && !loadingProduct && (
                 <TopContainer productPost={productPost} product={product} />
             )}
-            {!loadingPost && !loadingProduct &&  (
+            {!loadingPost && !loadingProduct && (
                 <BottomContainer
                     productPost={productPost}
                     product={product}
@@ -113,6 +88,7 @@ function TopContainer({ productPost, product }) {
         </>
     );
 }
+
 function Paragraph({ content }) {
     return (
         <div className="text-content">
@@ -133,6 +109,7 @@ function Video({ src }) {
             frameBorder="0"
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
+            className="iframe-video"
         ></iframe>
     );
 }
@@ -141,10 +118,7 @@ function BottomContainer({ productPost, product, type }) {
     return (
         <div id="bottom-content-wrapper">
             <LeftBottomBox product={product} />
-            <RightBottomBox
-                post={productPost}
-                type={type}
-            />
+            <RightBottomBox post={productPost} type={type} />
         </div>
     );
 }
@@ -204,59 +178,41 @@ function DisplayRating({ filled }) {
 }
 
 function RightBottomBox({ post, type }) {
-    const [loadingComments, setLoadingComments] = useState(true);
-    const [comments, setComments] = useState([]);
-    useEffect(() => {
-        
-        const fetchComments = async () => {
-            try {
-                console.log(post.id);
-                setLoadingComments(true);
-                var comments = '';
-                switch (type) {
-                    case 'consoles':
-                        comments = await getConsolePostComments(post.id);
-                        break;
-                    case 'games':
-                        comments = await getGamePostComments(post.id);
-                        break;
-                    default:
-                        comments = null;
-                }
-                setComments(comments.data);
-                setLoadingComments(false);
-            } catch (err) {
-                setLoadingComments(false);
-                console.log(err);
-            }
-        };
-        fetchComments();
+    const commentsMethod = useCallback(async () => {
+        switch (type) {
+            case 'consoles':
+                return await getConsolePostComments(post.id);
+            case 'games':
+                return await getGamePostComments(post.id);
+            default:
+                throw Error('Type is not valid');
+        }
     }, [post.id, type]);
+
+    const [{ value: loadingComments }, comments] = useFetchData(commentsMethod);
 
     return (
         <div className="right-bottom-box">
             <Title title="Comments" />
-            {(!loadingComments && <Comments comments={{comments, setComments}} post={post} type={type} />)} 
+            {!loadingComments && (
+                <Comments comments={comments} post={post} type={type} />
+            )}
         </div>
     );
 }
 
 function Comments({ comments, post, type }) {
-    const items = [];
-        for (let i = 0; i < comments.comments.length; i++) {
-            items.push(
+    return (
+        <div id="product-comments">
+            {comments.value.map((comment, index) => (
                 <Comment
-                    key={i}
-                    comment={comments.comments[i]}
+                    key={index}
+                    comment={comment}
                     comments={comments}
                     type={type}
                     post={post}
                 />
-            );
-        }
-    return (
-        <div id="product-comments">
-            {items}
+            ))}
             <AddComment comments={comments} post={post} type={type} />
         </div>
     );
@@ -264,18 +220,19 @@ function Comments({ comments, post, type }) {
 
 function Comment({ comment, comments, type, post }) {
     const user = useContext(UserContext);
+
     const handleLike = () => {
         if (type === 'consoles') {
-            likeCommentOnConsolePost(post.id, comment.id, user.token);
+            likeCommentOnConsolePost(post.id, comment.id, user.state.token);
         } else {
-            likeCommentOnGamePost(post.id, comment.id, user.token);
+            likeCommentOnGamePost(post.id, comment.id, user.state.token);
         }
 
-        const newComments = [...comments.comments];
+        const newComments = [...comments.value];
         const index = newComments.findIndex((c) => c.id === comment.id);
         newComments[index].likes++;
 
-        comments.setComments(newComments);
+        comments.update(newComments);
 
         //add restriction to user only vbeing able to like a comment once, shange the text to unlike once clicked
     };
@@ -305,8 +262,9 @@ function AddComment({ comments, post, type }) {
     const [commentText, setCommentText] = useState('');
 
     async function handleAddComment(event) {
-        let comment;
         event.preventDefault();
+        let comment;
+
         if (type === 'consoles') {
             comment = await addCommentToConsolePost(
                 post.id,
@@ -320,7 +278,9 @@ function AddComment({ comments, post, type }) {
                 user.state.token
             );
         }
-        comments.setComments([...comments.comments, comment.data]);
+        comments.update([...comments.value, comment.data]);
+
+        setCommentText('');
     }
 
     const updateCommentText = (event) => {

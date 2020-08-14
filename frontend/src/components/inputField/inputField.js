@@ -1,4 +1,5 @@
 import React from 'react';
+
 import './inputField.css';
 
 function InputField(props) {
@@ -19,7 +20,7 @@ function InputField(props) {
     );
 }
 
-function CommentInput({onChange}) {
+function CommentInput({ value, onChange }) {
     return (
         <div className="comment-input-box">
             <i className="fas fa-comment input-icon"></i>
@@ -29,6 +30,7 @@ function CommentInput({onChange}) {
                 placeholder="Add a comment"
                 name="comment"
                 required={true}
+                value={value}
                 onChange={onChange}
             />
         </div>

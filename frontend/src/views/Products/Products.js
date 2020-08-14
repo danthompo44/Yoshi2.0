@@ -1,9 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import FlickitySlider from 'react-flickity-component';
 
-import { getAllGames } from '../../services/gameService';
-import { getAllConsoles } from '../../services/consoleService';
+import { getTop5Games } from '../../services/gameService';
+import { getTop5Consoles } from '../../services/consoleService';
+
+import useFetchData from '../../hooks/useFetchData';
 
 import { Title } from '../../components/titles/titles';
 import FilledHeart from '../../components/heartIcon/filledHeart';
@@ -14,42 +16,12 @@ import './flickity.css';
 import './Products.css';
 
 function Products() {
-    const [gamesLoading, setGamesLoading] = useState(true);
-    const [games, setGames] = useState([]);
-
-    const [consolesLoading, setConsolesLoading] = useState(false);
-    const [consoles, setConsoles] = useState([]);
-
-    useEffect(() => {
-        const fetchGames = async () => {
-            try {
-                setGamesLoading(true);
-                const gameData = await getAllGames();
-                setGames(gameData.data);
-                setGamesLoading(false);
-            } catch (err) {
-                setGamesLoading(false);
-                console.log(err);
-            }
-        };
-
-        fetchGames();
-    }, []);
-
-    useEffect(() => {
-        const fetchConsoles = async () => {
-            try {
-                setConsolesLoading(true);
-                const consoleData = await getAllConsoles();
-                setConsoles(consoleData.data);
-                setConsolesLoading(false);
-            } catch (err) {
-                console.log(err);
-            }
-        };
-
-        fetchConsoles();
-    }, []);
+    const [{ value: gamesLoading }, { value: games }] = useFetchData(
+        getTop5Games
+    );
+    const [{ value: consolesLoading }, { value: consoles }] = useFetchData(
+        getTop5Consoles
+    );
 
     return (
         <>
@@ -87,6 +59,7 @@ function Carousel({ items, route }) {
     return (
         <FlickitySlider
             className={'main-carousel'}
+            reloadOnUpdate={true}
             options={flickityOptions}
             ref={flickityRef}
         >

@@ -14,6 +14,19 @@ export async function getAllConsoles() {
 }
 
 /**
+ * Function to get the top 5 rated consoles from the server.
+ */
+export async function getTop5Consoles() {
+    try {
+        const consoles = await axios.get('/consoles/top5');
+        return consoles;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
+/**
  * Function to get a specific console from the server.
  * @param {number} consoleId The console id.
  */

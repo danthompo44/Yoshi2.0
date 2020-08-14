@@ -3,6 +3,7 @@ const controller = require('../controllers/gameController');
 const { verifyToken } = require('../middleware/auth');
 
 router.get('/', controller.getAll);
+router.get('/top5', controller.getTop5);
 router.get('/game/:id', controller.getById);
 router.get('/game/:id/post', controller.getPostByGameId);
 
