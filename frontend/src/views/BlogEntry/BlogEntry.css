@@ -46,7 +46,6 @@
     margin: 30px 0;
 }
 
-
 .blog-comment-text {
     background-color: #444444;
     border-radius: 5px;
@@ -64,18 +63,19 @@
     justify-content: center;
 }
 
-.blog-comment-icons-wrapper{
+.blog-comment-icons-wrapper {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
-#blog-comment-form{
+
+#blog-comment-form {
     display: flex;
     flex-direction: row;
     width: 100%;
 }
 
-#add-comment-button{
+#add-comment-button {
     margin-top: 29px;
 }
 
