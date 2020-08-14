@@ -1,6 +1,5 @@
 import axios from '../helpers/axios';
 
-
 /**
  * Function to get all the blogs from the server.
  */
@@ -94,4 +93,4 @@ export async function likeCommentOnBlog(blogId, commentId, userToken) {
     }
 }
 
-export default {getAllBlogs, getBlogById, getBlogComments, likeCommentOnBlog};
+export default { getAllBlogs, getBlogById, getBlogComments, likeCommentOnBlog };

@@ -19,7 +19,7 @@ function InputField(props) {
     );
 }
 
-function CommentInput({onChange}) {
+function CommentInput({ onChange }) {
     return (
         <div className="comment-input-box">
             <i className="fas fa-comment input-icon"></i>

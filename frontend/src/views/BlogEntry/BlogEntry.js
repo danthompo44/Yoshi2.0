@@ -1,9 +1,14 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { BlogEntryTitle } from '../../components/titles/titles';
 import { CommentInputWithLabel } from '../../components/inputField/inputFieldWithLabel';
 import './BlogEntry.css';
 
-import {getBlogById, getBlogComments, addCommentToBlog, likeCommentOnBlog} from '../../services/blogService';
+import {
+    getBlogById,
+    getBlogComments,
+    addCommentToBlog,
+    likeCommentOnBlog,
+} from '../../services/blogService';
 
 import UserContext from '../../state/userContext';
 
@@ -49,26 +54,28 @@ function BlogEntry(props) {
 
     return (
         <div className="page-wrapper">
-            {!loadingBlog && (<BlogEntryTitle blog={blog}/>)}
-            {!loadingBlog && (<BlogEntryContent blog={blog}/>)}
-            {!loadingComments && (<Comments comments={{comments, setComments}} blog={blog}/>)}
-            <AddComment comments={{comments, setComments}} blog={blog}/>
+            {!loadingBlog && <BlogEntryTitle blog={blog} />}
+            {!loadingBlog && <BlogEntryContent blog={blog} />}
+            {!loadingComments && (
+                <Comments comments={{ comments, setComments }} blog={blog} />
+            )}
+            <AddComment comments={{ comments, setComments }} blog={blog} />
         </div>
     );
 }
 
-function BlogEntryContent({blog}) {
+function BlogEntryContent({ blog }) {
     return (
         <div className="blog-entry-content-container">
-            <TextSection content={blog.paragraph_one}/>
-            <Image src={blog.img_src} al={blog.img_alt}/>
-            <TextSection content={blog.paragraph_two}/>
-            <VideoSection src ={blog.vid_src}/>
+            <TextSection content={blog.paragraph_one} />
+            <Image src={blog.img_src} al={blog.img_alt} />
+            <TextSection content={blog.paragraph_two} />
+            <VideoSection src={blog.vid_src} />
         </div>
     );
 }
 
-function TextSection({content}) {
+function TextSection({ content }) {
     return (
         <div className="blog-entry-section">
             <p>{content}</p>
@@ -76,20 +83,17 @@ function TextSection({content}) {
     );
 }
 
-function Image({src, alt}) {
+function Image({ src, alt }) {
     return (
         <div className="blog-entry-section">
             <div className="blog-entry-image">
-                <img
-                    src={src}
-                    alt={alt}
-                />
+                <img src={src} alt={alt} />
             </div>
         </div>
     );
 }
 
-function VideoSection({src}) {
+function VideoSection({ src }) {
     return (
         <div className="blog-entry-section">
             <div className="blog-entry-video">
@@ -105,16 +109,19 @@ function VideoSection({src}) {
     );
 }
 
-function Comments({comments, blog}) {
+function Comments({ comments, blog }) {
     let commentComponentArray = [];
     for (let i = 0; i < comments.comments.length; i++) {
-        commentComponentArray.push(<BlogComment key = {i} comment={comments.comments[i]} comments={comments} blog={blog}/>);   
+        commentComponentArray.push(
+            <BlogComment
+                key={i}
+                comment={comments.comments[i]}
+                comments={comments}
+                blog={blog}
+            />
+        );
     }
-    return (
-        <div id="blog-comments">
-            {commentComponentArray}
-        </div>
-    )
+    return <div id="blog-comments">{commentComponentArray}</div>;
 }
 
 function BlogComment({ comment, comments, blog }) {
@@ -127,7 +134,7 @@ function BlogComment({ comment, comments, blog }) {
         newComments[index].likes++;
 
         comments.setComments(newComments);
-                //add restriction to user only vbeing able to like a comment once, shange the text to unlike once clicked
+        //add restriction to user only vbeing able to like a comment once, shange the text to unlike once clicked
     };
     return (
         <div className="blog-comment">
@@ -135,7 +142,7 @@ function BlogComment({ comment, comments, blog }) {
                 <p className="blog-comment-text">{comment.comment}</p>
             </div>
             <div className="blog-comment-icons-wrapper">
-            <div className="like-comment-wrapper">
+                <div className="like-comment-wrapper">
                     <p className="like-comment-text" onClick={handleLike}>
                         Like
                     </p>
@@ -173,7 +180,7 @@ function AddComment({ comments, blog }) {
         <div id="blog-add-comment">
             <form id="blog-comment-form" onSubmit={handleAddComment}>
                 <div id="comment-input-container">
-                    <CommentInputWithLabel onChange={updateCommentText}/>
+                    <CommentInputWithLabel onChange={updateCommentText} />
                 </div>
                 <div id="add-comment-button" className="inline-button-wrapper">
                     <button className="btn-green">Add Comment</button>

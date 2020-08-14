@@ -59,7 +59,6 @@ function UserProvider({ children }) {
 export default UserProvider;
 
 function userReducer(state, action) {
-    console.log(state, action);
     switch (action.type) {
         case 'logout':
             return initialUserData;

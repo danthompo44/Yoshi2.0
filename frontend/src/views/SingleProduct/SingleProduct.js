@@ -207,7 +207,6 @@ function RightBottomBox({ post, type }) {
     useEffect(() => {
         const fetchComments = async () => {
             try {
-                console.log(post.id);
                 setLoadingComments(true);
                 var comments = '';
                 switch (type) {
