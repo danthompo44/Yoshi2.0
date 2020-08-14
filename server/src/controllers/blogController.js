@@ -137,4 +137,10 @@ async function likeComment(req, res) {
     }
 }
 
-module.exports = { getAll, getById , getCommentsForBlog, addCommentToBlog, likeComment};
+module.exports = {
+    getAll,
+    getById,
+    getCommentsForBlog,
+    addCommentToBlog,
+    likeComment,
+};

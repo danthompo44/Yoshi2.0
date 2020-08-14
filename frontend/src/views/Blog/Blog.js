@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { getAllBlogs } from '../../services/blogService';
@@ -8,25 +8,12 @@ import RoundedButton from '../../components/roundedButton/roundedButton';
 import { BlogPageTitle } from '../../components/titles/titles';
 
 import './Blog.css';
+import useFetchData from '../../hooks/useFetchData';
 
 function Blog() {
-    const [loadingBlogs, setLoadingBlogs] = useState(true);
-    const [blogs, setBlogs] = useState([]);
-
-    useEffect(() => {
-        const fetchBlogs = async () => {
-            try {
-                setLoadingBlogs(true);
-                var blogs = await getAllBlogs();
-                setBlogs(blogs.data);
-                setLoadingBlogs(false);
-            } catch (err) {
-                setLoadingBlogs(false);
-                console.log(err);
-            }
-        };
-        fetchBlogs();
-    }, []);
+    const [{ value: loadingBlogs }, { value: blogs }] = useFetchData(
+        getAllBlogs
+    );
 
     return (
         <div id="blog-page-wrapper">
