@@ -3,6 +3,7 @@ const {
     isDataNullOrUndefined,
     throwNotFoundError,
     throwMissingDataError,
+    throwAPIError,
 } = require('../helpers');
 const db = require('../models');
 
@@ -138,7 +139,16 @@ async function likeComment(req, res) {
         }
 
         // check if valid comment
-        const comment = await BlogComment.findByPk(req.params.commentId);
+        const comment = await BlogComment.findAll({
+            where: {
+                id: req.params.commentId,
+            },
+            include: [
+                {
+                    model: BlogCommentLikes,
+                },
+            ],
+        });
         if (isDataNullOrUndefined(comment)) {
             throwNotFoundError(
                 null,
@@ -146,16 +156,23 @@ async function likeComment(req, res) {
                 'Comment not found, so can not increment number of likes'
             );
         }
+        //checks to see if the user trying to like the comment has already liked it
+        for (let i = 0; i < comment[0].blogCommentLikes.length; i++) {
+            // return res.status(200).json(comment[0].blogCommentLikes[i].user_id);
+            if (comment[0].blogCommentLikes[i].user_id == req.params.userId) {
+                throwAPIError(
+                    null,
+                    'ERR_COMMENT_LIKED_BY_USER',
+                    'This user has already liked this comment'
+                );
+            }
+        }
+
         const like = await BlogCommentLikes.create({
             comment_id: req.params.commentId,
             user_id: req.params.userId,
         });
-        // await comment.increment('likes');
 
-        // const updatedComment = {
-        //     ...comment.get(),
-        //     likes: comment.get().likes + 1,
-        // };
         return res.status(200).json(like);
     } catch (err) {
         const error = createErrorData(err);

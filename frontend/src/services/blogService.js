@@ -1,6 +1,5 @@
 import axios from '../helpers/axios';
 
-
 /**
  * Function to get all the blogs from the server.
  */
@@ -79,7 +78,7 @@ export async function addCommentToBlog(blogId, commentText, userToken) {
 export async function likeCommentOnBlog(blogId, commentId, userToken) {
     try {
         const comment = await axios.post(
-            `/blogs/blog/${blogId}/comments/${commentId}/like`,
+            `/blogs/blog/${blogId}/comments/${commentId}/${userToken.id}/like`,
             null,
             {
                 headers: {
@@ -94,4 +93,4 @@ export async function likeCommentOnBlog(blogId, commentId, userToken) {
     }
 }
 
-export default {getAllBlogs, getBlogById, getBlogComments, likeCommentOnBlog};
+export default { getAllBlogs, getBlogById, getBlogComments, likeCommentOnBlog };

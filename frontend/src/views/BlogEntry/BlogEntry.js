@@ -125,17 +125,39 @@ function Comments({ comments, blog }) {
 }
 
 function BlogComment({ comment, comments, blog }) {
-    // console.log(comment.blogCommentLikes.length);
     const user = useContext(UserContext);
+    const isCommentLiked = () => {
+        if (!user.state.isLoggedIn) {
+            return false;
+        }
+        let currentComment = comments.comments.find((c) => c.id === comment.id);
+        // console.log(currentComment);
+        const index = currentComment.blogCommentLikes.findIndex((c) => {
+            return c.user_id === parseInt(user.state.id);
+        });
+
+        return index > -1;
+    };
+
+    console.log(isCommentLiked());
+    // console.log(comments);
+
     const handleLike = () => {
-        likeCommentOnBlog(blog.id, comment.id, user.state.token);
+        let like = likeCommentOnBlog(blog.id, comment.id, user.state);
 
         const newComments = [...comments.comments];
         const index = newComments.findIndex((c) => c.id === comment.id);
-        console.log(newComments);
-        newComments[index].likes++;
+        newComments[index].blogCommentLikes.push(like);
 
         comments.setComments(newComments);
+        //add restriction to user only vbeing able to like a comment once, shange the text to unlike once clicked
+    };
+    const handleUnlike = () => {
+        // let like = likeCommentOnBlog(blog.id, comment.id, user.state);
+        // const newComments = [...comments.comments];
+        // const index = newComments.findIndex((c) => c.id === comment.id);
+        // newComments[index].blogCommentLikes.push(like);
+        // comments.setComments(newComments);
         //add restriction to user only vbeing able to like a comment once, shange the text to unlike once clicked
     };
     return (
@@ -145,8 +167,13 @@ function BlogComment({ comment, comments, blog }) {
             </div>
             <div className="blog-comment-icons-wrapper">
                 <div className="like-comment-wrapper">
-                    <p className="like-comment-text" onClick={handleLike}>
-                        Like
+                    <p
+                        className="like-comment-text"
+                        onClick={() =>
+                            isCommentLiked() ? handleUnlike() : handleLike()
+                        }
+                    >
+                        {isCommentLiked() ? 'Unlike' : 'Like'}
                     </p>
                 </div>
                 <div className="thumbs-up-icon-wrapper">
