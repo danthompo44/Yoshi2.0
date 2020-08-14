@@ -81,13 +81,12 @@ function SingleProduct(props) {
         fetchProduct();
     }, [id, type]);
 
-    
     return (
         <>
             {!loadingPost && !loadingProduct && (
                 <TopContainer productPost={productPost} product={product} />
             )}
-            {!loadingPost && !loadingProduct &&  (
+            {!loadingPost && !loadingProduct && (
                 <BottomContainer
                     productPost={productPost}
                     product={product}
@@ -113,6 +112,7 @@ function TopContainer({ productPost, product }) {
         </>
     );
 }
+
 function Paragraph({ content }) {
     return (
         <div className="text-content">
@@ -133,6 +133,7 @@ function Video({ src }) {
             frameBorder="0"
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
+            className="iframe-video"
         ></iframe>
     );
 }
@@ -141,10 +142,7 @@ function BottomContainer({ productPost, product, type }) {
     return (
         <div id="bottom-content-wrapper">
             <LeftBottomBox product={product} />
-            <RightBottomBox
-                post={productPost}
-                type={type}
-            />
+            <RightBottomBox post={productPost} type={type} />
         </div>
     );
 }
@@ -207,7 +205,6 @@ function RightBottomBox({ post, type }) {
     const [loadingComments, setLoadingComments] = useState(true);
     const [comments, setComments] = useState([]);
     useEffect(() => {
-        
         const fetchComments = async () => {
             try {
                 console.log(post.id);
@@ -236,24 +233,30 @@ function RightBottomBox({ post, type }) {
     return (
         <div className="right-bottom-box">
             <Title title="Comments" />
-            {(!loadingComments && <Comments comments={{comments, setComments}} post={post} type={type} />)} 
+            {!loadingComments && (
+                <Comments
+                    comments={{ comments, setComments }}
+                    post={post}
+                    type={type}
+                />
+            )}
         </div>
     );
 }
 
 function Comments({ comments, post, type }) {
     const items = [];
-        for (let i = 0; i < comments.comments.length; i++) {
-            items.push(
-                <Comment
-                    key={i}
-                    comment={comments.comments[i]}
-                    comments={comments}
-                    type={type}
-                    post={post}
-                />
-            );
-        }
+    for (let i = 0; i < comments.comments.length; i++) {
+        items.push(
+            <Comment
+                key={i}
+                comment={comments.comments[i]}
+                comments={comments}
+                type={type}
+                post={post}
+            />
+        );
+    }
     return (
         <div id="product-comments">
             {items}
