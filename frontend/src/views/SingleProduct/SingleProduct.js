@@ -127,7 +127,7 @@ function Image({ url, alt }) {
 
 function Video({ src }) {
     return (
-        <iframe
+        <iframe className="product-media" 
             title="Video"
             src={src}
             frameBorder="0"

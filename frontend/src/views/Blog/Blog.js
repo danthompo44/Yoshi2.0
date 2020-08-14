@@ -53,7 +53,7 @@ function BlogEntry({ blog }) {
                 </div>
                 <div className="blog-content">
                     <h2 className="blog-title">{blog.title}</h2>
-                    <p className="blog-text">{blog.content}</p>
+                    <h4 className="blog-text">{blog.subtitle}</h4>
                 </div>
             </div>
         </Link>

@@ -8,6 +8,7 @@ import { getAllConsoles } from '../../services/consoleService';
 import { Title } from '../../components/titles/titles';
 import FilledHeart from '../../components/heartIcon/filledHeart';
 import UnfilledHeart from '../../components/heartIcon/unfilledHeart';
+import SearchBar from '../../components/search-bar/search-bar';
 
 import './flickity.css';
 import './Products.css';
@@ -62,6 +63,7 @@ function Products() {
                 <Title title="Top 5 Games" />
                 {!gamesLoading && <Carousel items={games} route="/games/" />}
             </div>
+            <BottomContainer/>
         </>
     );
 }
@@ -122,6 +124,91 @@ function CarouselItem({ item, route }) {
             </div>
         </Link>
     );
+}
+function BottomContainer({products}) {
+    return (      
+        <div class="all-products-wrapper">
+        <div class="page-title" id="all-products-title">
+            <Title title= "All Products" />
+        </div>
+        <div class="top-filters-section">
+            <form id="filters-form">
+                <SelectBox option1= "PS4" option2= "xbox" option3= "snez"/>
+                <div id="input-div">
+                <SearchBar />
+                </div>
+            </form>
+        </div>
+        <div class="products-list-wrapper">
+        <ProductAtBottom/>
+        <PageNumberChanger/>
+    </div>
+</div>
+
+
+
+
+    )
+}
+
+
+function SelectBox({option1, option2, option3}) {
+    return (
+        <div class="select-div">
+                    <select>
+                        <option selected>Options</option>
+                        <option>{option1}</option>
+                        <option>{option2}</option>
+                        <option>{option3}</option>
+                    </select>
+                    <div class="arrow-container">
+                        <i class="fas fa-sort-down down-arrow"></i>
+                    </div>
+                </div>
+    )
+
+}
+
+function ProductAtBottom() {
+    return (
+        <div class="individual-product">
+            <div class="product-details">
+            <h2>Product Name 1</h2>
+            <p>Product Description 1 will be inserted here</p>
+        </div>
+        <div class="product-heart-rating">
+            <i class="fas fa-heart spacing green"></i>
+            <i class="fas fa-heart spacing green"></i>
+            <i class="fas fa-heart spacing green"></i>
+            <i class="fas fa-heart spacing green"></i>
+            <i class="fas fa-heart spacing"></i>
+        </div>
+        </div>
+    )
+}
+
+function PageNumberChanger() {
+    return (
+        <div class="page-numbers-wrapper">
+        <div class="page-numbers-container">
+            <div class="page-number">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+            <div class="page-number">
+                <p>1</p>
+            </div>
+            <div class="page-number selected-page-number">
+                <p>2</p>
+            </div>
+            <div class="page-number">
+                <p>3</p>
+            </div>
+            <div class="page-number">
+                <i class="fas fa-arrow-right"></i>
+            </div>
+        </div>
+    </div>
+    )
 }
 
 export default Products;
