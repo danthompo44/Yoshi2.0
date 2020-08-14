@@ -8,6 +8,8 @@ const db = require('../models');
 
 const Blog = db.Blog;
 const BlogComment = db.BlogComment;
+const BlogCommentLikes = db.BlogCommentLikes;
+const User = db.User;
 
 async function getAll(req, res) {
     try {
@@ -50,6 +52,11 @@ async function getCommentsForBlog(req, res) {
             where: {
                 blog_id: req.params.id,
             },
+            include: [
+                {
+                    model: BlogCommentLikes,
+                },
+            ],
         });
 
         return res.status(200).json(comments);
@@ -101,10 +108,25 @@ async function addCommentToBlog(req, res) {
  * @param {request} req Express request object
  * @param req.params.postId blog id
  * @param req.params.commentId Comment id
+ * @param req.params.userId User Id
  * @param {response} res Express response object
  */
 async function likeComment(req, res) {
     try {
+        // check if valid user
+        const user = await User.findAll({
+            where: {
+                id: req.params.userId,
+            },
+        });
+        if (isDataNullOrUndefined(user)) {
+            throwNotFoundError(
+                null,
+                'ERR_USER_NOT_FOUND',
+                'User not found, so can not like a comment'
+            );
+        }
+
         // check if valid post
         const blog = await Blog.findByPk(req.params.blogId);
         if (isDataNullOrUndefined(blog)) {
@@ -124,17 +146,27 @@ async function likeComment(req, res) {
                 'Comment not found, so can not increment number of likes'
             );
         }
-        await comment.increment('likes');
+        const like = await BlogCommentLikes.create({
+            comment_id: req.params.commentId,
+            user_id: req.params.userId,
+        });
+        // await comment.increment('likes');
 
-        const updatedComment = {
-            ...comment.get(),
-            likes: comment.get().likes + 1,
-        };
-        return res.status(200).json(updatedComment);
+        // const updatedComment = {
+        //     ...comment.get(),
+        //     likes: comment.get().likes + 1,
+        // };
+        return res.status(200).json(like);
     } catch (err) {
         const error = createErrorData(err);
         return res.status(error.code).json(error.error);
     }
 }
 
-module.exports = { getAll, getById , getCommentsForBlog, addCommentToBlog, likeComment};
+module.exports = {
+    getAll,
+    getById,
+    getCommentsForBlog,
+    addCommentToBlog,
+    likeComment,
+};

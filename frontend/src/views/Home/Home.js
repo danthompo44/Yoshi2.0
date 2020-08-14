@@ -88,7 +88,7 @@ function OpeningHours() {
                         <OpeningTimesRow day="Thursday" times="9am - 5pm" />
                         <OpeningTimesRow day="Friday" times="9am - 5pm" />
                         <OpeningTimesRow day="Saturday" times="9am - 5pm" />
-                        <OpeningTimesRow day="Sunday" times="Gone Gaming" />
+                        <OpeningTimesRow day="Sunday" times="Gone Gaming!" />
                     </tbody>
                 </table>
             </div>
