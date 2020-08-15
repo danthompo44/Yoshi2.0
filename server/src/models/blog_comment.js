@@ -1,21 +1,18 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { Sequelize, DataTypes, HasMany } = require('sequelize');
+const { sequelize } = require('.');
+const BlogCommentLikes = require('./blog_comment_likes');
 
 /**
- *
+ *A mehotd for mapping Blog Comments to the database
  * @param {Sequelize} sequelize The sequelize object
+ * @param {BlogCommentLikes} BlogCommentLikes the Blog Comment likes database model
  */
-function BlogComment(sequelize) {
-    return sequelize.define(
+module.exports = (sequelize, BlogCommentLikes) => {
+    const BlogComment = sequelize.define(
         'blogComment',
         {
             comment: {
                 type: DataTypes.STRING,
-            },
-            likes: {
-                type: DataTypes.INTEGER,
-            },
-            blog_id: {
-                type: DataTypes.INTEGER,
             },
         },
         {
@@ -24,6 +21,6 @@ function BlogComment(sequelize) {
             tableName: 'blog_comments',
         }
     );
-}
-
-module.exports = BlogComment;
+    BlogComment.hasMany(BlogCommentLikes, { foreignKey: 'comment_id' });
+    return BlogComment;
+};

@@ -14,6 +14,20 @@ export async function getAllBlogs() {
 }
 
 /**
+ * A function to search for blogs on the server.
+ * @param {string} search The search text.
+ */
+export async function searchForBlog(search) {
+    try {
+        const blogs = await axios.get(`/blogs/search?search=${search}`);
+        return blogs;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
+/**
  * Function to get a specific blog from the server.
  * @param {number} blogId The console id.
  */
@@ -78,11 +92,11 @@ export async function addCommentToBlog(blogId, commentText, userToken) {
 export async function likeCommentOnBlog(blogId, commentId, userToken) {
     try {
         const comment = await axios.post(
-            `/blogs/blog/${blogId}/comments/${commentId}/like`,
+            `/blogs/blog/${blogId}/comments/${commentId}/${userToken.id}/like`,
             null,
             {
                 headers: {
-                    authorization: `Bearer ${userToken}`,
+                    authorization: `Bearer ${userToken.token}`,
                 },
             }
         );
@@ -93,4 +107,30 @@ export async function likeCommentOnBlog(blogId, commentId, userToken) {
     }
 }
 
-export default { getAllBlogs, getBlogById, getBlogComments, likeCommentOnBlog };
+export async function unlikeCommentOnBlog(blogId, commentId, userToken) {
+    try {
+        const comment = await axios.post(
+            `blogs/blog/${blogId}/comments/${commentId}/unlike`,
+            {
+                userId: userToken.id,
+            },
+            {
+                headers: {
+                    authorization: `Bearer ${userToken.token}`,
+                },
+            }
+        );
+        return comment;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
+export default {
+    getAllBlogs,
+    getBlogById,
+    getBlogComments,
+    likeCommentOnBlog,
+    unlikeCommentOnBlog,
+};

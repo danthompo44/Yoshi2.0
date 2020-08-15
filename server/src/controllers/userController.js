@@ -146,7 +146,6 @@ exports.logout = async (req, res) => {
         res.clearCookie('token');
         res.status(200).json({ message: 'Logged out' });
     } catch (err) {
-        console.log(err);
         const error = createErrorData(err);
         return res.status(error.code).json(error.error);
     }
@@ -188,7 +187,6 @@ async function generateRefreshToken(userId) {
             disabled_at: disabledDate,
         };
     } catch (err) {
-        console.log(err);
         throw err;
     }
 }

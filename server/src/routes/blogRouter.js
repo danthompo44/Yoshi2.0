@@ -12,9 +12,16 @@ router.post(
     controller.addCommentToBlog
 );
 router.post(
-    '/blog/:blogId/comments/:commentId/like',
+    '/blog/:blogId/comments/:commentId/:userId/like',
     verifyToken,
     controller.likeComment
 );
+router.post(
+    '/blog/:blogId/comments/:commentId/unlike',
+    verifyToken,
+    controller.unlikeComment
+);
+
+router.get('/search', controller.searchForBlog);
 
 module.exports = router;

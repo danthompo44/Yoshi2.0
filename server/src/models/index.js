@@ -14,6 +14,7 @@ const GamePost = require('./game_post');
 const ConsolePostComment = require('./console_post_comment');
 const BlogComment = require('./blog_comment');
 const Query = require('./query');
+const BlogCommentLikes = require('./blog_comment_likes');
 
 const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
     host: config.HOST,
@@ -38,11 +39,13 @@ const db = {
     Console: Console(sequelize),
     ConsolePost: ConsolePost(sequelize),
     ConsolePostComment: ConsolePostComment(sequelize),
-    Blog: Blog(sequelize),
-    BlogComment: BlogComment(sequelize),
-    User: User(sequelize),
+    BlogCommentLikes: BlogCommentLikes(sequelize),
     UserToken: UserToken(sequelize),
     Query: Query(sequelize),
 };
+
+db.BlogComment = BlogComment(sequelize, db.BlogCommentLikes);
+db.Blog = Blog(sequelize, db.BlogComment);
+db.User = User(sequelize, db.BlogCommentLikes);
 
 module.exports = db;

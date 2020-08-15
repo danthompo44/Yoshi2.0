@@ -66,8 +66,24 @@ function throwMissingDataError(code, name, message) {
     );
 }
 
+/**
+ * Function that throws an API error containing the relevant information for a request where data could be found in the method.
+ * Default code is 404
+ * @param {number} [code=404] The code of the error - Default 404
+ * @param {string} [name="ERR_NOT_FOUND"] The name of the error
+ * @param {string} [message="Could not find item to get or modify"] The user friendly message of the error
+ */
+function throwNotFoundError(code, name, message) {
+    throw APIError(
+        code || 404,
+        name || 'ERR_NOT_FOUND',
+        message || 'Could not find item to get or modify'
+    );
+}
+
 module.exports = {
     createErrorData,
     throwAPIError,
     throwMissingDataError,
+    throwNotFoundError,
 };
