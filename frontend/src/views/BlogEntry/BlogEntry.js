@@ -127,46 +127,43 @@ function Comments({ comments, blog }) {
 
 function BlogComment({ comment, comments, blog }) {
     const user = useContext(UserContext);
+
     const isCommentLiked = () => {
         if (!user.state.isLoggedIn) {
             return false;
         }
         let currentComment = comments.comments.find((c) => c.id === comment.id);
-        const index = currentComment.blogCommentLikes.findIndex((c) => {
-            return c.user_id === parseInt(user.state.id);
-        });
-        console.log(currentComment);
+
+        const index = currentComment.blogCommentLikes.findIndex(
+            (c) => parseInt(c.user_id) === parseInt(user.state.id)
+        );
+
         return index > -1;
     };
 
     const handleLike = async () => {
         let like = await likeCommentOnBlog(blog.id, comment.id, user.state);
-        console.log(like);
         const newComments = [...comments.comments];
         const index = newComments.findIndex(
             (c) => c.id === parseInt(comment.id)
         );
         newComments[index].blogCommentLikes.push(like.data);
-        console.log(newComments[index]);
         comments.setComments(newComments);
-        //add restriction to user only vbeing able to like a comment once, shange the text to unlike once clicked
     };
+
     const handleUnlike = () => {
         unlikeCommentOnBlog(blog.id, comment.id, user.state);
         const newComments = [...comments.comments];
         const commentIndex = newComments.findIndex((c) => c.id === comment.id);
         const likeIndex = newComments[commentIndex].blogCommentLikes.findIndex(
-            (c) => {
-                return c.user_id === parseInt(user.state.id);
-            }
+            (c) => parseInt(c.user_id) === parseInt(user.state.id)
         );
         if (likeIndex > -1) {
             newComments[commentIndex].blogCommentLikes.splice(likeIndex, 1);
         }
-
         comments.setComments(newComments);
-        //add restriction to user only vbeing able to like a comment once, shange the text to unlike once clicked
     };
+
     return (
         <div className="blog-comment">
             <div className="blog-comment-box">
@@ -174,11 +171,14 @@ function BlogComment({ comment, comments, blog }) {
             </div>
             <div className="blog-comment-icons-wrapper">
                 <div className="like-comment-wrapper">
-                    <LikeText
-                        commentLiked={() => isCommentLiked()}
-                        likeFn={() => handleLike}
-                        unlikeFn={() => handleUnlike}
-                    />
+                    <p
+                        className="like-comment-text"
+                        onClick={() =>
+                            isCommentLiked() ? handleUnlike() : handleLike()
+                        }
+                    >
+                        {isCommentLiked() ? 'Unlike' : 'Like'}
+                    </p>
                 </div>
                 <div className="thumbs-up-icon-wrapper">
                     <i className="fas fa-thumbs-up like-icon"></i>
@@ -191,16 +191,11 @@ function BlogComment({ comment, comments, blog }) {
     );
 }
 
-function LikeText({ commentLiked, likeFn, unlikeFn }) {
-    return (
-        <p
-            className="like-comment-text"
-            onClick={commentLiked ? unlikeFn() : likeFn()}
-        >
-            {commentLiked ? 'Unlike' : 'Like'}
-        </p>
-    );
-}
+// function LikeText({ commentLiked, likeFn, unlikeFn }) {
+//     return (
+
+//     );
+// }
 
 function AddComment({ comments, blog }) {
     const user = useContext(UserContext);

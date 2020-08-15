@@ -97,7 +97,6 @@ async function addCommentToBlog(req, res) {
         });
 
         comment.dataValues.blogCommentLikes = [];
-        console.log(comment);
         return res.status(200).json(comment);
     } catch (err) {
         const error = createErrorData(err);
@@ -177,6 +176,7 @@ async function likeComment(req, res) {
         return res.status(200).json(like);
     } catch (err) {
         const error = createErrorData(err);
+        console.log(error);
         return res.status(error.code).json(error.error);
     }
 }
@@ -263,6 +263,7 @@ async function unlikeComment(req, res) {
         res.status(200).json(like);
     } catch (err) {
         const error = createErrorData(err);
+        console.log(error);
         return res.status(error.code).json(error.error);
     }
 }
