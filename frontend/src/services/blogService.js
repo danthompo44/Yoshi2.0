@@ -14,6 +14,20 @@ export async function getAllBlogs() {
 }
 
 /**
+ * A function to search for blogs on the server.
+ * @param {string} search The search text
+ */
+export async function searchForBlog(search) {
+    try {
+        const blogs = await axios.get(`/blogs/search?search=${search}`);
+        return blogs;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
+/**
  * Function to get a specific blog from the server.
  * @param {number} blogId The console id.
  */

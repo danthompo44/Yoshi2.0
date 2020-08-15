@@ -14,3 +14,7 @@
     border-color: #444444;
     color: #c0c0c0;
 }
+
+#search-bar i {
+    cursor: pointer;
+}
