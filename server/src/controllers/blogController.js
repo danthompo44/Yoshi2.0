@@ -200,7 +200,7 @@ async function unlikeComment(req, res) {
             );
         }
 
-        // check if valid post
+        // check if valid blog, inner join Blog Comments and Blog Comment likes to the query, reduce network requests
         const blog = await Blog.findOne({
             where: {
                 id: req.params.blogId,
@@ -216,7 +216,6 @@ async function unlikeComment(req, res) {
                 },
             ],
         });
-        return res.status(200).json(blog);
         if (isDataNullOrUndefined(blog)) {
             throwNotFoundError(
                 null,
@@ -224,32 +223,43 @@ async function unlikeComment(req, res) {
                 'Blog not found, so can not unlike a comment'
             );
         }
-
-        // check if valid comment
-        const comment = await BlogComment.findAll({
-            where: {
-                id: req.params.commentId,
-            },
-            include: [
-                {
-                    model: BlogCommentLikes,
-                },
-            ],
-        });
-        if (isDataNullOrUndefined(comment)) {
+        console.log(blog.blogComments[0].dataValues);
+        console.log(blog.blogComments.length);
+        // check if valid comment using the previous inner join query on the database
+        let commentExists = () => {
+            for (let i = 0; i < blog.blogComments.length; i++) {
+                if (
+                    blog.blogComments[i].id === parseInt(req.params.commentId)
+                ) {
+                    return true;
+                }
+            }
+            return false;
+        };
+        if (!commentExists) {
             throwNotFoundError(
                 null,
                 'ERR_COMMENT_NOT_FOUND',
-                'Comment not found, so can not increment number of likes'
+                'Comment not found, so can not unlike a comment'
             );
         }
 
-        const like = BlogCommentLikes.destroy({
+        //destroy comment using user id and comment id within blog_comment_likes table in the database
+        const like = await BlogCommentLikes.destroy({
             where: {
                 comment_id: req.params.commentId,
                 user_id: req.body.userId,
             },
         });
+        console.log(like);
+        if (isDataNullOrUndefined(like)) {
+            throwNotFoundError(
+                null,
+                'ERR_LIKE_NOT_FOUND',
+                'Like not found, so can not unlike a comment'
+            );
+        }
+
         res.status(200).json(like);
     } catch (err) {
         const error = createErrorData(err);
