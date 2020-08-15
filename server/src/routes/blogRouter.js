@@ -16,7 +16,6 @@ router.post(
     verifyToken,
     controller.likeComment
 );
-
 router.post(
     '/blog/:blogId/comments/:commentId/unlike',
     verifyToken,

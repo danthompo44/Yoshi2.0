@@ -6,7 +6,7 @@
 }
 
 .blog-entry-container {
-    width: 70%;
+    width: 100%;
     display: flex;
     margin: auto;
     padding: 5px;
@@ -15,11 +15,9 @@
 
 .blog-entry {
     height: 100%;
-    width: 100%;
-    display: flex;
-    margin-bottom: 20px;
+    width: 70%;
+    margin: 10px auto;
     max-height: 200px;
-    padding: 10px;
 }
 
 .blog-entry-container:hover {
@@ -30,8 +28,9 @@
 
 .blog-image {
     margin-right: 20px;
-    width: 30%;
+    width: 25%;
     min-height: 120px;
+    max-height: 150px;
     display: flex;
     align-items: center;
 }
@@ -46,7 +45,7 @@
 }
 
 .blog-title {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .blog-text {
@@ -57,37 +56,47 @@
     overflow: hidden;
 }
 
+#blog-entries-wrapper {
+    display: flex;
+    flex-flow: column;
+    margin-bottom: 20px;
+}
+
 @media all and (max-width: 1400px) {
-    .blog-entry-container {
+    .blog-entry {
         width: 80%;
     }
 }
 
 @media all and (max-width: 1200px) {
-    .blog-entry-container {
+    .blog-entry {
         width: 90%;
+    }
+
+    .blog-image {
+        width: 30%;
     }
 }
 
 @media all and (max-width: 600px) {
-    .blog-entry-container {
+    .blog-entry {
         width: 100%;
+        max-height: none;
     }
 
-    .blog-entry {
+    .blog-entry-container {
         flex-wrap: wrap;
         max-height: 100%;
     }
 
     .blog-image {
         width: 100%;
-        margin: 0 0 20px 0;
-        max-height: 250px;
-        overflow: hidden;
+        max-height: 200px;
+        margin: 0;
+    }
+
+    .blog-content {
+        margin-top: 10px;
+        width: 100%;
     }
 }
-
-/* #show-more-btn-wrapper {
-    margin-top: 10px;
-    width: 50%;
-} */

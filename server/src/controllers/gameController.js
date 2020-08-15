@@ -28,6 +28,24 @@ async function getAll(req, res) {
 }
 
 /**
+ * A method to retrieve the top 5 rated games
+ * @param {request} req Express Request Object
+ * @param {response} res Express Response Object
+ */
+async function getTop5(req, res) {
+    try {
+        const games = await Game.findAll({
+            limit: 5,
+            order: [['rating', 'DESC']],
+        });
+        return res.status(200).json(games);
+    } catch (err) {
+        const error = createErrorData(err);
+        return res.status(error.code).json(error.error);
+    }
+}
+
+/**
  * Get a game by it's id
  * @param {request} req Express request object
  * @param {response} res Express response object
@@ -105,7 +123,9 @@ async function getPostById(req, res) {
  */
 async function getPostByGameId(req, res) {
     try {
-        const post = await GamePost.findOne({where : {game_id : req.params.id}});
+        const post = await GamePost.findOne({
+            where: { game_id: req.params.id },
+        });
 
         if (isDataNullOrUndefined(post)) {
             throwAPIError(
@@ -152,8 +172,6 @@ async function getCommentsForPost(req, res) {
  */
 async function addCommentToPost(req, res) {
     try {
-        console.log('Add Comment to Game');
-        console.log(req.params.id);
         // check if valid post
         const post = await GamePost.findByPk(req.params.id);
 
@@ -169,7 +187,7 @@ async function addCommentToPost(req, res) {
         if (isDataNullOrUndefined(req.body.comment)) {
             throwMissingDataError();
         }
-        
+
         const comment = await GamePostComment.create({
             comment: req.body.comment,
             likes: 0,
@@ -226,6 +244,7 @@ async function likeComment(req, res) {
 
 module.exports = {
     getAll,
+    getTop5,
     getById,
     getAllPosts,
     getPostById,

@@ -1,43 +1,31 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+
+import { getAllBlogs } from '../../services/blogService';
 
 import SearchBar from '../../components/search-bar/search-bar';
 import RoundedButton from '../../components/roundedButton/roundedButton';
 import { BlogPageTitle } from '../../components/titles/titles';
 
 import './Blog.css';
-
-import {getAllBlogs} from '../../services/blogService';
+import useFetchData from '../../hooks/useFetchData';
 
 function Blog() {
-    const [loadingBlogs, setLoadingBlogs] = useState(true);
-    const [blogs, setBlogs] = useState([]);
-
-    useEffect(() => {
-        const fetchBlogs = async () => {
-            try {
-                setLoadingBlogs(true);
-                var blogs = await getAllBlogs();
-                setBlogs(blogs.data);
-                setLoadingBlogs(false);
-            } catch (err) {
-                setLoadingBlogs(false);
-                console.log(err);
-            }
-        };
-        fetchBlogs();
-    }, []);
-
-    var blogEntrys = [];
-    for(let i = 0; i <blogs.length; i++){
-        blogEntrys.push(!loadingBlogs && <BlogEntry blog={blogs[i]} key={i} />)
-    }
+    const [{ value: loadingBlogs }, { value: blogs }] = useFetchData(
+        getAllBlogs
+    );
 
     return (
         <div id="blog-page-wrapper">
-            <BlogPageTitle blogs = {blogs}/>
+            <BlogPageTitle blogs={blogs} />
             <SearchBar />
-            {blogEntrys}
+            {!loadingBlogs && (
+                <div id="blog-entries-wrapper">
+                    {blogs.map((blog, index) => (
+                        <BlogEntry blog={blog} key={index} />
+                    ))}
+                </div>
+            )}
             <RoundedButton content="SHOW MORE" />
         </div>
     );
@@ -53,7 +41,7 @@ function BlogEntry({ blog }) {
                 </div>
                 <div className="blog-content">
                     <h2 className="blog-title">{blog.title}</h2>
-                    <p className="blog-text">{blog.content}</p>
+                    <p className="blog-text">{blog.subtitle}</p>
                 </div>
             </div>
         </Link>
