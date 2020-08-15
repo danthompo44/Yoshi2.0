@@ -3,6 +3,7 @@ const controller = require('../controllers/consoleController');
 const { verifyToken } = require('../middleware/auth');
 
 router.get('/', controller.getAll);
+router.get('/search', controller.searchForConsoles);
 router.get('/top5', controller.getTop5);
 router.get('/console/:id', controller.getById);
 router.get('/console/:id/post', controller.getPostByConsoleId);

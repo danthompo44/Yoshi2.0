@@ -15,7 +15,7 @@ export async function getAllBlogs() {
 
 /**
  * A function to search for blogs on the server.
- * @param {string} search The search text
+ * @param {string} search The search text.
  */
 export async function searchForBlog(search) {
     try {

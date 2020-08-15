@@ -14,6 +14,20 @@ export async function getAllConsoles() {
 }
 
 /**
+ * A function to search for consoles on the server.
+ * @param {string} search The search text.
+ */
+export async function searchForConsole(search) {
+    try {
+        const consoles = await axios.get(`/consoles/search?search=${search}`);
+        return consoles;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
+/**
  * Function to get the top 5 rated consoles from the server.
  */
 export async function getTop5Consoles() {

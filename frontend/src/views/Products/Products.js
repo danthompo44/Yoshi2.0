@@ -2,8 +2,16 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import FlickitySlider from 'react-flickity-component';
 
-import { getTop5Games, getAllGames } from '../../services/gameService';
-import { getTop5Consoles, getAllConsoles } from '../../services/consoleService';
+import {
+    getTop5Games,
+    getAllGames,
+    searchForGame,
+} from '../../services/gameService';
+import {
+    getTop5Consoles,
+    getAllConsoles,
+    searchForConsole,
+} from '../../services/consoleService';
 
 import useFetchData from '../../hooks/useFetchData';
 
@@ -14,6 +22,7 @@ import SearchBar from '../../components/search-bar/search-bar';
 
 import './flickity.css';
 import './Products.css';
+import { searchForProduct } from '../../services/productService';
 
 function Products() {
     const [{ value: gamesLoading }, { value: games }] = useFetchData(
@@ -105,8 +114,51 @@ function BottomContainer() {
     const options = { ALL: 'ALL', GAMES: 'GAMES', CONSOLES: 'CONSOLES' };
     const [type, setType] = useState(options.ALL);
 
-    function changeType(event) {
+    const [{ value: gamesLoading }, games] = useFetchData(getAllGames);
+    const [{ value: consolesLoading }, consoles] = useFetchData(getAllConsoles);
+
+    async function changeType(event) {
         setType(options[event.target.value]);
+        switch (type) {
+            case options.GAMES:
+                refreshGames();
+                break;
+            case options.CONSOLES:
+                refreshConsoles();
+                break;
+            case options.ALL:
+            default:
+                refreshGames();
+                refreshConsoles();
+        }
+    }
+
+    async function refreshGames() {
+        const allGames = await getAllGames();
+        games.update(allGames.data || []);
+    }
+
+    async function refreshConsoles() {
+        const allConsoles = await getAllConsoles();
+        consoles.update(allConsoles.data || []);
+    }
+
+    async function search(text) {
+        switch (type) {
+            case options.GAMES:
+                const searchedGames = await searchForGame(text);
+                games.update(searchedGames.data || []);
+                break;
+            case options.CONSOLES:
+                const searchedConsoles = await searchForConsole(text);
+                consoles.update(searchedConsoles.data || []);
+                break;
+            case options.ALL:
+            default:
+                const searchedProducts = await searchForProduct(text);
+                games.update(searchedProducts.data.games || []);
+                consoles.update(searchedProducts.data.consoles || []);
+        }
     }
 
     return (
@@ -121,13 +173,16 @@ function BottomContainer() {
                     options={options}
                 />
 
-                <SearchBar />
+                <SearchBar searchFn={search} />
             </div>
             {(type === options.ALL || type === options.GAMES) && (
-                <AllGamesContainer />
+                <AllGamesContainer loading={gamesLoading} games={games.value} />
             )}
             {(type === options.ALL || type === options.CONSOLES) && (
-                <AllConsolesContainer />
+                <AllConsolesContainer
+                    loading={consolesLoading}
+                    consoles={consoles.value}
+                />
             )}
         </div>
     );
@@ -148,14 +203,11 @@ function SelectBox({ value, onChange, options }) {
     );
 }
 
-function AllGamesContainer() {
-    const [{ value: gamesLoading }, { value: games }] = useFetchData(
-        getAllGames
-    );
+function AllGamesContainer({ loading, games }) {
     return (
         <>
             <h2 className="bottom-product-title">Games</h2>
-            {!gamesLoading && (
+            {!loading && (
                 <div className="products-list-wrapper">
                     {games.map((game, index) => (
                         <ProductCard
@@ -170,14 +222,11 @@ function AllGamesContainer() {
     );
 }
 
-function AllConsolesContainer() {
-    const [{ value: consolesLoading }, { value: consoles }] = useFetchData(
-        getAllConsoles
-    );
+function AllConsolesContainer({ loading, consoles }) {
     return (
         <>
             <h2 className="bottom-product-title">Consoles</h2>
-            {!consolesLoading && (
+            {!loading && (
                 <div className="products-list-wrapper">
                     {consoles.map((console, index) => (
                         <ProductCard
