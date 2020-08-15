@@ -13,12 +13,13 @@ router.post(
 );
 router.post(
     '/blog/:blogId/comments/:commentId/:userId/like',
-    // verifyToken,
+    verifyToken,
     controller.likeComment
 );
 
 router.post(
     '/blog/:blogId/comments/:commentId/unlike',
+    verifyToken,
     controller.unlikeComment
 );
 

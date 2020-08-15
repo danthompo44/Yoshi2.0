@@ -93,10 +93,11 @@ async function addCommentToBlog(req, res) {
         }
         const comment = await BlogComment.create({
             comment: req.body.comment,
-            likes: 0,
             blog_id: req.params.id,
         });
 
+        comment.dataValues.blogCommentLikes = [];
+        console.log(comment);
         return res.status(200).json(comment);
     } catch (err) {
         const error = createErrorData(err);
@@ -223,8 +224,7 @@ async function unlikeComment(req, res) {
                 'Blog not found, so can not unlike a comment'
             );
         }
-        console.log(blog.blogComments[0].dataValues);
-        console.log(blog.blogComments.length);
+
         // check if valid comment using the previous inner join query on the database
         let commentExists = () => {
             for (let i = 0; i < blog.blogComments.length; i++) {
@@ -251,7 +251,7 @@ async function unlikeComment(req, res) {
                 user_id: req.body.userId,
             },
         });
-        console.log(like);
+
         if (isDataNullOrUndefined(like)) {
             throwNotFoundError(
                 null,
