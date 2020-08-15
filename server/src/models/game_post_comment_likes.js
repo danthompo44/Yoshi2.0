@@ -1,13 +1,13 @@
 const { Sequelize, DataTypes } = require('sequelize');
 
 /**
- *A function for mapping the api to the console post comments table in the database.
+ *A function for mapping the api to the game post comment likes table in the database.
  * @param {Sequelize} sequelize The sequelize object
  */
 
-function ConsolePostCommentLikes(sequelize) {
+function GamePostCommentLikes(sequelize) {
     return sequelize.define(
-        'consolePostCommentLikes',
+        'gamePostCommentLikes',
         {
             comment_id: {
                 type: DataTypes.INTEGER,
@@ -19,9 +19,9 @@ function ConsolePostCommentLikes(sequelize) {
         {
             timestamps: false,
             freezeTableName: true,
-            tableName: 'console_post_comment_likes',
+            tableName: 'game_post_comment_likes',
         }
     );
 }
 
-module.exports = ConsolePostCommentLikes;
+module.exports = GamePostCommentLikes;

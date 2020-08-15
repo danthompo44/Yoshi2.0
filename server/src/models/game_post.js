@@ -1,11 +1,13 @@
 const { Sequelize, DataTypes } = require('sequelize');
+const GamePostComment = require('./game_post_comment');
 
 /**
- *
+ * A function for mapping the api to the game posts table in the database and create association with game post comments
  * @param {Sequelize} sequelize The sequelize object
+ * @param {GamePostComment} GamePostComment the game post comment database mapping
  */
-function GamePost(sequelize) {
-    return sequelize.define(
+module.exports = (sequelize, GamePostComment) => {
+    const GamePost = sequelize.define(
         'gamePost',
         {
             title: {
@@ -30,6 +32,6 @@ function GamePost(sequelize) {
             tableName: 'game_posts',
         }
     );
-}
-
-module.exports = GamePost;
+    GamePost.hasMany(GamePostComment, { foreignKey: 'game_post_id' });
+    return GamePost;
+};
