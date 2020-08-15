@@ -39,13 +39,13 @@ const db = {
     Console: Console(sequelize),
     ConsolePost: ConsolePost(sequelize),
     ConsolePostComment: ConsolePostComment(sequelize),
-    Blog: Blog(sequelize),
     BlogCommentLikes: BlogCommentLikes(sequelize),
     UserToken: UserToken(sequelize),
     Query: Query(sequelize),
 };
 
 db.BlogComment = BlogComment(sequelize, db.BlogCommentLikes);
+db.Blog = Blog(sequelize, db.BlogComment);
 db.User = User(sequelize, db.BlogCommentLikes);
 
 module.exports = db;

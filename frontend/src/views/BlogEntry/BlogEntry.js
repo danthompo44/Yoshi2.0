@@ -131,7 +131,6 @@ function BlogComment({ comment, comments, blog }) {
             return false;
         }
         let currentComment = comments.comments.find((c) => c.id === comment.id);
-        // console.log(currentComment);
         const index = currentComment.blogCommentLikes.findIndex((c) => {
             return c.user_id === parseInt(user.state.id);
         });

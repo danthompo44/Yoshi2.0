@@ -17,4 +17,9 @@ router.post(
     controller.likeComment
 );
 
+router.post(
+    '/blog/:blogId/comments/:commentId/unlike',
+    controller.unlikeComment
+);
+
 module.exports = router;

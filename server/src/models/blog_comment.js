@@ -14,9 +14,6 @@ module.exports = (sequelize, BlogCommentLikes) => {
             comment: {
                 type: DataTypes.STRING,
             },
-            blog_id: {
-                type: DataTypes.INTEGER,
-            },
         },
         {
             timestamps: false,

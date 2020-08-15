@@ -107,7 +107,7 @@ async function addCommentToBlog(req, res) {
 /**
  * Increment number of likes on a comment
  * @param {request} req Express request object
- * @param req.params.postId blog id
+ * @param req.params.blogId blog id
  * @param req.params.commentId Comment id
  * @param req.params.userId User Id
  * @param {response} res Express response object
@@ -180,10 +180,88 @@ async function likeComment(req, res) {
     }
 }
 
+/**
+ * Remove the logged in users like on a comment if valid
+ * @param {request} req Express request object
+ * @param req.params.commentId Comment id
+ * @param req.params.blogId blog id
+ * @param req.body.userId User Id
+ * @param {response} res Express response object
+ */
+async function unlikeComment(req, res) {
+    try {
+        // check if valid user
+        const user = await User.findByPk(req.body.userId);
+        if (isDataNullOrUndefined(user)) {
+            throwNotFoundError(
+                null,
+                'ERR_USER_NOT_FOUND',
+                'User not found, so can not unlike a comment'
+            );
+        }
+
+        // check if valid post
+        const blog = await Blog.findOne({
+            where: {
+                id: req.params.blogId,
+            },
+            include: [
+                {
+                    model: BlogComment,
+                    include: [
+                        {
+                            model: BlogCommentLikes,
+                        },
+                    ],
+                },
+            ],
+        });
+        return res.status(200).json(blog);
+        if (isDataNullOrUndefined(blog)) {
+            throwNotFoundError(
+                null,
+                'ERR_BLOG_NOT_FOUND',
+                'Blog not found, so can not unlike a comment'
+            );
+        }
+
+        // check if valid comment
+        const comment = await BlogComment.findAll({
+            where: {
+                id: req.params.commentId,
+            },
+            include: [
+                {
+                    model: BlogCommentLikes,
+                },
+            ],
+        });
+        if (isDataNullOrUndefined(comment)) {
+            throwNotFoundError(
+                null,
+                'ERR_COMMENT_NOT_FOUND',
+                'Comment not found, so can not increment number of likes'
+            );
+        }
+
+        const like = BlogCommentLikes.destroy({
+            where: {
+                comment_id: req.params.commentId,
+                user_id: req.body.userId,
+            },
+        });
+        res.status(200).json(like);
+    } catch (err) {
+        const error = createErrorData(err);
+        return res.status(error.code).json(error.error);
+    }
+}
+
 module.exports = {
     getAll,
     getById,
     getCommentsForBlog,
     addCommentToBlog,
     likeComment,
+    unlikeComment,
 };
