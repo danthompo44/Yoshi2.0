@@ -56,6 +56,7 @@ async function getCommentsForBlog(req, res) {
             include: [
                 {
                     model: BlogCommentLikes,
+                    attributes: ['id', 'user_id'],
                 },
             ],
         });
@@ -128,7 +129,7 @@ async function likeComment(req, res) {
             );
         }
 
-        // check if valid post
+        // check if valid blog
         const blog = await Blog.findByPk(req.params.blogId);
         if (isDataNullOrUndefined(blog)) {
             throwNotFoundError(
@@ -146,6 +147,7 @@ async function likeComment(req, res) {
             include: [
                 {
                     model: BlogCommentLikes,
+                    attributes: ['id', 'user_id'],
                 },
             ],
         });

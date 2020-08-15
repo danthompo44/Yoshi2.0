@@ -13,9 +13,6 @@ module.exports = (sequelize, GamePostCommentLikes) => {
             comment: {
                 type: DataTypes.STRING,
             },
-            likes: {
-                type: DataTypes.INTEGER,
-            },
             game_post_id: {
                 type: DataTypes.INTEGER,
             },
