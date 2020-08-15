@@ -1,11 +1,14 @@
 const { Sequelize, DataTypes } = require('sequelize');
+const ConsolePost = require('./console_post');
+const { sequelize } = require('.');
 
 /**
- *
+ * A function for mapping consoles to the database
  * @param {Sequelize} sequelize The sequelize object
+ * @param {ConsolePost} ConsolePost The console post database mapping
  */
-function Console(sequelize) {
-    return sequelize.define(
+module.exports = (sequelize, ConsolePost) => {
+    const Console = sequelize.define(
         'console',
         {
             name: {
@@ -45,6 +48,6 @@ function Console(sequelize) {
             tableName: 'consoles',
         }
     );
-}
-
-module.exports = Console;
+    Console.hasMany(ConsolePost, { foreignKey: 'console_id' });
+    return Console;
+};

@@ -1,11 +1,13 @@
 const { Sequelize, DataTypes } = require('sequelize');
+const ConsolePostCommentLikes = require('./console_post_comment_likes');
 
 /**
- *
+ * A function for mapping Console post comments to the database whilst creating foreign key relationships with console post comment likes
  * @param {Sequelize} sequelize The sequelize object
+ * @param {ConsolePostCommentLikes} ConsolePostCommentLikes the console post comment likes database map object
  */
-function ConsolePostComment(sequelize) {
-    return sequelize.define(
+module.exports = (sequelize, ConsolePostCommentLikes) => {
+    const ConsolePostComment = sequelize.define(
         'consolePostComment',
         {
             comment: {
@@ -24,6 +26,8 @@ function ConsolePostComment(sequelize) {
             tableName: 'console_post_comments',
         }
     );
-}
-
-module.exports = ConsolePostComment;
+    ConsolePostComment.hasMany(ConsolePostCommentLikes, {
+        foreignKey: 'comment_id',
+    });
+    return ConsolePostComment;
+};
