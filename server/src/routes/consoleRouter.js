@@ -22,5 +22,10 @@ router.post(
     verifyToken,
     controller.likeComment
 );
+router.post(
+    '/posts/:postId/comments/:commentId/unlike',
+    verifyToken,
+    controller.unlikeComment
+);
 
 module.exports = router;
