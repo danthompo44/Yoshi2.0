@@ -143,14 +143,43 @@ export async function addCommentToGamePost(postId, commentText, userToken) {
  * @param {number} commentId The comment id.
  * @param {string} userToken The users JWT token for authentication.
  */
-export async function likeCommentOnGamePost(postId, commentId, userToken) {
+export async function likeCommentOnGamePost(postId, commentId, user) {
     try {
         const comment = await axios.post(
             `/games/posts/${postId}/comments/${commentId}/like`,
-            null,
+            {
+                userId: user.id,
+            },
             {
                 headers: {
-                    authorization: `Bearer ${userToken}`,
+                    authorization: `Bearer ${user}`,
+                },
+            }
+        );
+        return comment;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
+/**
+ * A function to unlike a comment on a post on the server.
+ * The user must be logged in and have a valid token.
+ * @param {number} postId The post id.
+ * @param {number} commentId The comment id.
+ * @param {string} userToken The users JWT token for authentication.
+ */
+export async function unlikeCommentOnGamePost(postId, commentId, user) {
+    try {
+        const comment = await axios.post(
+            `/games/posts/${postId}/comments/${commentId}/unlike`,
+            {
+                userId: user.id,
+            },
+            {
+                headers: {
+                    authorization: `Bearer ${user}`,
                 },
             }
         );
@@ -170,4 +199,5 @@ export default {
     getGamePostComments,
     addCommentToGamePost,
     likeCommentOnGamePost,
+    unlikeCommentOnGamePost,
 };
