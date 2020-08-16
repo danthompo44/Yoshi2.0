@@ -284,16 +284,15 @@ async function likeComment(req, res) {
         }
 
         //check if user has already liked the comment
-        let likesArray = comment[0].gamePostCommentLikes;
-        for (let i = 0; i < likesArray.length; i++) {
-            if (likesArray[i].user_id == req.body.userId) {
+        comment[0].gamePostCommentLikes.forEach((c) => {
+            if (c.user_id == req.body.userId) {
                 throwAPIError(
                     null,
                     'ERR_COMMENT_LIKED_BY_USER',
                     'This user has already liked this comment'
                 );
             }
-        }
+        });
 
         //create entry in database
         const like = await GamePostCommentLikes.create({
@@ -328,51 +327,39 @@ async function unlikeComment(req, res) {
             );
         }
 
-        // check if valid blog, inner join Blog Comments and Blog Comment likes to the query, reduce network requests
-        const blog = await Blog.findOne({
-            where: {
-                id: req.params.blogId,
-            },
-            include: [
-                {
-                    model: BlogComment,
-                    include: [
-                        {
-                            model: BlogCommentLikes,
-                        },
-                    ],
-                },
-            ],
-        });
-        if (isDataNullOrUndefined(blog)) {
-            throwNotFoundError(
-                null,
-                'ERR_BLOG_NOT_FOUND',
-                'Blog not found, so can not unlike a comment'
+        // check if valid post
+        const post = await GamePost.findByPk(req.params.postId);
+        if (isDataNullOrUndefined(post)) {
+            throwAPIError(
+                404,
+                'ERR_POST_NOT_FOUND',
+                'Post not found, so can not like a comment'
             );
         }
 
-        // check if valid comment using the previous inner join query on the database
-        let commentExists = () => {
-            for (let i = 0; i < blog.blogComments.length; i++) {
-                if (
-                    blog.blogComments[i].id === parseInt(req.params.commentId)
-                ) {
-                    return true;
-                }
-            }
-            return false;
-        };
-        if (!commentExists) {
-            throwNotFoundError(
-                null,
+        // check if valid comment
+        const comment = await GamePostComment.findAll({
+            where: {
+                id: req.params.commentId,
+            },
+            include: [
+                {
+                    model: GamePostCommentLikes,
+                    attributes: ['id', 'user_id'],
+                },
+            ],
+        });
+
+        if (isArrayEmpty(comment)) {
+            throwAPIError(
+                404,
                 'ERR_COMMENT_NOT_FOUND',
-                'Comment not found, so can not unlike a comment'
+                'Comment not found, so can not increment number of likes'
             );
         }
 
         //destroy comment using user id and comment id within blog_comment_likes table in the database
-        const like = await BlogCommentLikes.destroy({
+        const like = await GamePostCommentLikes.destroy({
             where: {
                 comment_id: req.params.commentId,
                 user_id: req.body.userId,
@@ -387,7 +374,7 @@ async function unlikeComment(req, res) {
             );
         }
 
-        res.status(200).json(like);
+        return res.status(200).json(like);
     } catch (err) {
         const error = createErrorData(err);
         return res.status(error.code).json(error.error);
