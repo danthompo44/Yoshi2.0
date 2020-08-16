@@ -226,6 +226,9 @@ async function addCommentToPost(req, res) {
             likes: 0,
             game_post_id: req.params.id,
         });
+
+        comment.dataValues.gamePostCommentLikes = [];
+
         return res.status(200).json(comment);
     } catch (err) {
         const error = createErrorData(err);
@@ -243,15 +246,6 @@ async function addCommentToPost(req, res) {
  */
 async function likeComment(req, res) {
     try {
-        // check if valid user
-        const user = await User.findByPk(req.body.userId);
-        if (isDataNullOrUndefined(user)) {
-            throwNotFoundError(
-                null,
-                'ERR_USER_NOT_FOUND',
-                'User not found, so can not like a comment'
-            );
-        }
         // check if valid post
         const post = await GamePost.findByPk(req.params.postId);
         if (isDataNullOrUndefined(post)) {
@@ -263,10 +257,7 @@ async function likeComment(req, res) {
         }
 
         // check if valid comment
-        const comment = await GamePostComment.findAll({
-            where: {
-                id: req.params.commentId,
-            },
+        const comment = await GamePostComment.findByPk(req.params.commentId, {
             include: [
                 {
                     model: GamePostCommentLikes,
@@ -275,7 +266,7 @@ async function likeComment(req, res) {
             ],
         });
 
-        if (isArrayEmpty(comment)) {
+        if (isDataNullOrUndefined(comment)) {
             throwAPIError(
                 404,
                 'ERR_COMMENT_NOT_FOUND',
@@ -284,7 +275,7 @@ async function likeComment(req, res) {
         }
 
         //check if user has already liked the comment
-        comment[0].gamePostCommentLikes.forEach((c) => {
+        comment.gamePostCommentLikes.forEach((c) => {
             if (c.user_id == req.body.userId) {
                 throwAPIError(
                     null,
@@ -317,16 +308,6 @@ async function likeComment(req, res) {
  */
 async function unlikeComment(req, res) {
     try {
-        // check if valid user
-        const user = await User.findByPk(req.body.userId);
-        if (isDataNullOrUndefined(user)) {
-            throwNotFoundError(
-                null,
-                'ERR_USER_NOT_FOUND',
-                'User not found, so can not unlike a comment'
-            );
-        }
-
         // check if valid post
         const post = await GamePost.findByPk(req.params.postId);
         if (isDataNullOrUndefined(post)) {
@@ -338,19 +319,9 @@ async function unlikeComment(req, res) {
         }
 
         // check if valid comment
-        const comment = await GamePostComment.findAll({
-            where: {
-                id: req.params.commentId,
-            },
-            include: [
-                {
-                    model: GamePostCommentLikes,
-                    attributes: ['id', 'user_id'],
-                },
-            ],
-        });
+        const comment = await GamePostComment.findByPk(req.params.commentId);
 
-        if (isArrayEmpty(comment)) {
+        if (isDataNullOrUndefined(comment)) {
             throwAPIError(
                 404,
                 'ERR_COMMENT_NOT_FOUND',

@@ -141,7 +141,7 @@ export async function addCommentToGamePost(postId, commentText, userToken) {
  * The user must be logged in and have a valid token.
  * @param {number} postId The post id.
  * @param {number} commentId The comment id.
- * @param {string} userToken The users JWT token for authentication.
+ * @param {{id: string, token: string}} user The user of the application. Must contain the id and token.
  */
 export async function likeCommentOnGamePost(postId, commentId, user) {
     try {
@@ -152,7 +152,7 @@ export async function likeCommentOnGamePost(postId, commentId, user) {
             },
             {
                 headers: {
-                    authorization: `Bearer ${user}`,
+                    authorization: `Bearer ${user.token}`,
                 },
             }
         );
@@ -168,7 +168,7 @@ export async function likeCommentOnGamePost(postId, commentId, user) {
  * The user must be logged in and have a valid token.
  * @param {number} postId The post id.
  * @param {number} commentId The comment id.
- * @param {string} userToken The users JWT token for authentication.
+ * @param {{id: string, token: string}} user The user of the application. Must contain the id and token.
  */
 export async function unlikeCommentOnGamePost(postId, commentId, user) {
     try {
@@ -179,7 +179,7 @@ export async function unlikeCommentOnGamePost(postId, commentId, user) {
             },
             {
                 headers: {
-                    authorization: `Bearer ${user}`,
+                    authorization: `Bearer ${user.token}`,
                 },
             }
         );

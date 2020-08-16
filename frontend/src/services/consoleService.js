@@ -145,9 +145,6 @@ export async function addCommentToConsolePost(postId, commentText, userToken) {
  */
 export async function likeCommentOnConsolePost(postId, commentId, user) {
     try {
-        console.log(postId);
-        console.log(commentId);
-        console.log(user);
         const comment = await axios.post(
             `/consoles/posts/${postId}/comments/${commentId}/like`,
             { userId: user.id },

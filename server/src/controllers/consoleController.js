@@ -221,6 +221,8 @@ async function addCommentToPost(req, res) {
             console_post_id: req.params.id,
         });
 
+        comment.dataValues.consolePostCommentLikes = [];
+
         return res.status(200).json(comment);
     } catch (err) {
         const error = createErrorData(err);
