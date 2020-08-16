@@ -2,7 +2,7 @@ import React, { useReducer, useCallback, useEffect } from 'react';
 import UserContext from '../state/userContext';
 import service from '../services/userService';
 
-const initialUserData = {
+export const initialUserData = {
     isLoggedIn: false,
     id: null,
     token: null,

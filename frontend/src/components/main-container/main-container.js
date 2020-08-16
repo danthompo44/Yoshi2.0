@@ -9,6 +9,7 @@ import Blog from '../../views/Blog/Blog';
 import BlogEntry from '../../views/BlogEntry/BlogEntry';
 import ContactUs from '../../views/ContactUs/ContactUs';
 import SignUp from '../../views/SignUp/SignUp';
+
 import './main-container.css';
 
 function MainContainer() {

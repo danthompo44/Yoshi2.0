@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 /**
- *
+ * A hook for fetching and setting data from a service function with appropriate loading and error state.
  * @param {Promise<Function>} serviceMethod The service method to fetch data from.
  */
 function useFetchData(serviceMethod) {

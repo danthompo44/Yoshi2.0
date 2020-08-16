@@ -12,6 +12,7 @@ import {
     getAllConsoles,
     searchForConsole,
 } from '../../services/consoleService';
+import { searchForProduct } from '../../services/productService';
 
 import useFetchData from '../../hooks/useFetchData';
 
@@ -22,7 +23,6 @@ import SearchBar from '../../components/search-bar/search-bar';
 
 import './flickity.css';
 import './Products.css';
-import { searchForProduct } from '../../services/productService';
 
 function Products() {
     const [{ value: gamesLoading }, { value: games }] = useFetchData(
