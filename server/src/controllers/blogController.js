@@ -13,7 +13,6 @@ const db = require('../models');
 const Blog = db.Blog;
 const BlogComment = db.BlogComment;
 const BlogCommentLikes = db.BlogCommentLikes;
-const User = db.User;
 
 /**
  * A method to get all blogs from the database.
