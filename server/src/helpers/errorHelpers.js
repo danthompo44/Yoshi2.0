@@ -1,4 +1,5 @@
 const { APIError } = require('../errors');
+const winston = require('../../config/winston');
 
 /**
  * Create error data for a response back from the API. Will either return the data if valid, or create a generic code and message to send back.
@@ -31,6 +32,7 @@ function createErrorData(error) {
         }
     }
 
+    winston.error(data);
     return data;
 }
 
