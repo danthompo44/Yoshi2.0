@@ -1,4 +1,5 @@
 const { request, response } = require('express');
+const { Op } = require('sequelize');
 
 const {
     createErrorData,
@@ -6,16 +7,16 @@ const {
     throwNotFoundError,
 } = require('../helpers');
 const db = require('../models');
-const { sequelize } = require('../models');
 
 const Console = db.Console;
 const ConsolePost = db.ConsolePost;
 const ConsolePostComment = db.ConsolePostComment;
+const ConsolePostCommentLikes = db.ConsolePostCommentLikes;
 
 /**
- * A method to retrieve all consoles
- * @param {request} req Express Request Object
- * @param {response} res Express Response Object
+ * A method to retrieve all consoles.
+ * @param {request} req Express request object.
+ * @param {response} res Express response object.
  */
 async function getAll(req, res) {
     try {
@@ -28,9 +29,30 @@ async function getAll(req, res) {
 }
 
 /**
- * A method to retrieve the top 5 rated consoles
- * @param {request} req Express Request Object
- * @param {response} res Express Response Object
+ * A method to search for a console.
+ * @param {request} req Express request object.
+ * @param {response} res Express response object.
+ */
+async function searchForConsoles(req, res) {
+    try {
+        const consoles = await Console.findAll({
+            where: {
+                name: {
+                    [Op.like]: `%${req.query.search}%`,
+                },
+            },
+        });
+        return res.status(200).json(consoles);
+    } catch (err) {
+        const error = createErrorData(err);
+        return res.status(error.code).json(error.error);
+    }
+}
+
+/**
+ * A method to retrieve the top 5 rated consoles.
+ * @param {request} req Express request object.
+ * @param {response} res Express response object.
  */
 async function getTop5(req, res) {
     try {
@@ -46,10 +68,10 @@ async function getTop5(req, res) {
 }
 
 /**
- * A method to retrieve a console by its id
- * @param {request} req Express Request Object
- * @param {response} res Express Response Object
- * @param {number} req.params.id A console id
+ * A method to retrieve a console by its id.
+ * @param {request} req Express request object.
+ * @param {response} res Express response object.
+ * @param {number} req.params.id A console id.
  */
 async function getById(req, res) {
     try {
@@ -65,10 +87,10 @@ async function getById(req, res) {
 }
 
 /**
- * A function for return all post relating to consoles
- *  Does **not** include the comments associated with any of the posts
- * @param {request} req Express request object
- * @param {response} res Express response object
+ * A function for return all post relating to consoles.
+ *  Does **not** include the comments associated with any of the posts.
+ * @param {request} req Express request object.
+ * @param {response} res Express response object.
  */
 async function getAllPosts(req, res) {
     try {
@@ -91,9 +113,9 @@ async function getAllPosts(req, res) {
 /**
  * Get a post about a console by it's id.
  * Does **not** include the comments associated with the post.
- * @param {request} req Express request object
- * @param req.params.id Post id
- * @param {response} res Express response object
+ * @param {request} req Express request object.
+ * @param req.params.id Post id.
+ * @param {response} res Express response object.
  */
 async function getPostById(req, res) {
     try {
@@ -117,9 +139,9 @@ async function getPostById(req, res) {
 /**
  * Get a post about a console by the games id.
  * Does **not** include the comments associated with the post.
- * @param {request} req Express request object
- * @param req.params.id Game id
- * @param {response} res Express response object
+ * @param {request} req Express request object.
+ * @param req.params.id Game id.
+ * @param {response} res Express response object.
  */
 async function getPostByConsoleId(req, res) {
     try {
@@ -144,9 +166,9 @@ async function getPostByConsoleId(req, res) {
 
 /**
  * Get the comments for a post with a particular id.
- * @param {request} req Express request object
- * @param req.params.id Post id
- * @param {response} res Express response object
+ * @param {request} req Express request object.
+ * @param req.params.id Post id.
+ * @param {response} res Express response object.
  */
 async function getCommentsForPost(req, res) {
     try {
@@ -154,6 +176,12 @@ async function getCommentsForPost(req, res) {
             where: {
                 console_post_id: req.params.id,
             },
+            include: [
+                {
+                    model: ConsolePostCommentLikes,
+                    attributes: ['id', 'user_id'],
+                },
+            ],
         });
 
         return res.status(200).json(comments);
@@ -164,11 +192,11 @@ async function getCommentsForPost(req, res) {
 }
 
 /**
- * Add a comment to a particular post
- * @param {request} req Express request object
- * @param req.params.id Post id
- * @param req.body.comment Comment text
- * @param {response} res Express response object
+ * Add a comment to a particular post.
+ * @param {request} req Express request object.
+ * @param req.params.id Post id.
+ * @param req.body.comment Comment text.
+ * @param {response} res Express response object.
  */
 async function addCommentToPost(req, res) {
     try {
@@ -201,11 +229,12 @@ async function addCommentToPost(req, res) {
 }
 
 /**
- * Increment number of likes on a post
- * @param {request} req Express request object
- * @param req.params.postId Post id
- * @param req.params.commentId Comment id
- * @param {response} res Express response object
+ * Increment number of likes on a post.
+ * @param {request} req Express request object.
+ * @param req.params.postId Post id.
+ * @param req.params.commentId Comment id.
+ * @param req.body.userId User Id.
+ * @param {response} res Express response object.
  */
 async function likeComment(req, res) {
     try {
@@ -220,7 +249,18 @@ async function likeComment(req, res) {
         }
 
         // check if valid comment
-        const comment = await ConsolePostComment.findByPk(req.params.commentId);
+        const comment = await ConsolePostComment.findByPk(
+            req.params.commentId,
+            {
+                include: [
+                    {
+                        model: ConsolePostCommentLikes,
+                        attributes: ['id', 'user_id'],
+                    },
+                ],
+            }
+        );
+
         if (isDataNullOrUndefined(comment)) {
             throwNotFoundError(
                 null,
@@ -228,13 +268,76 @@ async function likeComment(req, res) {
                 'Comment not found, so can not increment number of likes'
             );
         }
-        await comment.increment('likes');
 
-        const updatedComment = {
-            ...comment.get(),
-            likes: comment.get().likes + 1,
-        };
-        return res.status(200).json(updatedComment);
+        comment.consolePostCommentLikes.forEach((c) => {
+            if (c.consolePostCommentLikes.user_id === req.body.userId) {
+                throwAPIError(
+                    null,
+                    'ERR_COMMENT_LIKED_BY_USER',
+                    'This user has already liked this comment'
+                );
+            }
+        });
+
+        const like = await ConsolePostCommentLikes.create({
+            comment_id: req.params.commentId,
+            user_id: req.body.userId,
+        });
+
+        return res.status(200).json(like);
+    } catch (err) {
+        const error = createErrorData(err);
+        return res.status(error.code).json(error.error);
+    }
+}
+
+/**
+ * Increment number of likes on a post.
+ * @param {request} req Express request object.
+ * @param req.params.postId Post id.
+ * @param req.params.commentId Comment id.
+ * @param req.body.userId User Id.
+ * @param {response} res Express response object.
+ */
+async function unlikeComment(req, res) {
+    try {
+        // check if valid post
+        const post = await ConsolePost.findByPk(req.params.postId);
+        if (isDataNullOrUndefined(post)) {
+            throwNotFoundError(
+                null,
+                'ERR_POST_NOT_FOUND',
+                'Post not found, so can not like a comment'
+            );
+        }
+
+        // check if valid comment
+        const comment = await ConsolePostComment.findByPk(req.params.commentId);
+
+        if (isDataNullOrUndefined(comment)) {
+            throwNotFoundError(
+                null,
+                'ERR_COMMENT_NOT_FOUND',
+                'Comment not found, so can not increment number of likes'
+            );
+        }
+
+        const like = await ConsolePostCommentLikes.destroy({
+            where: {
+                comment_id: req.params.commentId,
+                user_id: req.body.userId,
+            },
+        });
+
+        if (isDataNullOrUndefined(like)) {
+            throwNotFoundError(
+                null,
+                'ERR_LIKE_NOT_FOUND',
+                'Like not found, so can not unlike a comment'
+            );
+        }
+
+        res.status(200).json(like);
     } catch (err) {
         const error = createErrorData(err);
         return res.status(error.code).json(error.error);
@@ -243,6 +346,7 @@ async function likeComment(req, res) {
 
 module.exports = {
     getAll,
+    searchForConsoles,
     getTop5,
     getById,
     getAllPosts,
@@ -251,4 +355,5 @@ module.exports = {
     getCommentsForPost,
     addCommentToPost,
     likeComment,
+    unlikeComment,
 };

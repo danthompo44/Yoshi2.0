@@ -1,4 +1,6 @@
 const { request, response } = require('express');
+const { Op } = require('sequelize');
+
 const {
     createErrorData,
     isDataNullOrUndefined,
@@ -16,9 +18,9 @@ const User = db.User;
 const GamePostCommentLikes = db.GamePostCommentLikes;
 
 /**
- * A function to get all games
- * @param {request} req Express request object
- * @param {response} res Express response object
+ * A function to get all games.
+ * @param {request} req Express request object.
+ * @param {response} res Express response object.
  */
 async function getAll(req, res) {
     try {
@@ -32,9 +34,30 @@ async function getAll(req, res) {
 }
 
 /**
- * A method to retrieve the top 5 rated games
- * @param {request} req Express Request Object
- * @param {response} res Express Response Object
+ * A method to search for a game.
+ * @param {request} req Express request object.
+ * @param {response} res Express response object.
+ */
+async function searchForGames(req, res) {
+    try {
+        const games = await Game.findAll({
+            where: {
+                title: {
+                    [Op.like]: `%${req.query.search}%`,
+                },
+            },
+        });
+        return res.status(200).json(games);
+    } catch (err) {
+        const error = createErrorData(err);
+        return res.status(error.code).json(error.error);
+    }
+}
+
+/**
+ * A method to retrieve the top 5 rated games.
+ * @param {request} req Express request object.
+ * @param {response} res Express response object.
  */
 async function getTop5(req, res) {
     try {
@@ -50,9 +73,9 @@ async function getTop5(req, res) {
 }
 
 /**
- * Get a game by it's id
- * @param {request} req Express request object
- * @param {response} res Express response object
+ * Get a game by it's id.
+ * @param {request} req Express request object.
+ * @param {response} res Express response object.
  */
 async function getById(req, res) {
     try {
@@ -70,9 +93,9 @@ async function getById(req, res) {
 
 /**
  * Get all posts relating to games.
- * Does **not** include the comments associated with any of the posts
- * @param {request} req Express request object
- * @param {response} res Express response object
+ * Does **not** include the comments associated with any of the posts.
+ * @param {request} req Express request object.
+ * @param {response} res Express response object.
  */
 async function getAllPosts(req, res) {
     try {
@@ -95,9 +118,9 @@ async function getAllPosts(req, res) {
 /**
  * Get a post about a game by it's id.
  * Does **not** include the comments associated with the post.
- * @param {request} req Express request object
- * @param req.params.id Post id
- * @param {response} res Express response object
+ * @param {request} req Express request object.
+ * @param req.params.id Post id.
+ * @param {response} res Express response object.
  */
 async function getPostById(req, res) {
     try {
@@ -121,9 +144,9 @@ async function getPostById(req, res) {
 /**
  * Get a post about a game by the games id.
  * Does **not** include the comments associated with the post.
- * @param {request} req Express request object
- * @param req.params.id Game id
- * @param {response} res Express response object
+ * @param {request} req Express request object.
+ * @param req.params.id Game id.
+ * @param {response} res Express response object.
  */
 async function getPostByGameId(req, res) {
     try {
@@ -148,9 +171,9 @@ async function getPostByGameId(req, res) {
 
 /**
  * Get the comments for a post with a particular id.
- * @param {request} req Express request object
- * @param req.params.id Post id
- * @param {response} res Express response object
+ * @param {request} req Express request object.
+ * @param req.params.id Post id.
+ * @param {response} res Express response object.
  */
 async function getCommentsForPost(req, res) {
     try {
@@ -174,11 +197,11 @@ async function getCommentsForPost(req, res) {
 }
 
 /**
- * Add a comment to a particular post
- * @param {request} req Express request object
- * @param req.params.id Post id
- * @param req.body.comment Comment text
- * @param {response} res Express response object
+ * Add a comment to a particular post.
+ * @param {request} req Express request object.
+ * @param req.params.id Post id.
+ * @param req.body.comment Comment text.
+ * @param {response} res Express response object.
  */
 async function addCommentToPost(req, res) {
     try {
@@ -373,6 +396,7 @@ async function unlikeComment(req, res) {
 
 module.exports = {
     getAll,
+    searchForGames,
     getTop5,
     getById,
     getAllPosts,

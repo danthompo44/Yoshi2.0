@@ -1,27 +1,34 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { getAllBlogs } from '../../services/blogService';
+import { getAllBlogs, searchForBlog } from '../../services/blogService';
+import useFetchData from '../../hooks/useFetchData';
 
 import SearchBar from '../../components/search-bar/search-bar';
 import RoundedButton from '../../components/roundedButton/roundedButton';
 import { BlogPageTitle } from '../../components/titles/titles';
 
 import './Blog.css';
-import useFetchData from '../../hooks/useFetchData';
 
 function Blog() {
-    const [{ value: loadingBlogs }, { value: blogs }] = useFetchData(
-        getAllBlogs
-    );
+    const [{ value: loadingBlogs }, blogs] = useFetchData(getAllBlogs);
+
+    async function search(text) {
+        try {
+            const searchedBlogs = await searchForBlog(text);
+            blogs.update(searchedBlogs.data);
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     return (
         <div id="blog-page-wrapper">
-            <BlogPageTitle blogs={blogs} />
-            <SearchBar />
+            <BlogPageTitle blogs={blogs.value} />
+            <SearchBar searchFn={search} />
             {!loadingBlogs && (
                 <div id="blog-entries-wrapper">
-                    {blogs.map((blog, index) => (
+                    {blogs.value.map((blog, index) => (
                         <BlogEntry blog={blog} key={index} />
                     ))}
                 </div>

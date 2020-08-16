@@ -14,6 +14,20 @@ export async function getAllConsoles() {
 }
 
 /**
+ * A function to search for consoles on the server.
+ * @param {string} search The search text.
+ */
+export async function searchForConsole(search) {
+    try {
+        const consoles = await axios.get(`/consoles/search?search=${search}`);
+        return consoles;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
+/**
  * Function to get the top 5 rated consoles from the server.
  */
 export async function getTop5Consoles() {
@@ -127,16 +141,41 @@ export async function addCommentToConsolePost(postId, commentText, userToken) {
  * The user must be logged in and have a valid token.
  * @param {number} postId The post id.
  * @param {number} commentId The comment id.
- * @param {string} userToken The users JWT token for authentication.
+ * @param {{id: string, token: string}} user The user of the application. Must contain the id and token.
  */
-export async function likeCommentOnConsolePost(postId, commentId, userToken) {
+export async function likeCommentOnConsolePost(postId, commentId, user) {
     try {
         const comment = await axios.post(
             `/consoles/posts/${postId}/comments/${commentId}/like`,
-            null,
+            { userId: user.id },
             {
                 headers: {
-                    authorization: `Bearer ${userToken}`,
+                    authorization: `Bearer ${user.token}`,
+                },
+            }
+        );
+        return comment;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
+/**
+ * A function to unlike a comment on a post on the server.
+ * The user must be logged in and have a valid token.
+ * @param {number} postId The post id.
+ * @param {number} commentId The comment id.
+ * @param {{id: string, token: string}} user The user of the application. Must contain the id and token.
+ */
+export async function unlikeCommentOnConsolePost(postId, commentId, user) {
+    try {
+        const comment = await axios.post(
+            `/consoles/posts/${postId}/comments/${commentId}/unlike`,
+            { userId: user.id },
+            {
+                headers: {
+                    authorization: `Bearer ${user.token}`,
                 },
             }
         );

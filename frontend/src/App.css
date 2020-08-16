@@ -81,6 +81,14 @@ select {
     font-size: 1.1em;
 }
 
+select {
+    cursor: pointer;
+}
+
+select::-ms-expand {
+    display: none;
+}
+
 input.light {
     background-color: #444444;
 }

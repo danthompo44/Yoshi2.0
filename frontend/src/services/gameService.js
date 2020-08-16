@@ -14,6 +14,20 @@ export async function getAllGames() {
 }
 
 /**
+ * A function to search for games on the server.
+ * @param {string} search The search text.
+ */
+export async function searchForGame(search) {
+    try {
+        const games = await axios.get(`/games/search?search=${search}`);
+        return games;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
+/**
  * Function to get the top 5 rated games from the server.
  */
 export async function getTop5Games() {

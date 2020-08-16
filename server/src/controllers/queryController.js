@@ -1,11 +1,12 @@
 const { request, response } = require('express');
-const db = require('../models');
+
 const {
     isDataNullOrUndefined,
     throwNotFoundError,
     createErrorData,
     throwMissingDataError,
 } = require('../helpers');
+const db = require('../models');
 
 const Query = db.Query;
 

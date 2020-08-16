@@ -18,6 +18,7 @@ import {
     getConsolePostComments,
     addCommentToConsolePost,
     likeCommentOnConsolePost,
+    unlikeCommentOnConsolePost,
 } from '../../services/consoleService';
 import UserContext from '../../state/userContext';
 import useFetchData from '../../hooks/useFetchData';
@@ -104,12 +105,12 @@ function Image({ url, alt }) {
 function Video({ src }) {
     return (
         <iframe
+            className="product-media iframe-video"
             title="Video"
             src={src}
             frameBorder="0"
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
-            className="iframe-video"
         ></iframe>
     );
 }
@@ -221,20 +222,64 @@ function Comments({ comments, post, type }) {
 function Comment({ comment, comments, type, post }) {
     const user = useContext(UserContext);
 
-    const handleLike = () => {
+    const isCommentLiked = () => {
+        if (!user.state.isLoggedIn) {
+            return false;
+        }
+        let currentComment = comments.value.find((c) => c.id === comment.id);
+
+        const index = currentComment.consolePostCommentLikes.findIndex(
+            (c) => parseInt(c.user_id) === parseInt(user.state.id)
+        );
+
+        return index > -1;
+    };
+
+    const handleLike = async () => {
+        let like;
         if (type === 'consoles') {
-            likeCommentOnConsolePost(post.id, comment.id, user.state.token);
+            like = await likeCommentOnConsolePost(
+                post.id,
+                comment.id,
+                user.state
+            );
         } else {
-            likeCommentOnGamePost(post.id, comment.id, user.state.token);
+            like = await likeCommentOnGamePost(
+                post.id,
+                comment.id,
+                user.state.token
+            );
         }
 
         const newComments = [...comments.value];
-        const index = newComments.findIndex((c) => c.id === comment.id);
-        newComments[index].likes++;
-
+        const index = newComments.findIndex(
+            (c) => c.id === parseInt(comment.id)
+        );
+        newComments[index].consolePostCommentLikes.push(like.data);
         comments.update(newComments);
+    };
 
-        //add restriction to user only vbeing able to like a comment once, shange the text to unlike once clicked
+    const handleUnlike = async () => {
+        if (type === 'consoles') {
+            await unlikeCommentOnConsolePost(post.id, comment.id, user.state);
+        } else {
+            await likeCommentOnGamePost(post.id, comment.id, user.state.token);
+        }
+
+        const newComments = [...comments.value];
+        const commentIndex = newComments.findIndex((c) => c.id === comment.id);
+        const likeIndex = newComments[
+            commentIndex
+        ].consolePostCommentLikes.findIndex(
+            (c) => parseInt(c.user_id) === parseInt(user.state.id)
+        );
+        if (likeIndex > -1) {
+            newComments[commentIndex].consolePostCommentLikes.splice(
+                likeIndex,
+                1
+            );
+        }
+        comments.update(newComments);
     };
 
     return (
@@ -244,13 +289,20 @@ function Comment({ comment, comments, type, post }) {
             </div>
             <div className="single-product-comment-icons-wrapper">
                 <div className="like-comment-wrapper">
-                    <p className="like-comment-text" onClick={handleLike}>
-                        Like
+                    <p
+                        className="like-comment-text"
+                        onClick={() =>
+                            isCommentLiked() ? handleUnlike() : handleLike()
+                        }
+                    >
+                        {isCommentLiked() ? 'Unlike' : 'Like'}
                     </p>
                 </div>
                 <div className="thumbs-up-icon-wrapper">
                     <i className="fas fa-thumbs-up like-icon"></i>
-                    <p className="like-icon-text">{comment.likes}</p>
+                    <p className="like-icon-text">
+                        {comment.consolePostCommentLikes.length}
+                    </p>
                 </div>
             </div>
         </div>
