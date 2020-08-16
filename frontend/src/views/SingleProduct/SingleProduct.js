@@ -11,6 +11,7 @@ import {
     getGamePostComments,
     addCommentToGamePost,
     likeCommentOnGamePost,
+    unlikeCommentOnGamePost,
 } from '../../services/gameService';
 import {
     getConsolePostByConsoleId,
@@ -222,40 +223,55 @@ function Comments({ comments, post, type }) {
 function Comment({ comment, comments, type, post }) {
     const user = useContext(UserContext);
 
+    const isProductAConsole = (type) => {
+        if (type === 'consoles') {
+            return true;
+        }
+        return false;
+    };
+
     const isCommentLiked = () => {
         if (!user.state.isLoggedIn) {
             return false;
         }
         let currentComment = comments.value.find((c) => c.id === comment.id);
 
-        const index = currentComment.consolePostCommentLikes.findIndex(
-            (c) => parseInt(c.user_id) === parseInt(user.state.id)
-        );
+        let index;
+        if (isProductAConsole(type)) {
+            index = currentComment.consolePostCommentLikes.findIndex(
+                (c) => parseInt(c.user_id) === parseInt(user.state.id)
+            );
+        } else {
+            index = currentComment.gamePostCommentLikes.findIndex(
+                (c) => parseInt(c.user_id) === parseInt(user.state.id)
+            );
+        }
 
         return index > -1;
     };
 
     const handleLike = async () => {
         let like;
-        if (type === 'consoles') {
+        if (isProductAConsole(type)) {
             like = await likeCommentOnConsolePost(
                 post.id,
                 comment.id,
                 user.state
             );
         } else {
-            like = await likeCommentOnGamePost(
-                post.id,
-                comment.id,
-                user.state.token
-            );
+            like = await likeCommentOnGamePost(post.id, comment.id, user.state);
         }
 
         const newComments = [...comments.value];
         const index = newComments.findIndex(
             (c) => c.id === parseInt(comment.id)
         );
-        newComments[index].consolePostCommentLikes.push(like.data);
+        if (isProductAConsole(type)) {
+            newComments[index].consolePostCommentLikes.push(like.data);
+        } else {
+            newComments[index].gamePostCommentLikes.push(like.data);
+        }
+
         comments.update(newComments);
     };
 
@@ -263,21 +279,39 @@ function Comment({ comment, comments, type, post }) {
         if (type === 'consoles') {
             await unlikeCommentOnConsolePost(post.id, comment.id, user.state);
         } else {
-            await likeCommentOnGamePost(post.id, comment.id, user.state.token);
+            await unlikeCommentOnGamePost(post.id, comment.id, user.state);
         }
 
         const newComments = [...comments.value];
         const commentIndex = newComments.findIndex((c) => c.id === comment.id);
-        const likeIndex = newComments[
-            commentIndex
-        ].consolePostCommentLikes.findIndex(
-            (c) => parseInt(c.user_id) === parseInt(user.state.id)
-        );
-        if (likeIndex > -1) {
-            newComments[commentIndex].consolePostCommentLikes.splice(
-                likeIndex,
-                1
+
+        let likeIndex;
+        if (isProductAConsole(type)) {
+            likeIndex = newComments[
+                commentIndex
+            ].consolePostCommentLikes.findIndex(
+                (c) => parseInt(c.user_id) === parseInt(user.state.id)
             );
+        } else {
+            likeIndex = newComments[
+                commentIndex
+            ].gamePostCommentLikes.findIndex(
+                (c) => parseInt(c.user_id) === parseInt(user.state.id)
+            );
+        }
+
+        if (likeIndex > -1) {
+            if (isProductAConsole(type)) {
+                newComments[commentIndex].consolePostCommentLikes.splice(
+                    likeIndex,
+                    1
+                );
+            } else {
+                newComments[commentIndex].gamePostCommentLikes.splice(
+                    likeIndex,
+                    1
+                );
+            }
         }
         comments.update(newComments);
     };
@@ -301,7 +335,9 @@ function Comment({ comment, comments, type, post }) {
                 <div className="thumbs-up-icon-wrapper">
                     <i className="fas fa-thumbs-up like-icon"></i>
                     <p className="like-icon-text">
-                        {comment.consolePostCommentLikes.length}
+                        {isProductAConsole(type)
+                            ? comment.consolePostCommentLikes.length
+                            : comment.gamePostCommentLikes.length}
                     </p>
                 </div>
             </div>
