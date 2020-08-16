@@ -12,7 +12,7 @@ router.post(
     controller.addCommentToBlog
 );
 router.post(
-    '/blog/:blogId/comments/:commentId/:userId/like',
+    '/blog/:blogId/comments/:commentId/like',
     verifyToken,
     controller.likeComment
 );
