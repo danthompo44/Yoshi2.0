@@ -1,6 +1,7 @@
 const { request, response } = require('express');
 const { Op } = require('sequelize');
 
+const { createErrorData } = require('../helpers');
 const db = require('../models');
 
 const Console = db.Console;
