@@ -18,8 +18,13 @@ router.post(
 );
 router.post(
     '/posts/:postId/comments/:commentId/like',
-    verifyToken,
+    // verifyToken,
     controller.likeComment
+);
+router.post(
+    '/posts/:postId/comments/:commentId/unlike',
+    // verifyToken,
+    controller.unlikeComment
 );
 
 module.exports = router;

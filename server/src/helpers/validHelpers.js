@@ -32,4 +32,20 @@ function isDataNullOrUndefined(data) {
     return false;
 }
 
-module.exports = { isAnyKeyInObjectNullOrUndefined, isDataNullOrUndefined };
+/**
+ * A method for seeing if the array that is passed in is empty
+ * @param {any} data
+ * @returns True is the array passed in is of length 0
+ */
+function isArrayEmpty(data) {
+    if (data.length == 0) {
+        return true;
+    }
+    return false;
+}
+
+module.exports = {
+    isAnyKeyInObjectNullOrUndefined,
+    isDataNullOrUndefined,
+    isArrayEmpty,
+};

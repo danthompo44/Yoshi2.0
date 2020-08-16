@@ -4,12 +4,16 @@ const {
     isDataNullOrUndefined,
     throwMissingDataError,
     throwAPIError,
+    throwNotFoundError,
+    isArrayEmpty,
 } = require('../helpers');
 const db = require('../models');
 
 const Game = db.Game;
 const GamePost = db.GamePost;
 const GamePostComment = db.GamePostComment;
+const User = db.User;
+const GamePostCommentLikes = db.GamePostCommentLikes;
 
 /**
  * A function to get all games
@@ -154,6 +158,12 @@ async function getCommentsForPost(req, res) {
             where: {
                 game_post_id: req.params.id,
             },
+            include: [
+                {
+                    model: GamePostCommentLikes,
+                    attributes: ['id', 'user_id'],
+                },
+            ],
         });
 
         return res.status(200).json(comments);
@@ -201,14 +211,24 @@ async function addCommentToPost(req, res) {
 }
 
 /**
- * Increment number of likes on a post
+ * Increment number of likes on a post if a user is logged in
  * @param {request} req Express request object
  * @param req.params.postId Post id
  * @param req.body.commentId Comment id
+ * @param req.body.userId User id
  * @param {response} res Express response object
  */
 async function likeComment(req, res) {
     try {
+        // check if valid user
+        const user = await User.findByPk(req.body.userId);
+        if (isDataNullOrUndefined(user)) {
+            throwNotFoundError(
+                null,
+                'ERR_USER_NOT_FOUND',
+                'User not found, so can not like a comment'
+            );
+        }
         // check if valid post
         const post = await GamePost.findByPk(req.params.postId);
         if (isDataNullOrUndefined(post)) {
@@ -220,8 +240,19 @@ async function likeComment(req, res) {
         }
 
         // check if valid comment
-        const comment = await GamePostComment.findByPk(req.params.commentId);
-        if (isDataNullOrUndefined(comment)) {
+        const comment = await GamePostComment.findAll({
+            where: {
+                id: req.params.commentId,
+            },
+            include: [
+                {
+                    model: GamePostCommentLikes,
+                    attributes: ['id', 'user_id'],
+                },
+            ],
+        });
+
+        if (isArrayEmpty(comment)) {
             throwAPIError(
                 404,
                 'ERR_COMMENT_NOT_FOUND',
@@ -229,13 +260,111 @@ async function likeComment(req, res) {
             );
         }
 
-        await comment.increment('likes');
+        //check if user has already liked the comment
+        let likesArray = comment[0].gamePostCommentLikes;
+        for (let i = 0; i < likesArray.length; i++) {
+            if (likesArray[i].user_id == req.body.userId) {
+                throwAPIError(
+                    null,
+                    'ERR_COMMENT_LIKED_BY_USER',
+                    'This user has already liked this comment'
+                );
+            }
+        }
 
-        const updatedComment = {
-            ...comment.get(),
-            likes: comment.get().likes + 1,
+        //create entry in database
+        const like = await GamePostCommentLikes.create({
+            comment_id: req.params.commentId,
+            user_id: req.body.userId,
+        });
+
+        return res.status(200).json(like);
+    } catch (err) {
+        const error = createErrorData(err);
+        return res.status(error.code).json(error.error);
+    }
+}
+
+/**
+ * Remove the logged in users like on a game post comment if valid
+ * @param {request} req Express request object
+ * @param req.params.commentId Comment id
+ * @param req.params.postId game id
+ * @param req.body.userId User Id
+ * @param {response} res Express response object
+ */
+async function unlikeComment(req, res) {
+    try {
+        // check if valid user
+        const user = await User.findByPk(req.body.userId);
+        if (isDataNullOrUndefined(user)) {
+            throwNotFoundError(
+                null,
+                'ERR_USER_NOT_FOUND',
+                'User not found, so can not unlike a comment'
+            );
+        }
+
+        // check if valid blog, inner join Blog Comments and Blog Comment likes to the query, reduce network requests
+        const blog = await Blog.findOne({
+            where: {
+                id: req.params.blogId,
+            },
+            include: [
+                {
+                    model: BlogComment,
+                    include: [
+                        {
+                            model: BlogCommentLikes,
+                        },
+                    ],
+                },
+            ],
+        });
+        if (isDataNullOrUndefined(blog)) {
+            throwNotFoundError(
+                null,
+                'ERR_BLOG_NOT_FOUND',
+                'Blog not found, so can not unlike a comment'
+            );
+        }
+
+        // check if valid comment using the previous inner join query on the database
+        let commentExists = () => {
+            for (let i = 0; i < blog.blogComments.length; i++) {
+                if (
+                    blog.blogComments[i].id === parseInt(req.params.commentId)
+                ) {
+                    return true;
+                }
+            }
+            return false;
         };
-        return res.status(200).json(updatedComment);
+        if (!commentExists) {
+            throwNotFoundError(
+                null,
+                'ERR_COMMENT_NOT_FOUND',
+                'Comment not found, so can not unlike a comment'
+            );
+        }
+
+        //destroy comment using user id and comment id within blog_comment_likes table in the database
+        const like = await BlogCommentLikes.destroy({
+            where: {
+                comment_id: req.params.commentId,
+                user_id: req.body.userId,
+            },
+        });
+
+        if (isDataNullOrUndefined(like)) {
+            throwNotFoundError(
+                null,
+                'ERR_LIKE_NOT_FOUND',
+                'Like not found, so can not unlike a comment'
+            );
+        }
+
+        res.status(200).json(like);
     } catch (err) {
         const error = createErrorData(err);
         return res.status(error.code).json(error.error);
@@ -252,4 +381,5 @@ module.exports = {
     getCommentsForPost,
     addCommentToPost,
     likeComment,
+    unlikeComment,
 };
