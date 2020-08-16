@@ -22,4 +22,6 @@ router.post(
     controller.unlikeComment
 );
 
+router.get('/search', controller.searchForBlog);
+
 module.exports = router;

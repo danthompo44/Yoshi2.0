@@ -13,4 +13,9 @@
     border-radius: 50px;
     border-color: #444444;
     color: #c0c0c0;
+    margin-bottom: 5px;
+}
+
+#search-bar i {
+    cursor: pointer;
 }

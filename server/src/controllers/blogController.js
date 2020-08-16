@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const {
     createErrorData,
     isDataNullOrUndefined,
@@ -268,6 +269,38 @@ async function unlikeComment(req, res) {
     }
 }
 
+/**
+ * Search for a blog by the search criteria
+ * @param {request} req Express request object
+ * @param req.params.search The search criteria
+ * @param {response} res Express response object
+ */
+async function searchForBlog(req, res) {
+    try {
+        const blogs = await Blog.findAll({
+            where: {
+                [Op.or]: [
+                    {
+                        title: {
+                            [Op.like]: `%${req.query.search}%`,
+                        },
+                    },
+                    {
+                        subtitle: {
+                            [Op.like]: `%${req.query.search}%`,
+                        },
+                    },
+                ],
+            },
+        });
+
+        res.status(200).json(blogs);
+    } catch (err) {
+        const error = createErrorData(err);
+        return res.status(error.code).json(error.error);
+    }
+}
+
 module.exports = {
     getAll,
     getById,
@@ -275,4 +308,5 @@ module.exports = {
     addCommentToBlog,
     likeComment,
     unlikeComment,
+    searchForBlog,
 };
