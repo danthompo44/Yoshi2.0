@@ -1,4 +1,5 @@
 import React from 'react';
+
 import './squareButton.css';
 
 function SquareButton(props) {

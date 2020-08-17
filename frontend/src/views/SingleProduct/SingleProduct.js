@@ -1,9 +1,6 @@
 import React, { useState, useContext, useCallback } from 'react';
-import './SingleProduct.css';
 
-import { Title } from '../../components/titles/titles';
-import FilledHeart from '../../components/heartIcon/filledHeart';
-import UnfilledHeart from '../../components/heartIcon/unfilledHeart';
+import UserContext from '../../state/userContext';
 
 import {
     getGamePostByGameId,
@@ -21,8 +18,14 @@ import {
     likeCommentOnConsolePost,
     unlikeCommentOnConsolePost,
 } from '../../services/consoleService';
-import UserContext from '../../state/userContext';
+
 import useFetchData from '../../hooks/useFetchData';
+
+import { Title } from '../../components/titles/titles';
+import FilledHeart from '../../components/heartIcon/filledHeart';
+import UnfilledHeart from '../../components/heartIcon/unfilledHeart';
+
+import './SingleProduct.css';
 
 function SingleProduct(props) {
     //retireve paramaters to be used to query the database

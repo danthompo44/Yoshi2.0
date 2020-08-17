@@ -1,5 +1,7 @@
 import React, { useState, useContext, useCallback } from 'react';
 
+import UserContext from '../../state/userContext';
+
 import {
     getBlogById,
     getBlogComments,
@@ -8,7 +10,6 @@ import {
     unlikeCommentOnBlog,
 } from '../../services/blogService';
 
-import UserContext from '../../state/userContext';
 import useFetchData from '../../hooks/useFetchData';
 
 import { BlogEntryTitle } from '../../components/titles/titles';

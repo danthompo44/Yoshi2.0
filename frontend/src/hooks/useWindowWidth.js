@@ -1,5 +1,8 @@
 import { useLayoutEffect, useState } from 'react';
 
+/**
+ * A hook for getting a subscription to the listener for the width of the window.
+ */
 function useWindowWidth() {
     // init size state hook
     const [size, setSize] = useState(0);

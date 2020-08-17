@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 
+import { createQuery } from '../../services/queryService';
+
 import { Title } from '../../components/titles/titles';
 import { InputWithLabel } from '../../components/inputField/inputFieldWithLabel';
 
 import './ContactUs.css';
-import { createQuery } from '../../services/queryService';
 
 function ContactUs() {
     return (
