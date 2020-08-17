@@ -6,12 +6,16 @@ const {
     isDataNullOrUndefined,
     throwMissingDataError,
     throwAPIError,
+    throwNotFoundError,
+    isArrayEmpty,
 } = require('../helpers');
 const db = require('../models');
 
 const Game = db.Game;
 const GamePost = db.GamePost;
 const GamePostComment = db.GamePostComment;
+const User = db.User;
+const GamePostCommentLikes = db.GamePostCommentLikes;
 
 /**
  * A function to get all games.
@@ -177,6 +181,12 @@ async function getCommentsForPost(req, res) {
             where: {
                 game_post_id: req.params.id,
             },
+            include: [
+                {
+                    model: GamePostCommentLikes,
+                    attributes: ['id', 'user_id'],
+                },
+            ],
         });
 
         return res.status(200).json(comments);
@@ -216,6 +226,9 @@ async function addCommentToPost(req, res) {
             likes: 0,
             game_post_id: req.params.id,
         });
+
+        comment.dataValues.gamePostCommentLikes = [];
+
         return res.status(200).json(comment);
     } catch (err) {
         const error = createErrorData(err);
@@ -224,11 +237,12 @@ async function addCommentToPost(req, res) {
 }
 
 /**
- * Increment number of likes on a post.
- * @param {request} req Express request object.
- * @param req.params.postId Post id.
- * @param req.body.commentId Comment id.
- * @param {response} res Express response object.
+ * Increment number of likes on a post if a user is logged in
+ * @param {request} req Express request object
+ * @param req.params.postId Post id
+ * @param req.body.commentId Comment id
+ * @param req.body.userId User id
+ * @param {response} res Express response object
  */
 async function likeComment(req, res) {
     try {
@@ -243,7 +257,15 @@ async function likeComment(req, res) {
         }
 
         // check if valid comment
-        const comment = await GamePostComment.findByPk(req.params.commentId);
+        const comment = await GamePostComment.findByPk(req.params.commentId, {
+            include: [
+                {
+                    model: GamePostCommentLikes,
+                    attributes: ['id', 'user_id'],
+                },
+            ],
+        });
+
         if (isDataNullOrUndefined(comment)) {
             throwAPIError(
                 404,
@@ -252,13 +274,78 @@ async function likeComment(req, res) {
             );
         }
 
-        await comment.increment('likes');
+        //check if user has already liked the comment
+        comment.gamePostCommentLikes.forEach((c) => {
+            if (c.user_id == req.body.userId) {
+                throwAPIError(
+                    null,
+                    'ERR_COMMENT_LIKED_BY_USER',
+                    'This user has already liked this comment'
+                );
+            }
+        });
 
-        const updatedComment = {
-            ...comment.get(),
-            likes: comment.get().likes + 1,
-        };
-        return res.status(200).json(updatedComment);
+        //create entry in database
+        const like = await GamePostCommentLikes.create({
+            comment_id: req.params.commentId,
+            user_id: req.body.userId,
+        });
+
+        return res.status(200).json(like);
+    } catch (err) {
+        const error = createErrorData(err);
+        return res.status(error.code).json(error.error);
+    }
+}
+
+/**
+ * Remove the logged in users like on a game post comment if valid
+ * @param {request} req Express request object
+ * @param req.params.commentId Comment id
+ * @param req.params.postId game id
+ * @param req.body.userId User Id
+ * @param {response} res Express response object
+ */
+async function unlikeComment(req, res) {
+    try {
+        // check if valid post
+        const post = await GamePost.findByPk(req.params.postId);
+        if (isDataNullOrUndefined(post)) {
+            throwAPIError(
+                404,
+                'ERR_POST_NOT_FOUND',
+                'Post not found, so can not like a comment'
+            );
+        }
+
+        // check if valid comment
+        const comment = await GamePostComment.findByPk(req.params.commentId);
+
+        if (isDataNullOrUndefined(comment)) {
+            throwAPIError(
+                404,
+                'ERR_COMMENT_NOT_FOUND',
+                'Comment not found, so can not increment number of likes'
+            );
+        }
+
+        //destroy comment using user id and comment id within blog_comment_likes table in the database
+        const like = await GamePostCommentLikes.destroy({
+            where: {
+                comment_id: req.params.commentId,
+                user_id: req.body.userId,
+            },
+        });
+
+        if (isDataNullOrUndefined(like)) {
+            throwNotFoundError(
+                null,
+                'ERR_LIKE_NOT_FOUND',
+                'Like not found, so can not unlike a comment'
+            );
+        }
+
+        return res.status(200).json(like);
     } catch (err) {
         const error = createErrorData(err);
         return res.status(error.code).json(error.error);
@@ -276,4 +363,5 @@ module.exports = {
     getCommentsForPost,
     addCommentToPost,
     likeComment,
+    unlikeComment,
 };

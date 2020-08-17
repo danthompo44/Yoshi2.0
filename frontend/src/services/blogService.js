@@ -87,16 +87,16 @@ export async function addCommentToBlog(blogId, commentText, userToken) {
  * The user must be logged in and have a valid token.
  * @param {number} blogId The blog id.
  * @param {number} commentId The comment id.
- * @param {string} userToken The users JWT token for authentication.
+ * @param {{id: string, token: string}} user The user of the application. Must contain the id and token.
  */
-export async function likeCommentOnBlog(blogId, commentId, userToken) {
+export async function likeCommentOnBlog(blogId, commentId, user) {
     try {
         const comment = await axios.post(
-            `/blogs/blog/${blogId}/comments/${commentId}/${userToken.id}/like`,
-            null,
+            `/blogs/blog/${blogId}/comments/${commentId}/like`,
+            { userId: user.id },
             {
                 headers: {
-                    authorization: `Bearer ${userToken.token}`,
+                    authorization: `Bearer ${user.token}`,
                 },
             }
         );
@@ -107,16 +107,23 @@ export async function likeCommentOnBlog(blogId, commentId, userToken) {
     }
 }
 
-export async function unlikeCommentOnBlog(blogId, commentId, userToken) {
+/**
+ * A function to unlike a comment on a blog on the server.
+ * The user must be logged in and have a valid token.
+ * @param {number} blogId The blog id.
+ * @param {number} commentId The comment id.
+ * @param {{id: string, token: string}} user The user of the application. Must contain the id and token.
+ */
+export async function unlikeCommentOnBlog(blogId, commentId, user) {
     try {
         const comment = await axios.post(
             `blogs/blog/${blogId}/comments/${commentId}/unlike`,
             {
-                userId: userToken.id,
+                userId: user.id,
             },
             {
                 headers: {
-                    authorization: `Bearer ${userToken.token}`,
+                    authorization: `Bearer ${user.token}`,
                 },
             }
         );

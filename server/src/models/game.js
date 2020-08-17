@@ -1,11 +1,13 @@
 const { Sequelize, DataTypes } = require('sequelize');
+const GamePost = require('./game_post');
 
 /**
- *
+ * A function for mapping Game data to the database, also creates association with Game Posts
  * @param {Sequelize} sequelize The sequelize object
+ * @param {GamePost} GamePost the game post sequelize database model
  */
-function Game(sequelize) {
-    return sequelize.define(
+module.exports = (sequelize, GamePost) => {
+    const Game = sequelize.define(
         'game',
         {
             title: {
@@ -42,6 +44,6 @@ function Game(sequelize) {
             tableName: 'Games',
         }
     );
-}
-
-module.exports = Game;
+    Game.hasMany(GamePost, { foreignKey: 'game_id' });
+    return Game;
+};
