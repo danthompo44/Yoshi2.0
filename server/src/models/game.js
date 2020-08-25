@@ -1,12 +1,14 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const GamePost = require('./game_post');
+const UserGameRating = require('./user_game_ratings');
 
 /**
- * A function for mapping Game data to the database, also creates association with Game Posts
+ * A function for mapping Game data to the database, also creates associations
  * @param {Sequelize} sequelize The sequelize object
  * @param {GamePost} GamePost the game post sequelize database model
+ * @param {UserGameRating} UserGameRating the user game rating sequelize database model
  */
-module.exports = (sequelize, GamePost) => {
+module.exports = (sequelize, GamePost, UserGameRating) => {
     const Game = sequelize.define(
         'game',
         {
@@ -21,9 +23,6 @@ module.exports = (sequelize, GamePost) => {
             },
             video_src: {
                 type: DataTypes.STRING,
-            },
-            rating: {
-                type: DataTypes.INTEGER,
             },
             multiplayer: {
                 type: DataTypes.BOOLEAN,
@@ -44,6 +43,9 @@ module.exports = (sequelize, GamePost) => {
             tableName: 'Games',
         }
     );
+    //create foreign keys and associations
     Game.hasMany(GamePost, { foreignKey: 'game_id' });
+    Game.hasMany(UserGameRating, { foreignKey: 'game_id' });
+
     return Game;
 };

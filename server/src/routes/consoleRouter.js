@@ -7,6 +7,7 @@ router.get('/search', controller.searchForConsoles);
 router.get('/top5', controller.getTop5);
 router.get('/console/:id', controller.getById);
 router.get('/console/:id/post', controller.getPostByConsoleId);
+router.post('/console/:consoleId/rate', controller.rateConsoleById);
 
 router.get('/posts', controller.getAllPosts);
 router.get('/posts/:id', controller.getPostById);

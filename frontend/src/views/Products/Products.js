@@ -91,7 +91,7 @@ function CarouselItem({ item, route }) {
             <div className="carousel-cell-bottom-bar">
                 <p>{item.title || item.name}</p>
                 <div className="bottom-bar-rating">
-                    <DisplayRating rating={item.rating} />
+                    <DisplayRating rating={item.averageRating} />
                 </div>
             </div>
         </Link>
@@ -250,7 +250,7 @@ function ProductCard({ product, route }) {
                 <div className="product-details">
                     <h3>{product.title || product.name}</h3>
                     <div className="product-rating-container">
-                        <DisplayRating rating={product.rating} />
+                        <DisplayRating rating={product.averageRating} />
                     </div>
                 </div>
             </Link>

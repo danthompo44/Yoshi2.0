@@ -1,13 +1,14 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const ConsolePost = require('./console_post');
-const { sequelize } = require('.');
+const UserConsoleRatings = require('./user_console_ratings');
 
 /**
  * A function for mapping consoles to the database
  * @param {Sequelize} sequelize The sequelize object
  * @param {ConsolePost} ConsolePost The console post database mapping
+ * @param {UserConsoleRatings} UserConsoleRatings The user console ratings database mapping
  */
-module.exports = (sequelize, ConsolePost) => {
+module.exports = (sequelize, ConsolePost, UserConsoleRatings) => {
     const Console = sequelize.define(
         'console',
         {
@@ -22,9 +23,6 @@ module.exports = (sequelize, ConsolePost) => {
             },
             video_src: {
                 type: DataTypes.STRING,
-            },
-            rating: {
-                type: DataTypes.INTEGER,
             },
             multiplayer: {
                 type: DataTypes.BOOLEAN,
@@ -48,6 +46,9 @@ module.exports = (sequelize, ConsolePost) => {
             tableName: 'consoles',
         }
     );
+    //create foreign keys and associations
     Console.hasMany(ConsolePost, { foreignKey: 'console_id' });
+    Console.hasMany(UserConsoleRatings, { foreignKey: 'console_id' });
+
     return Console;
 };

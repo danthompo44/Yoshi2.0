@@ -10,12 +10,14 @@ const {
     isArrayEmpty,
 } = require('../helpers');
 const db = require('../models');
+const { sequelize } = require('../models');
 
 const Game = db.Game;
 const GamePost = db.GamePost;
 const GamePostComment = db.GamePostComment;
 const User = db.User;
 const GamePostCommentLikes = db.GamePostCommentLikes;
+const UserGameRating = db.UserGameRating;
 
 /**
  * A function to get all games.
@@ -24,13 +26,50 @@ const GamePostCommentLikes = db.GamePostCommentLikes;
  */
 async function getAll(req, res) {
     try {
-        const games = await Game.findAll();
-
-        return res.status(200).json(games);
+        const games = await Game.findAll({
+            include: [
+                {
+                    attributes: ['rating'],
+                    model: UserGameRating,
+                },
+            ],
+        });
+        let gamesWithAverageRatingArray = [];
+        for (let i = 0; i < games.length; i++) {
+            gamesWithAverageRatingArray.push(
+                createGameObjectWithAverageRating(games[i])
+            );
+        }
+        return res.status(200).json(gamesWithAverageRatingArray);
     } catch (err) {
         const error = createErrorData(err);
         return res.status(error.code).json(error.error);
     }
+}
+
+/**
+ * A function that takes a game object from the database and formats it into information and an average rating
+ * @param {object} game A game object that contain information and includes an average of all user ratings for that game
+ */
+function createGameObjectWithAverageRating(game) {
+    let totalRating = 0;
+
+    //calculate total rating for a game
+    for (let i = 0; i < game.userGameRatings.length; i++) {
+        totalRating += game.userGameRatings[i].rating;
+    }
+    //calculate average Rating for a game
+    const averageRating = totalRating / game.userGameRatings.length;
+
+    //check to see if a number, if so add average rating onto the game object
+    if (isNaN(averageRating)) {
+        game.dataValues.averageRating = 0;
+    } else {
+        game.dataValues.averageRating = averageRating;
+    }
+
+    delete game.dataValues.userGameRatings;
+    return game;
 }
 
 /**
@@ -46,8 +85,18 @@ async function searchForGames(req, res) {
                     [Op.like]: `%${req.query.search}%`,
                 },
             },
+            include: {
+                model: UserGameRating,
+                attributes: ['rating'],
+            },
         });
-        return res.status(200).json(games);
+        let gamesWithAverageRating = [];
+        for (let i = 0; i < games.length; i++) {
+            gamesWithAverageRating.push(
+                createGameObjectWithAverageRating(games[i])
+            );
+        }
+        return res.status(200).json(gamesWithAverageRating);
     } catch (err) {
         const error = createErrorData(err);
         return res.status(error.code).json(error.error);
@@ -62,10 +111,62 @@ async function searchForGames(req, res) {
 async function getTop5(req, res) {
     try {
         const games = await Game.findAll({
-            limit: 5,
-            order: [['rating', 'DESC']],
+            include: {
+                model: UserGameRating,
+                attributes: ['rating'],
+            },
         });
-        return res.status(200).json(games);
+        let gamesWithAverageRating = [];
+        for (let i = 0; i < games.length; i++) {
+            gamesWithAverageRating.push(
+                createGameObjectWithAverageRating(games[i])
+            );
+        }
+
+        //if 5 or less games return the games with the added average rating
+        if (gamesWithAverageRating.length < 6) {
+            return res.status(200).json(gamesWithAverageRating);
+        }
+
+        //initiate the top5 array, lowest index and lowest value
+        let top5 = [gamesWithAverageRating[0]];
+        let lowestIndex = 0;
+        let lowestRating = gamesWithAverageRating[0].dataValues.averageRating;
+
+        //iterate through 2nd to 5th game and add them to top 5 array, keep track of lowest index and lowest value
+        for (let i = 1; i < 5; i++) {
+            top5.push(gamesWithAverageRating[i]);
+            if (
+                gamesWithAverageRating[i].dataValues.averageRating <
+                lowestRating
+            ) {
+                lowestIndex = i;
+                lowestRating =
+                    gamesWithAverageRating[i].dataValues.averageRating;
+            }
+        }
+
+        //iterate through remaining games, removing games with a lower average rating in the top 5 array
+        for (let i = 5; i < gamesWithAverageRating.length; i++) {
+            if (
+                gamesWithAverageRating[i].dataValues.averageRating >
+                lowestRating
+            ) {
+                top5.splice(lowestIndex, 1, gamesWithAverageRating[i]);
+                //find the new lowest value and index
+                lowestIndex = 0;
+                lowestRating =
+                    gamesWithAverageRating[0].dataValues.averageRating;
+                for (let i = 0; i < top5.length; i++) {
+                    if (top5[i].dataValues.averageRating < lowestRating) {
+                        lowestIndex = i;
+                        lowestRating =
+                            gamesWithAverageRating[i].dataValues.averageRating;
+                    }
+                }
+            }
+        }
+        return res.status(200).json(top5);
     } catch (err) {
         const error = createErrorData(err);
         return res.status(error.code).json(error.error);
@@ -79,7 +180,10 @@ async function getTop5(req, res) {
  */
 async function getById(req, res) {
     try {
-        const game = await Game.findByPk(req.params.id);
+        const game = await Game.findByPk(req.params.id, {
+            include: UserGameRating,
+            attribute: ['rating'],
+        });
         if (isDataNullOrUndefined(game)) {
             throwAPIError(
                 404,
@@ -87,8 +191,21 @@ async function getById(req, res) {
                 `Game with id ${req.params.id} not found`
             );
         }
-        return res.status(200).json(game);
-    } catch (err) {}
+
+        //find the number of ratings
+        const ratings = await UserGameRating.findAll({
+            where: {
+                game_id: req.params.id,
+            },
+        });
+
+        let gameWithRating = createGameObjectWithAverageRating(game);
+        gameWithRating.dataValues.ratings = ratings;
+        return res.status(200).json(gameWithRating);
+    } catch (err) {
+        const error = createErrorData(err);
+        return res.status(error.code).json(error.error);
+    }
 }
 
 /**
@@ -352,6 +469,92 @@ async function unlikeComment(req, res) {
     }
 }
 
+/**
+ * A function for a user to rate a game
+ * @param {request} req Express request object
+ * @param {response} res Express response object
+ * @param {number} req.params.gameId A game id
+ * @param {number} req.body.userId A user id
+ * @param {number} req.body.rating The users rating
+ */
+async function rateGameById(req, res) {
+    try {
+        //check if the user exists
+        console.log(req.body.userId);
+        const user = await User.findByPk(req.body.userId);
+        if (isDataNullOrUndefined(user)) {
+            throwNotFoundError(
+                null,
+                'ERR_USER_NOT_FOUND',
+                'The user entered does not exist'
+            );
+        }
+
+        //check if the game exists
+        const game = await Game.findByPk(req.params.gameId);
+        if (isDataNullOrUndefined(game)) {
+            throwNotFoundError(
+                null,
+                'ERR_GAME_NOT_FOUND',
+                'The game does not exist'
+            );
+        }
+
+        //check if the rating is a number
+        if (isNaN(req.body.rating)) {
+            throwAPIError(
+                null,
+                'ERR_RATING_IS_NOT_A_NUMBER',
+                'The rating entered is not a number'
+            );
+        }
+
+        //check if rating is less than 0 or greater than 5
+        if (req.body.rating < 0 || req.body.rating > 5) {
+            throwAPIError(
+                null,
+                'ERR_RATING_OUT_OF_VALID_RANGE',
+                'The rating entered must be between 0 and 5'
+            );
+        }
+
+        let rating;
+        //check if user already has a rating for the game
+        rating = await UserGameRating.findOne({
+            where: {
+                user_id: req.body.userId,
+                game_id: parseInt(req.params.gameId),
+            },
+        });
+        if (isDataNullOrUndefined(rating)) {
+            rating = await UserGameRating.create({
+                user_id: req.body.userId,
+                game_id: parseInt(req.params.gameId),
+                rating: req.body.rating,
+            });
+        } else {
+            rating = await UserGameRating.update(
+                {
+                    user_id: req.body.userId,
+                    game_id: parseInt(req.params.gameId),
+                    rating: req.body.rating,
+                },
+                {
+                    where: {
+                        user_id: req.body.userId,
+                        game_id: parseInt(req.params.gameId),
+                    },
+                }
+            );
+        }
+        res.status(200).json(rating);
+    } catch (err) {
+        const error = createErrorData(err);
+        console.log(error);
+        return res.status(error.code).json(error.error);
+    }
+}
+
 module.exports = {
     getAll,
     searchForGames,
@@ -364,4 +567,5 @@ module.exports = {
     addCommentToPost,
     likeComment,
     unlikeComment,
+    rateGameById,
 };

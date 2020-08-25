@@ -190,6 +190,31 @@ export async function unlikeCommentOnGamePost(postId, commentId, user) {
     }
 }
 
+/**
+ * Set a rating on a singular game from a user.
+ * The user must be logged in and have a valid token.
+ * @param {number} gameId The games id.
+ * @param {number} ratingValue The rating submitted.
+ * @param {{id: string, token: string}} user The user of the application. Must contain the id and token.
+ */
+export async function setRatingOnGame(gameId, ratingValue, user) {
+    try {
+        const rating = await axios.post(
+            `/games/game/${gameId}/rate`,
+            { userId: user.id, rating: ratingValue },
+            {
+                headers: {
+                    authorization: `Bearer ${user.token}`,
+                },
+            }
+        );
+        return rating;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
 export default {
     getAllGames,
     getGameById,
@@ -200,4 +225,5 @@ export default {
     addCommentToGamePost,
     likeCommentOnGamePost,
     unlikeCommentOnGamePost,
+    setRatingOnGame,
 };

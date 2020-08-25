@@ -9,6 +9,7 @@ import {
     addCommentToGamePost,
     likeCommentOnGamePost,
     unlikeCommentOnGamePost,
+    setRatingOnGame,
 } from '../../services/gameService';
 import {
     getConsolePostByConsoleId,
@@ -17,6 +18,7 @@ import {
     addCommentToConsolePost,
     likeCommentOnConsolePost,
     unlikeCommentOnConsolePost,
+    setRatingOnConsole,
 } from '../../services/consoleService';
 
 import useFetchData from '../../hooks/useFetchData';
@@ -54,9 +56,7 @@ function SingleProduct(props) {
         }
     }, [id, type]);
 
-    const [{ value: loadingProduct }, { value: product }] = useFetchData(
-        productsMethod
-    );
+    const [{ value: loadingProduct }, product] = useFetchData(productsMethod);
 
     const [{ value: loadingPost }, { value: productPost }] = useFetchData(
         postMethod
@@ -65,7 +65,10 @@ function SingleProduct(props) {
     return (
         <>
             {!loadingPost && !loadingProduct && (
-                <TopContainer productPost={productPost} product={product} />
+                <TopContainer
+                    productPost={productPost}
+                    product={product.value}
+                />
             )}
             {!loadingPost && !loadingProduct && (
                 <BottomContainer
@@ -122,31 +125,51 @@ function Video({ src }) {
 function BottomContainer({ productPost, product, type }) {
     return (
         <div id="bottom-content-wrapper">
-            <LeftBottomBox product={product} />
+            <LeftBottomBox product={product} type={type} />
             <RightBottomBox post={productPost} type={type} />
         </div>
     );
 }
 
-function LeftBottomBox({ product }) {
+function LeftBottomBox({ product, type }) {
+    const user = useContext(UserContext);
+
     return (
         <div className="left-bottom-box">
             <ProductInfo
                 icon="fas fa-user-friends"
-                text={product.multiplayer ? 'Multiplayer' : 'Singleplayer'}
+                text={
+                    product.value.multiplayer ? 'Multiplayer' : 'Singleplayer'
+                }
             />
             <ProductInfo
                 icon="fas fa-wifi"
-                text={product.online ? 'Online' : 'Offline'}
+                text={product.value.online ? 'Online' : 'Offline'}
             />
-            {product.form_factor ? (
-                <ProductInfo icon="fas fa-gamepad" text={product.form_factor} />
+            {product.value.form_factor ? (
+                <ProductInfo
+                    icon="fas fa-gamepad"
+                    text={product.value.form_factor}
+                />
             ) : null}
-            {product.trending ? (
+            {product.value.trending ? (
                 <ProductInfo icon="fas fa-chart-line" text="Trending" />
             ) : null}
-            <ProductInfo icon="fas fa-pound-sign" text={'£' + product.cost} />
-            <ProductRating rating={product.rating} />
+            <ProductInfo
+                icon="fas fa-pound-sign"
+                text={'£' + product.value.cost}
+            />
+            <ProductRating
+                rating={product.value.averageRating}
+                ratings={product.value.ratings}
+            />
+            {user.state.isLoggedIn && (
+                <CreateOrUpdateRating
+                    product={product}
+                    type={type}
+                    ratings={product.value.ratings}
+                />
+            )}
         </div>
     );
 }
@@ -161,11 +184,11 @@ function ProductInfo({ icon, text }) {
     );
 }
 
-function ProductRating({ rating }) {
+function ProductRating({ rating, ratings }) {
     return (
         <div className="product-rating">
-            <p className="rating-info-text">Rating</p>
             <DisplayRating filled={rating} />
+            <p className="rating-info-text">{ratings.length || 0} reviews</p>
         </div>
     );
 }
@@ -177,6 +200,95 @@ function DisplayRating({ filled }) {
             hearts.push(<FilledHeart key={index} />);
         } else {
             hearts.push(<UnfilledHeart key={index} />);
+        }
+    }
+    return hearts;
+}
+
+function CreateOrUpdateRating({ product, ratings, type }) {
+    const user = useContext(UserContext);
+    const [userRating, setUserRating] = useState(getUserRating());
+
+    function getUserRating() {
+        const rating = ratings.find(
+            (r) => r.user_id === parseInt(user.state.id)
+        );
+
+        return rating ? rating.rating : 0;
+    }
+
+    async function setRating(index) {
+        setUserRating(index);
+        // update db for either console or game
+
+        try {
+            let rating;
+            if (type === 'games') {
+                rating = await setRatingOnGame(
+                    product.value.id,
+                    index,
+                    user.state
+                );
+            } else {
+                rating = await setRatingOnConsole(
+                    product.value.id,
+                    index,
+                    user.state
+                );
+            }
+
+            const newProduct = { ...product.value };
+
+            // update current rating on frontend
+            const ratingIndex = ratings.findIndex(
+                (r) => parseInt(r.user_id) === parseInt(user.state.id)
+            );
+
+            // if no current rating
+            if (ratingIndex === -1) {
+                newProduct.ratings.push(rating.data);
+            } else {
+                // reset value in current index
+                newProduct.ratings[ratingIndex].rating = index;
+            }
+
+            // calculate average rating again
+            let totalOfRatings = 0;
+            newProduct.ratings.forEach((r) => (totalOfRatings += r.rating));
+
+            const numOfRatings = newProduct.ratings.length;
+            newProduct.averageRating = totalOfRatings / numOfRatings;
+
+            product.update(newProduct);
+        } catch (err) {
+            // implement error handling
+            console.log(err);
+        }
+    }
+
+    return (
+        <div id="submit-rating-container">
+            <p>Your rating</p>
+            <CreateRating currentRating={userRating} setRating={setRating} />
+        </div>
+    );
+}
+
+function CreateRating({ currentRating = 0, setRating }) {
+    const hearts = [];
+
+    for (let index = 0; index < 5; index++) {
+        if (currentRating > index) {
+            hearts.push(
+                <FilledHeart key={index} onClick={() => setRating(index + 1)} />
+            );
+        } else {
+            hearts.push(
+                <UnfilledHeart
+                    key={index}
+                    onClick={() => setRating(index + 1)}
+                />
+            );
         }
     }
     return hearts;
