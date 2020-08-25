@@ -1,5 +1,4 @@
 const { Sequelize, DataTypes, HasMany } = require('sequelize');
-const { sequelize } = require('.');
 const BlogCommentLikes = require('./blog_comment_likes');
 
 /**

@@ -186,6 +186,31 @@ export async function unlikeCommentOnConsolePost(postId, commentId, user) {
     }
 }
 
+/**
+ * Set a rating on a singular console from a user.
+ * The user must be logged in and have a valid token.
+ * @param {number} consoleId The consoles id.
+ * @param {number} ratingValue The rating submitted.
+ * @param {{id: string, token: string}} user The user of the application. Must contain the id and token.
+ */
+export async function setRatingOnConsole(consoleId, ratingValue, user) {
+    try {
+        const rating = await axios.post(
+            `/consoles/console/${consoleId}/rate`,
+            { userId: user.id, rating: ratingValue },
+            {
+                headers: {
+                    authorization: `Bearer ${user.token}`,
+                },
+            }
+        );
+        return rating;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
 export default {
     getAllConsoles,
     getConsoleById,
@@ -196,4 +221,5 @@ export default {
     addCommentToConsolePost,
     likeCommentOnConsolePost,
     unlikeCommentOnConsolePost,
+    setRatingOnConsole,
 };

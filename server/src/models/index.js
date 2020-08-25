@@ -18,6 +18,8 @@ const Query = require('./query');
 const BlogCommentLikes = require('./blog_comment_likes');
 const ConsolePostCommentLikes = require('./console_post_comment_likes');
 const GamePostCommentLikes = require('./game_post_comment_likes');
+const UserConsoleRating = require('./user_console_ratings');
+const UserGameRating = require('./user_game_ratings');
 
 const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
     host: config.HOST,
@@ -42,6 +44,8 @@ const db = {
     GamePostCommentLikes: GamePostCommentLikes(sequelize),
     UserToken: UserToken(sequelize),
     Query: Query(sequelize),
+    UserConsoleRating: UserConsoleRating(sequelize),
+    UserGameRating: UserGameRating(sequelize),
 };
 
 //create level 2 mappings that have dependencies on level 1 mappings
@@ -51,7 +55,12 @@ db.ConsolePostComment = ConsolePostComment(
 );
 db.GamePostComment = GamePostComment(sequelize, db.GamePostCommentLikes);
 db.BlogComment = BlogComment(sequelize, db.BlogCommentLikes);
-db.User = User(sequelize, db.BlogCommentLikes);
+db.User = User(
+    sequelize,
+    db.BlogCommentLikes,
+    db.UserConsoleRating,
+    db.UserGameRating
+);
 
 //create level 3 mappings
 db.ConsolePost = ConsolePost(sequelize, db.ConsolePostComment);
@@ -59,7 +68,7 @@ db.Blog = Blog(sequelize, db.BlogComment);
 db.GamePost = GamePost(sequelize, db.GamePostComment);
 
 //create level 4 mappings
-db.Console = Console(sequelize, db.ConsolePost);
-db.Game = Game(sequelize, db.GamePost);
+db.Console = Console(sequelize, db.ConsolePost, db.UserConsoleRating);
+db.Game = Game(sequelize, db.GamePost, db.UserGameRating);
 
 module.exports = db;
