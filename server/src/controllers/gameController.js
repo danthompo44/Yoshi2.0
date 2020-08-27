@@ -7,7 +7,7 @@ const {
     throwMissingDataError,
     throwAPIError,
     throwNotFoundError,
-    isArrayEmpty,
+    createGameObjectWithAverageRating,
 } = require('../helpers');
 const db = require('../models');
 const { sequelize } = require('../models');
@@ -45,31 +45,6 @@ async function getAll(req, res) {
         const error = createErrorData(err);
         return res.status(error.code).json(error.error);
     }
-}
-
-/**
- * A function that takes a game object from the database and formats it into information and an average rating
- * @param {object} game A game object that contain information and includes an average of all user ratings for that game
- */
-function createGameObjectWithAverageRating(game) {
-    let totalRating = 0;
-
-    //calculate total rating for a game
-    for (let i = 0; i < game.userGameRatings.length; i++) {
-        totalRating += game.userGameRatings[i].rating;
-    }
-    //calculate average Rating for a game
-    const averageRating = totalRating / game.userGameRatings.length;
-
-    //check to see if a number, if so add average rating onto the game object
-    if (isNaN(averageRating)) {
-        game.dataValues.averageRating = 0;
-    } else {
-        game.dataValues.averageRating = averageRating;
-    }
-
-    delete game.dataValues.userGameRatings;
-    return game;
 }
 
 /**
@@ -305,6 +280,13 @@ async function getCommentsForPost(req, res) {
                 },
             ],
         });
+        if (isDataNullOrUndefined(comments)) {
+            throwNotFoundError(
+                null,
+                'ERR_NO_COMMENTS_FOUND',
+                'No comments were found for this post'
+            );
+        }
 
         return res.status(200).json(comments);
     } catch (err) {
@@ -387,7 +369,7 @@ async function likeComment(req, res) {
             throwAPIError(
                 404,
                 'ERR_COMMENT_NOT_FOUND',
-                'Comment not found, so can not increment number of likes'
+                'Comment not found, so can not like the comment'
             );
         }
 
@@ -431,7 +413,7 @@ async function unlikeComment(req, res) {
             throwAPIError(
                 404,
                 'ERR_POST_NOT_FOUND',
-                'Post not found, so can not like a comment'
+                'Post not found, so can not unlike a comment'
             );
         }
 
@@ -480,7 +462,6 @@ async function unlikeComment(req, res) {
 async function rateGameById(req, res) {
     try {
         //check if the user exists
-        console.log(req.body.userId);
         const user = await User.findByPk(req.body.userId);
         if (isDataNullOrUndefined(user)) {
             throwNotFoundError(
@@ -550,7 +531,6 @@ async function rateGameById(req, res) {
         res.status(200).json(rating);
     } catch (err) {
         const error = createErrorData(err);
-        console.log(error);
         return res.status(error.code).json(error.error);
     }
 }

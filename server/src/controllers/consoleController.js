@@ -6,6 +6,7 @@ const {
     isDataNullOrUndefined,
     throwNotFoundError,
     throwAPIError,
+    createConsoleObjectWithAverageRating,
 } = require('../helpers');
 const db = require('../models');
 
@@ -42,31 +43,6 @@ async function getAll(req, res) {
         const error = createErrorData(err);
         return res.status(error.code).json(error.error);
     }
-}
-
-/**
- * A function that takes a console object from the database and formats it into information and an average rating
- * @param {object} console A console object that contain information and includes an average of all user ratings for that console
- */
-function createConsoleObjectWithAverageRating(c) {
-    let totalRating = 0;
-
-    //calculate total rating for a console
-    for (let i = 0; i < c.userConsoleRatings.length; i++) {
-        totalRating += c.userConsoleRatings[i].rating;
-    }
-    //calculate average Rating for a console
-    const averageRating = totalRating / c.userConsoleRatings.length;
-
-    //check to see if a number, if not add average rating onto the console object
-    if (isNaN(averageRating)) {
-        c.dataValues.averageRating = 0;
-    } else {
-        c.dataValues.averageRating = averageRating;
-    }
-
-    delete c.dataValues.userConsoleRatings;
-    return c;
 }
 
 /**
@@ -309,6 +285,13 @@ async function getCommentsForPost(req, res) {
                 },
             ],
         });
+        if (isDataNullOrUndefined(comments)) {
+            throwNotFoundError(
+                null,
+                'ERR_NO_COMMENTS_FOUND',
+                'No comments were found for this post'
+            );
+        }
 
         return res.status(200).json(comments);
     } catch (err) {
@@ -435,7 +418,7 @@ async function unlikeComment(req, res) {
             throwNotFoundError(
                 null,
                 'ERR_POST_NOT_FOUND',
-                'Post not found, so can not like a comment'
+                'Post not found, so can not unlike a comment'
             );
         }
 
@@ -446,7 +429,7 @@ async function unlikeComment(req, res) {
             throwNotFoundError(
                 null,
                 'ERR_COMMENT_NOT_FOUND',
-                'Comment not found, so can not increment number of likes'
+                'Comment not found, so can not unlike a comment'
             );
         }
 

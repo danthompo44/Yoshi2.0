@@ -67,6 +67,9 @@ async function getCommentsForBlog(req, res) {
                 },
             ],
         });
+        if (isDataNullOrUndefined(comments)) {
+            throwNotFoundError();
+        }
 
         return res.status(200).json(comments);
     } catch (err) {
@@ -146,7 +149,7 @@ async function likeComment(req, res) {
             throwNotFoundError(
                 null,
                 'ERR_COMMENT_NOT_FOUND',
-                'Comment not found, so can not increment number of likes'
+                'Comment not found, so can not like a comment'
             );
         }
 
@@ -200,7 +203,7 @@ async function unlikeComment(req, res) {
             throwNotFoundError(
                 null,
                 'ERR_COMMENT_NOT_FOUND',
-                'Comment not found, so can not increment number of likes'
+                'Comment not found, so can not unlike a comment'
             );
         }
 
