@@ -1,6 +1,5 @@
 const { Sequelize } = require('sequelize');
 
-const winston = require('../../config/winston');
 const config = require('../../config/db');
 
 // model imports
@@ -29,10 +28,10 @@ const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
 sequelize
     .authenticate()
     .then(() => {
-        winston.log('Connection has been established successfully.');
+        console.log('Connection has been established successfully.');
     })
     .catch((err) => {
-        winston.error('Unable to connect to the database: ' + err);
+        console.error('Unable to connect to the database: ' + err);
     });
 
 //level 1 mappings that have no dependencies on other models

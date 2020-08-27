@@ -20,9 +20,12 @@ app.use(cookieParser());
 // security with helmet
 app.use(helmet());
 
+// set up cors policy
 app.use(
     cors({
-        origin: ['http://localhost:8080'],
+        // [dev, test]
+        origin: ['http://localhost:8080', 'http://localhost:5000'],
+        credentials: true,
     })
 );
 

@@ -2,7 +2,6 @@
     "name": "frontend",
     "version": "0.1.0",
     "private": true,
-    "proxy": "http://localhost:3000",
     "dependencies": {
         "@testing-library/jest-dom": "^4.2.4",
         "@testing-library/react": "^9.5.0",
@@ -20,7 +19,8 @@
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "serve": "serve -s build"
     },
     "eslintConfig": {
         "extends": "react-app"
