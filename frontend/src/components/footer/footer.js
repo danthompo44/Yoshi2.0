@@ -11,7 +11,7 @@ function Footer() {
                     <div id="ft-text">
                         <p>
                             <span className="copyright">&copy;</span> OldSkool
-                            Games
+                            Games 2020
                         </p>
                     </div>
                     <div id="ft-socials">

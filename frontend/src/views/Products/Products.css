@@ -174,4 +174,8 @@
     .top-filters-section {
         flex-wrap: wrap-reverse;
     }
+
+    .carousel-cell {
+        width: 100%;
+    }
 }

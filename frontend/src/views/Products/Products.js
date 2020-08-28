@@ -49,14 +49,14 @@ function Products() {
     );
 }
 
-const flickityOptions = {
-    initialIndex: 2,
-    freeScroll: true,
-    wrapAround: true,
-};
-
 function Carousel({ items, route }) {
     const flickityRef = useRef();
+
+    const flickityOptions = {
+        initialIndex: 2,
+        freeScroll: true,
+        wrapAround: true,
+    };
 
     useEffect(() => {
         if (flickityRef) {

@@ -19,3 +19,9 @@
 #search-bar i {
     cursor: pointer;
 }
+
+@media all and (max-width: 800px) {
+    #search-container {
+        justify-content: center;
+    }
+}

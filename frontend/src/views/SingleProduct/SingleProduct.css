@@ -155,12 +155,22 @@
 }
 
 @media all and (max-width: 880px) {
+    #top-content-wrapper {
+        width: 100%;
+    }
+
     #bottom-content-wrapper {
         flex-direction: column;
         align-items: center;
     }
+
     .left-bottom-box {
         padding: 0;
         margin-bottom: 40px;
+        width: 100%;
+    }
+
+    .right-bottom-box {
+        width: 100%;
     }
 }
