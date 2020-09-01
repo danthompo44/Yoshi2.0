@@ -43,7 +43,7 @@ function AboutUsSection() {
                 <div id="about-us-image">
                     <img
                         alt="Placeholder"
-                        src="https://via.placeholder.com/400"
+                        src="https://www.player1videogames.com/images/store.jpg"
                     />
                 </div>
             </div>

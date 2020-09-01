@@ -191,7 +191,10 @@ function BottomContainer() {
 function SelectBox({ value, onChange, options }) {
     return (
         <div className="product-options-select">
-            <select value={value} onChange={onChange}>
+            <label for="options" id="visually-hidden">
+                Select a product
+            </label>
+            <select value={value} onChange={onChange} id="options">
                 {Object.keys(options).map((item, index) => (
                     <option value={item} label={item} key={index} />
                 ))}
