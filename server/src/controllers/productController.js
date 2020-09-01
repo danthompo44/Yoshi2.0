@@ -32,10 +32,12 @@ async function searchForProducts(req, res) {
             },
         });
         let consolesWithAverageRating = [];
-        for (let i = 0; i < consoles.length; i++) {
-            consolesWithAverageRating.push(
-                createGameObjectWithAverageRating(consoles[i])
-            );
+        if (consoles) {
+            for (let i = 0; i < consoles.length; i++) {
+                consolesWithAverageRating.push(
+                    createConsoleObjectWithAverageRating(consoles[i])
+                );
+            }
         }
 
         const games = await Game.findAll({
@@ -49,16 +51,20 @@ async function searchForProducts(req, res) {
                 attributes: ['rating'],
             },
         });
+
         let gamesWithAverageRating = [];
-        for (let i = 0; i < games.length; i++) {
-            gamesWithAverageRating.push(
-                createGameObjectWithAverageRating(games[i])
-            );
+        if (games) {
+            for (let i = 0; i < games.length; i++) {
+                gamesWithAverageRating.push(
+                    createGameObjectWithAverageRating(games[i])
+                );
+            }
         }
 
-        return res
-            .status(200)
-            .json({ consolesWithAverageRating, gamesWithAverageRating });
+        return res.status(200).json({
+            consoles: consolesWithAverageRating,
+            games: gamesWithAverageRating,
+        });
     } catch (err) {
         const error = createErrorData(err);
         return res.status(error.code).json(error.error);

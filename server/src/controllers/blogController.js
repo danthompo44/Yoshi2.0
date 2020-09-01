@@ -56,6 +56,11 @@ async function getById(req, res) {
  */
 async function getCommentsForBlog(req, res) {
     try {
+        const blog = await Blog.findByPk(req.params.id);
+        if (isDataNullOrUndefined(blog)) {
+            throwNotFoundError();
+        }
+
         const comments = await BlogComment.findAll({
             where: {
                 blog_id: req.params.id,

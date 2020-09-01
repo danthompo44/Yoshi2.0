@@ -66,7 +66,7 @@ async function searchForConsoles(req, res) {
         let consolesWithAverageRating = [];
         for (let i = 0; i < consoles.length; i++) {
             consolesWithAverageRating.push(
-                createGameObjectWithAverageRating(consoles[i])
+                createConsoleObjectWithAverageRating(consoles[i])
             );
         }
         return res.status(200).json(consolesWithAverageRating);
@@ -106,7 +106,6 @@ async function getTop5(req, res) {
         let lowestIndex = 0;
         let lowestRating =
             consolesWithAverageRating[0].dataValues.averageRating;
-        console.log(consolesWithAverageRating[1].dataValues.averageRating);
 
         //iterate through 1st to 5th game and add them to top 5 array, keep track of lowest index and lowest value
         for (let i = 0; i < 5; i++) {
@@ -274,6 +273,10 @@ async function getPostByConsoleId(req, res) {
  */
 async function getCommentsForPost(req, res) {
     try {
+        const post = await ConsolePost.findByPk(req.params.id);
+        if (isDataNullOrUndefined(post)) {
+            throwNotFoundError();
+        }
         const comments = await ConsolePostComment.findAll({
             where: {
                 console_post_id: req.params.id,
@@ -381,7 +384,7 @@ async function likeComment(req, res) {
         }
 
         comment.consolePostCommentLikes.forEach((c) => {
-            if (c.consolePostCommentLikes.user_id === req.body.userId) {
+            if (c.user_id === req.body.userId) {
                 throwAPIError(
                     null,
                     'ERR_COMMENT_LIKED_BY_USER',
