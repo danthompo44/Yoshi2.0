@@ -196,7 +196,9 @@ function SelectBox({ value, onChange, options }) {
             </label>
             <select value={value} onChange={onChange} id="options">
                 {Object.keys(options).map((item, index) => (
-                    <option value={item} label={item} key={index} />
+                    <option value={item} label={item} key={index}>
+                        {item}
+                    </option>
                 ))}
             </select>
             <div className="arrow-container">
