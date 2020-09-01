@@ -168,11 +168,16 @@
     align-items: center;
 }
 
+.product-details h3 {
+    width: 60%;
+}
+
 .product-details p {
     color: #c0c0c0;
 }
 
-.product-heart-rating {
+.product-rating-container {
+    width: 40%;
     display: flex;
     justify-content: flex-end;
 }
@@ -183,7 +188,9 @@
     }
 
     .top-filters-section {
+        margin-top: 20px;
         flex-wrap: wrap-reverse;
+        justify-content: center;
     }
 
     .carousel-cell {
