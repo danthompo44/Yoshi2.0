@@ -21,7 +21,7 @@ function Header() {
     return (
         <header>
             <div id="main-nav-container">
-                <nav id="main-nav" role="navigation">
+                <nav id="main-nav">
                     <div className="nav-flex">
                         <div id="nav-title">
                             <h1>OSG</h1>

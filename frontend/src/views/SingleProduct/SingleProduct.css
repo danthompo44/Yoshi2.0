@@ -148,6 +148,7 @@
 .iframe-video {
     height: 400px;
     width: 100%;
+    border: 0;
 }
 
 #submit-rating-container {
