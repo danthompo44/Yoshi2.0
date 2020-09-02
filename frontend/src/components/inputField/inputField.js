@@ -8,6 +8,7 @@ function InputField(props) {
         <div className="input-container">
             <i className={iconClass}></i>
             <input
+                id={props.name}
                 type={props.type}
                 className="inputField"
                 placeholder={props.placeholder}
@@ -20,11 +21,12 @@ function InputField(props) {
     );
 }
 
-function CommentInput({ value, onChange }) {
+function CommentInput({ id, value, onChange }) {
     return (
         <div className="comment-input-box">
             <i className="fas fa-comment input-icon"></i>
             <input
+                id={id}
                 type="type"
                 className="form-input light with-icon"
                 placeholder="Add a comment"

@@ -6,7 +6,7 @@ import InputLabel from './inputLabel';
 function InputWithLabel(props) {
     return (
         <>
-            <InputLabel htmlFor={props.name} content={props.labelContent} />
+            <InputLabel for={props.name} content={props.labelContent} />
             <InputField
                 icon={props.icon}
                 type={props.inputType}
@@ -19,11 +19,11 @@ function InputWithLabel(props) {
     );
 }
 
-function CommentInputWithLabel({ value, onChange }) {
+function CommentInputWithLabel({ value, onChange, id }) {
     return (
         <>
-            <InputLabel htmlFor="comment" content="Add comment:" />
-            <CommentInput value={value} onChange={onChange} />
+            <InputLabel for={id} content="Add comment:" />
+            <CommentInput value={value} onChange={onChange} id={id} />
         </>
     );
 }
