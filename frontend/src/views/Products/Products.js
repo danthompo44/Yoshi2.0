@@ -36,15 +36,13 @@ function Products() {
         <>
             <div className="top-x-wrapper">
                 <Title title="Top 5 Consoles" />
-                {!consolesLoading && consoles && (
+                {!consolesLoading && (
                     <Carousel items={consoles} route="/consoles/" />
                 )}
             </div>
             <div className="top-x-wrapper">
                 <Title title="Top 5 Games" />
-                {!gamesLoading && games && (
-                    <Carousel items={games} route="/games/" />
-                )}
+                {!gamesLoading && <Carousel items={games} route="/games/" />}
             </div>
             <BottomContainer />
         </>
@@ -214,7 +212,7 @@ function AllGamesContainer({ loading, games }) {
     return (
         <>
             <h2 className="bottom-product-title">Games</h2>
-            {!loading && games && (
+            {!loading && (
                 <div className="products-list-wrapper">
                     {games.map((game, index) => (
                         <ProductCard
@@ -233,7 +231,7 @@ function AllConsolesContainer({ loading, consoles }) {
     return (
         <>
             <h2 className="bottom-product-title">Consoles</h2>
-            {!loading && consoles && (
+            {!loading && (
                 <div className="products-list-wrapper">
                     {consoles.map((console, index) => (
                         <ProductCard
