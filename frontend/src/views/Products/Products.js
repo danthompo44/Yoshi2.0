@@ -36,13 +36,15 @@ function Products() {
         <>
             <div className="top-x-wrapper">
                 <Title title="Top 5 Consoles" />
-                {!consolesLoading && (
+                {!consolesLoading && consoles && (
                     <Carousel items={consoles} route="/consoles/" />
                 )}
             </div>
             <div className="top-x-wrapper">
                 <Title title="Top 5 Games" />
-                {!gamesLoading && <Carousel items={games} route="/games/" />}
+                {!gamesLoading && games && (
+                    <Carousel items={games} route="/games/" />
+                )}
             </div>
             <BottomContainer />
         </>
@@ -191,7 +193,7 @@ function BottomContainer() {
 function SelectBox({ value, onChange, options }) {
     return (
         <div className="product-options-select">
-            <label for="options" id="visually-hidden">
+            <label htmlFor="options" id="visually-hidden">
                 Select a product
             </label>
             <select value={value} onChange={onChange} id="options">
@@ -212,7 +214,7 @@ function AllGamesContainer({ loading, games }) {
     return (
         <>
             <h2 className="bottom-product-title">Games</h2>
-            {!loading && (
+            {!loading && games && (
                 <div className="products-list-wrapper">
                     {games.map((game, index) => (
                         <ProductCard
@@ -231,7 +233,7 @@ function AllConsolesContainer({ loading, consoles }) {
     return (
         <>
             <h2 className="bottom-product-title">Consoles</h2>
-            {!loading && (
+            {!loading && consoles && (
                 <div className="products-list-wrapper">
                     {consoles.map((console, index) => (
                         <ProductCard

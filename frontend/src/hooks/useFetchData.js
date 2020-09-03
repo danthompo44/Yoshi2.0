@@ -32,7 +32,7 @@ import { useState, useEffect } from 'react';
  */
 function useFetchData(serviceMethod) {
     const [loading, setLoading] = useState(true);
-    const [data, setData] = useState({});
+    const [data, setData] = useState([]);
     const [error, setError] = useState('');
 
     useEffect(() => {
