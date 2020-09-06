@@ -30,10 +30,7 @@ function UserProvider({ children }) {
                 },
             });
         } catch (err) {
-            dispatch({
-                type: 'add_error',
-                payload: err,
-            });
+            console.log(err);
         }
     }, []);
 

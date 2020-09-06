@@ -52,3 +52,26 @@
 #ft-span {
     width: 20%;
 }
+
+@media all and (max-width: 600px) {
+    #main-ft-container {
+        height: 65px;
+    }
+    #ft-span {
+        display: none;
+    }
+    #ft-container {
+        flex-direction: column-reverse;
+    }
+    #ft-socials {
+        width: 50%;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+    #ft-text {
+        margin-bottom: 5px;
+    }
+    #ft-text p {
+        font-size: 14px;
+    }
+}

@@ -5,7 +5,6 @@ import { getAllBlogs, searchForBlog } from '../../services/blogService';
 import useFetchData from '../../hooks/useFetchData';
 
 import SearchBar from '../../components/search-bar/search-bar';
-import RoundedButton from '../../components/roundedButton/roundedButton';
 import { BlogPageTitle } from '../../components/titles/titles';
 
 import './Blog.css';
@@ -33,7 +32,6 @@ function Blog() {
                     ))}
                 </div>
             )}
-            <RoundedButton content="SHOW MORE" />
         </div>
     );
 }

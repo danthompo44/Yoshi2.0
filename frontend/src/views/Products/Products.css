@@ -50,6 +50,17 @@
     color: #92d36e;
 }
 
+#visually-hidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
 .flickity-button {
     background-color: #333333 !important;
     color: #92d36e !important;
@@ -157,11 +168,16 @@
     align-items: center;
 }
 
+.product-details h3 {
+    width: 60%;
+}
+
 .product-details p {
     color: #c0c0c0;
 }
 
-.product-heart-rating {
+.product-rating-container {
+    width: 40%;
     display: flex;
     justify-content: flex-end;
 }
@@ -172,6 +188,12 @@
     }
 
     .top-filters-section {
+        margin-top: 20px;
         flex-wrap: wrap-reverse;
+        justify-content: center;
+    }
+
+    .carousel-cell {
+        width: 100%;
     }
 }

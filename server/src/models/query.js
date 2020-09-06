@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 
 /**
- *
+ * The model to map to the queries table in the database.
  * @param {Sequelize} sequelize The sequelize object
  */
 function Query(sequelize) {

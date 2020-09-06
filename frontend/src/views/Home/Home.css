@@ -35,6 +35,11 @@
     width: 60%;
 }
 
+#about-us-image img {
+    width: 100%;
+    max-width: 600px;
+}
+
 #location-wrapper .section-content {
     display: flex;
     flex-direction: column;
@@ -84,14 +89,16 @@
         margin-bottom: 20px;
     }
 
-    #location-image {
+    #location-image,
+    #about-us-image {
         width: 70%;
     }
 }
 
 /* Small screens */
 @media all and (max-width: 800px) {
-    #location-image {
+    #location-image,
+    #about-us-image {
         width: 90%;
     }
 }

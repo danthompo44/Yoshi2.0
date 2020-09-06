@@ -269,6 +269,11 @@ async function getPostByGameId(req, res) {
  */
 async function getCommentsForPost(req, res) {
     try {
+        const post = await GamePost.findByPk(req.params.id);
+        if (isDataNullOrUndefined(post)) {
+            throwNotFoundError();
+        }
+
         const comments = await GamePostComment.findAll({
             where: {
                 game_post_id: req.params.id,

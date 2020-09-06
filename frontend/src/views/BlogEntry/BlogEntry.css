@@ -112,11 +112,6 @@
         flex-wrap: wrap;
     }
 
-    #add-comment-button,
-    #add-comment-button button {
-        width: 100%;
-    }
-
     .comment-input-box input {
         margin-bottom: 0 !important;
     }
