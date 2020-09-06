@@ -7,7 +7,7 @@ router.get('/search', controller.searchForGames);
 router.get('/top5', controller.getTop5);
 router.get('/game/:id', controller.getById);
 router.get('/game/:id/post', controller.getPostByGameId);
-router.post('/game/:gameId/rate', controller.rateGameById);
+router.post('/game/:gameId/rate', verifyToken, controller.rateGameById);
 
 router.get('/posts', controller.getAllPosts);
 router.get('/posts/:id', controller.getPostById);

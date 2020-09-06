@@ -50,7 +50,7 @@ function BlogEntryContent({ blog }) {
     return (
         <div className="blog-entry-content-container">
             <TextSection content={blog.paragraph_one} />
-            <Image src={blog.img_src} al={blog.img_alt} />
+            <Image src={blog.img_src} alt={blog.img_alt} />
             <TextSection content={blog.paragraph_two} />
             <VideoSection src={blog.vid_src} />
         </div>
@@ -201,6 +201,7 @@ function AddComment({ comments, blog }) {
                     <CommentInputWithLabel
                         value={commentText}
                         onChange={updateCommentText}
+                        id="comment"
                     />
                 </div>
                 <div id="add-comment-button" className="inline-button-wrapper">
