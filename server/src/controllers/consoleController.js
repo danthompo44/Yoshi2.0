@@ -406,7 +406,7 @@ async function likeComment(req, res) {
 }
 
 /**
- * Increment number of likes on a post.
+ * Decrement number of likes on a post.
  * @param {request} req Express request object.
  * @param req.params.postId Post id.
  * @param req.params.commentId Comment id.
